@@ -145,10 +145,9 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
 
             #p-header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 1.2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0ea5e9; flex-shrink: 0; }
             .p-header-info { display: flex; align-items: center; gap: 0.75rem; }
-            .p-header-icon { width: 36px; height: 36px; background: rgba(14, 165, 233, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0ea5e9; font-size: 1.1rem; }
+            .p-header-icon { width: 36px; height: 36px; background: rgba(14, 165, 233, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0ea5e9; }
             .p-header-text h3 { margin: 0; color: #ffffff; font-size: 1rem; font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: 0.5px; }
             .p-header-text span { font-size: 0.7rem; color: #10b981; font-family: 'JetBrains Mono', monospace; font-weight: 600; display: flex; align-items: center; gap: 4px; }
-            .p-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
 
             #p-header-actions { display: flex; gap: 15px; }
             #p-header-actions button { background: none; border: none; color: #94a3b8; font-size: 1.1rem; cursor: pointer; transition: color 0.2s; padding: 0; }
@@ -205,10 +204,25 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
             <div id="penelope-chatbox">
                 <div id="p-header">
                     <div class="p-header-info">
-                        <div class="p-header-icon"><i class="fas fa-robot"></i></div>
+                        <div class="p-header-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F8FAFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                              <circle cx="12" cy="5" r="2"></circle>
+                              <path d="M12 7v4"></path>
+                              <line x1="8" y1="16" x2="8" y2="16"></line>
+                              <line x1="16" y1="16" x2="16" y2="16"></line>
+                            </svg>
+                        </div>
                         <div class="p-header-text">
                             <h3>Penelope</h3>
-                            <span><div class="p-status-dot"></div> Online · Chief of Staff</span>
+                            <span>
+                                <svg id="connection-globe" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: all 0.3s ease; filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.5));">
+                                  <circle cx="12" cy="12" r="10"></circle>
+                                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                                <span id="connection-text" style="color: #10B981; font-size: 0.8rem; font-weight: 600; margin-left: 4px; margin-right: 4px;">LIVE</span> · Chief of Staff
+                            </span>
                         </div>
                     </div>
                     <div id="p-header-actions">
@@ -221,7 +235,12 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
                 </div>
                 <div id="p-input-area">
                     <input type="text" id="p-input" placeholder="Ask me about his work..." autocomplete="off">
-                    <button id="p-send"><i class="fas fa-paper-plane"></i></button>
+                    <button id="p-send">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F8FAFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateX(-1px) translateY(1px);">
+                          <line x1="22" y1="2" x2="11" y2="13"></line>
+                          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div id="p-scroll-bubble">What do you want to know? I'll help you! 👋</div>
@@ -480,6 +499,37 @@ ${JSON.stringify(knowledgeBase)}
 
         sendBtn.addEventListener('click', handleSend);
         input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
+
+        // =====================================================================
+        // Network Connection Status Handler
+        // =====================================================================
+        function updateNetworkStatus() {
+            const globe = document.getElementById('connection-globe');
+            const statusText = document.getElementById('connection-text');
+            
+            if (!globe || !statusText) return; 
+
+            if (navigator.onLine) {
+                // User is connected: Bright Green with glowing shadow
+                globe.style.stroke = '#10B981';
+                globe.style.filter = 'drop-shadow(0 0 4px rgba(16, 185, 129, 0.5))';
+                statusText.style.color = '#10B981';
+                statusText.innerText = 'LIVE';
+            } else {
+                // User lost connection: Dim Slate/Gray with no glow
+                globe.style.stroke = '#475569';
+                globe.style.filter = 'none';
+                statusText.style.color = '#475569';
+                statusText.innerText = 'OFFLINE';
+            }
+        }
+
+        // Run once on load to set initial state
+        updateNetworkStatus();
+
+        // Listen for network changes dynamically
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
     };
 
     injectStyles();
