@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHI-Twin | Penelope Inc.</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/nav.css">
+    <link rel="stylesheet" href="../assets/suite.css">
+    <style>
+        :root {
+            --bg-milky-white: #FAF9F5; --bg-milky-card: #F3F0E8;
+            --navy-creamy-dark: #0E1726; --navy-creamy-mid: #1E293B;
+            --blue-accent: #2563EB; --text-dark: #1A1A1A;
+            --text-light: #F8FAFC; --text-muted: #64748B;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg-milky-white); color: var(--text-dark); font-family: var(--font-sans); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+        .btn-link { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--blue-accent); border-bottom: 2px solid transparent; padding-bottom: 2px; }
+        .btn-link:hover { border-bottom-color: var(--blue-accent); }
+        .btn-primary { display: inline-block; background: var(--text-light); color: var(--navy-creamy-dark); padding: 0.9rem 1.8rem; border-radius: 4px; font-weight: 600; }
+        footer { background-color: #070C14; color: #94A3B8; padding: 3rem 8% 2rem; font-size: 0.9rem; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER — identical markup to index.html, paths adjusted for /suites/ depth -->
+    <header>
+        <a href="/" class="logo" style="font-family:var(--font-serif);font-size:1.8rem;color:var(--text-light);">Penelope Inc.</a>
+        <ul class="nav-links">
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger">PHI Suites <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="phi-twin.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-01</span><span class="nav-panel-copy"><h4>PHI-Twin</h4><p>Edge digital twins for landing gear &amp; structural health monitoring.</p></span></a>
+                        <a href="phi-chain.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-02</span><span class="nav-panel-copy"><h4>PHI-Chain</h4><p>Split-payload blockchain security for aviation communications.</p></span></a>
+                        <a href="phi-arc.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-03</span><span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Turbine blade prognostics with real-time fault injection.</p></span></a>
+                        <a href="phi-drone.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-04</span><span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span></a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger">Services <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="/services/digital-twin-training.html" class="nav-panel-link"><span class="nav-panel-tag">01</span><span class="nav-panel-copy"><h4>Digital Twin Training</h4><p>For universities, MRO teams &amp; individuals.</p></span></a>
+                        <a href="/services/school-apps.html" class="nav-panel-link"><span class="nav-panel-tag">02</span><span class="nav-panel-copy"><h4>School Apps</h4><p>Lightweight screen-share learning platforms.</p></span></a>
+                        <a href="/services/church-apps.html" class="nav-panel-link"><span class="nav-panel-tag">03</span><span class="nav-panel-copy"><h4>Church Apps</h4><p>Full digital building for your congregation.</p></span></a>
+                        <a href="/services/lifestones.html" class="nav-panel-link"><span class="nav-panel-tag">04</span><span class="nav-panel-copy"><h4>Lifestones</h4><p>Autonomous sermon-intelligence &amp; verse display.</p></span></a>
+                        <a href="/services/penelope-agent.html" class="nav-panel-link"><span class="nav-panel-tag">05</span><span class="nav-panel-copy"><h4>Penelope AI Agent</h4><p>Hardware-locked, private autonomous agents.</p></span></a>
+                        <a href="/services/social-apps.html" class="nav-panel-link"><span class="nav-panel-tag">06</span><span class="nav-panel-copy"><h4>Social &amp; Mobile Apps</h4><p>Windows, Android, macOS, Linux — built affordably.</p></span></a>
+                        <a href="/services/security.html" class="nav-panel-link"><span class="nav-panel-tag">07</span><span class="nav-panel-copy"><h4>Security Architecture</h4><p>Predictive digital &amp; physical threat systems.</p></span></a>
+                        <a href="/services/fintech-crypto.html" class="nav-panel-link"><span class="nav-panel-tag">08</span><span class="nav-panel-copy"><h4>Financial Cryptography</h4><p>Networks that secure people's finances.</p></span></a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="/lab.html" class="nav-trigger">The Lab</a></li>
+            <li class="nav-item"><a href="/about.html" class="nav-trigger">About</a></li>
+            <li class="nav-item"><a href="/join.html" class="nav-trigger">Join Us</a></li>
+            <li class="nav-item"><a href="/contact.html" class="nav-trigger">Contact</a></li>
+        </ul>
+        <button class="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </header>
+
+    <div class="mobile-drawer">
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger">PHI Suites <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="phi-twin.html"><span class="nav-panel-tag">PHI-01</span> PHI-Twin</a>
+                <a href="phi-chain.html"><span class="nav-panel-tag">PHI-02</span> PHI-Chain</a>
+                <a href="phi-arc.html"><span class="nav-panel-tag">PHI-03</span> PHI-Arc</a>
+                <a href="phi-drone.html"><span class="nav-panel-tag">PHI-04</span> PHI-Drone</a>
+            </div>
+        </div>
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger">Services <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="/services/digital-twin-training.html">Digital Twin Training</a>
+                <a href="/services/school-apps.html">School Apps</a>
+                <a href="/services/church-apps.html">Church Apps</a>
+                <a href="/services/lifestones.html">Lifestones</a>
+                <a href="/services/penelope-agent.html">Penelope AI Agent</a>
+                <a href="/services/social-apps.html">Social &amp; Mobile Apps</a>
+                <a href="/services/security.html">Security Architecture</a>
+                <a href="/services/fintech-crypto.html">Financial Cryptography</a>
+            </div>
+        </div>
+        <a href="/lab.html" class="mobile-simple-link">The Lab</a>
+        <a href="/about.html" class="mobile-simple-link">About</a>
+        <a href="/join.html" class="mobile-simple-link">Join Us</a>
+        <a href="/contact.html" class="mobile-simple-link">Contact</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="suite-hero">
+        <div class="suite-hero-tag">PHI-01 — EDGE PROGNOSTICS</div>
+        <h1>PHI-Twin: a digital twin that watches landing gear the way a mechanic would, at machine speed.</h1>
+        <p class="lede">Physics-informed edge inference fusing sensor telemetry with structural models — built to flag what's wearing before it becomes what's grounded.</p>
+    </section>
+
+    <!-- STORY (brief, non-exposing) -->
+    <section class="suite-story">
+        <h2>The gap we're closing</h2>
+        <p>Most landing gear health monitoring still leans on scheduled teardown inspection — safe, but blind to the time between inspections. PHI-Twin runs continuously instead, fusing multi-channel sensor data through a physics-informed neural architecture that's learned what normal wear looks like versus what a developing fault looks like, and flags the difference in milliseconds, at the edge, without a round-trip to the cloud.</p>
+        <p>We validated the approach on a Dornier 228-212 airframe model across eleven distinct fault classes, and the architecture is built to generalize to other gear-equipped platforms.</p>
+        <p class="note">Full model architecture, training methodology, and dataset composition are reserved for OEM and institutional partners under NDA — this page covers what the system does, not how it's built.</p>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="suite-gallery">
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="../assets/phi-twin/prototype-1.jpg" alt="PHI-Twin prototype dashboard"></div>
+            <div class="gallery-item"><img src="../assets/phi-twin/prototype-2.jpg" alt="PHI-Twin sensor rig"></div>
+            <div class="gallery-item"><img src="../assets/phi-twin/prototype-3.jpg" alt="PHI-Twin fault classification output"></div>
+            <div class="gallery-item"><img src="../assets/phi-twin/prototype-4.jpg" alt="PHI-Twin testbed setup"></div>
+            <div class="gallery-item"><img src="../assets/phi-twin/prototype-5.jpg" alt="PHI-Twin live inference view"></div>
+        </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="suite-video">
+        <div class="embed-frame">
+            <!-- Replace VIDEO_ID with the unlisted YouTube video ID -->
+            <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="PHI-Twin demo" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <!-- VALIDATION CTA -->
+    <section class="validation-cta">
+        <div class="eyebrow">WE NEED YOU</div>
+        <h2>We built this to the edge of what a small lab can validate alone. If you're an OEM, MRO authority, or research body who can push it further — we want to hear from you.</h2>
+        <p>Independent validation, flight test data, or certification pathway guidance would move PHI-Twin from lab-proven to field-proven faster than we can do it solo.</p>
+        <a href="/contact.html" class="btn-primary">Talk to us about validation</a>
+    </section>
+
+    <!-- ONGOING PROJECT / LIVE TELEMETRY -->
+    <section class="ongoing-project">
+        <h2>On-going: PHI-Twin</h2>
+        <p>This is being built in the open. The strip below reflects real progress, pulled live — no one's editing this copy to make it look further along than it is.</p>
+        <div class="telemetry-strip" data-project-suite="phi-twin" id="phi-twin-telemetry"></div>
+        <a href="/join.html?project=phi-twin" class="btn-link">Want to help build this? Join the project &rarr;</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Penelope Inc. — PHI Lab Aerospace Technologies</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.5/dist/pocketbase.umd.js"></script>
+    <script src="../assets/pb-realtime.js"></script>
+    <script src="../assets/gallery-lightbox.js"></script>
+    <script src="../assets/nav.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.PenelopeTelemetry.initProjectProgress('phi-twin', '#phi-twin-telemetry');
+        });
+    </script>
+</body>
+</html>
