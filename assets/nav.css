@@ -1,0 +1,254 @@
+/* ==========================================================================
+   NAV: Mega-menu ("manifest board") reveal system
+   Desktop: hover top-level nav item -> panel drops from header
+   Mobile:  hamburger -> full-screen accordion drawer
+   ========================================================================== */
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(14, 23, 38, 0.92);
+    backdrop-filter: blur(12px);
+    padding: 1.2rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    color: var(--text-light);
+    font-weight: 400;
+    letter-spacing: -0.5px;
+}
+
+/* --- Top-level nav --- */
+.nav-links {
+    display: flex;
+    gap: 0.5rem;
+    list-style: none;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-item > button.nav-trigger {
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    color: var(--text-light);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.nav-item > button.nav-trigger:hover,
+.nav-item.panel-open > button.nav-trigger {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-item > button.nav-trigger .caret {
+    width: 8px;
+    height: 8px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.2s;
+    margin-top: -3px;
+}
+
+.nav-item.panel-open > button.nav-trigger .caret {
+    transform: rotate(-135deg);
+    margin-top: 3px;
+}
+
+.nav-item > a.nav-trigger {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+    display: inline-block;
+}
+
+/* --- Mega panel --- */
+.nav-panel {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    background: var(--navy-creamy-dark);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 32px 32px;
+    padding: 2.5rem 5%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-12px);
+    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+    z-index: 999;
+}
+
+.nav-item.panel-open .nav-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.nav-panel-grid {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.5rem 2.5rem;
+}
+
+.nav-panel-link {
+    display: flex;
+    gap: 1rem;
+    padding: 0.9rem 0.5rem;
+    border-radius: 6px;
+    transition: background 0.15s;
+    align-items: flex-start;
+}
+
+.nav-panel-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-panel-tag {
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    color: var(--blue-accent);
+    border: 1px solid rgba(37, 99, 235, 0.4);
+    border-radius: 3px;
+    padding: 0.15rem 0.4rem;
+    white-space: nowrap;
+    margin-top: 0.15rem;
+}
+
+.nav-panel-copy h4 {
+    color: var(--text-light);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.nav-panel-copy p {
+    color: #94A3B8;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* --- Mobile hamburger + drawer --- */
+.nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    width: 32px;
+    height: 24px;
+    position: relative;
+    cursor: pointer;
+    z-index: 1002;
+}
+
+.nav-hamburger span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--text-light);
+    transition: all 0.25s ease;
+}
+
+.nav-hamburger span:nth-child(1) { top: 0; }
+.nav-hamburger span:nth-child(2) { top: 11px; }
+.nav-hamburger span:nth-child(3) { top: 22px; }
+
+.nav-hamburger.open span:nth-child(1) { top: 11px; transform: rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { top: 11px; transform: rotate(-45deg); }
+
+.mobile-drawer {
+    position: fixed;
+    inset: 0;
+    background: var(--navy-creamy-dark);
+    z-index: 1001;
+    padding: 6rem 6% 3rem;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.28s ease;
+}
+
+.mobile-drawer.open {
+    transform: translateX(0);
+}
+
+.mobile-accordion-item {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.mobile-accordion-trigger {
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    font-weight: 500;
+    padding: 1.2rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.mobile-accordion-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+}
+
+.mobile-accordion-item.open .mobile-accordion-panel {
+    max-height: 600px;
+}
+
+.mobile-accordion-panel a {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    color: #CBD5E1;
+    font-size: 0.95rem;
+}
+
+.mobile-accordion-panel .nav-panel-tag {
+    margin-top: 0.1rem;
+}
+
+.mobile-simple-link {
+    display: block;
+    padding: 1.2rem 0;
+    color: var(--text-light);
+    font-size: 1.15rem;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+@media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-hamburger { display: block; }
+}
