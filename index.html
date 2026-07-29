@@ -9,17 +9,15 @@
     <link rel="apple-touch-icon" href="assets/favicon.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/nav.css">
 
     <style>
-        /* ==========================================================================
-           COLOR PALETTE: Creamy Blues & Milky Whites
-           ========================================================================== */
         :root {
-            --bg-milky-white: #FAF9F5;      /* Soft, warm off-white */
-            --bg-milky-card: #F3F0E8;       /* Slightly deeper cream for subtle contrast */
-            --navy-creamy-dark: #0E1726;    /* Deep, rich slate navy */
-            --navy-creamy-mid: #1E293B;     /* Mid-tone navy blue */
-            --blue-accent: #2563EB;         /* Vibrant blue for CTAs */
+            --bg-milky-white: #FAF9F5;
+            --bg-milky-card: #F3F0E8;
+            --navy-creamy-dark: #0E1726;
+            --navy-creamy-mid: #1E293B;
+            --blue-accent: #2563EB;
             --text-dark: #1A1A1A;
             --text-light: #F8FAFC;
             --text-muted: #64748B;
@@ -27,11 +25,7 @@
             --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg-milky-white);
@@ -41,52 +35,8 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+        a { text-decoration: none; color: inherit; }
 
-        /* --- Header / Navigation --- */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(14, 23, 38, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 1.2rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo {
-            font-family: var(--font-serif);
-            font-size: 1.8rem;
-            color: var(--text-light);
-            font-weight: 400;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: opacity 0.2s;
-        }
-
-        .nav-links a:hover {
-            opacity: 0.7;
-        }
-
-        /* --- Hero Section with Background Video --- */
         .hero {
             position: relative;
             height: 90vh;
@@ -100,378 +50,192 @@
 
         .hero-video-bg {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
+            top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
             z-index: 1;
             transform: translate(-50%, -50%);
             object-fit: cover;
         }
 
         .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, rgba(14, 23, 38, 0.5) 0%, rgba(14, 23, 38, 0.8) 100%);
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, rgba(14,23,38,0.5) 0%, rgba(14,23,38,0.8) 100%);
             z-index: 2;
         }
 
         .hero-content {
-            position: relative;
-            z-index: 3;
-            max-width: 900px;
-            text-align: center;
-            padding: 0 20px;
+            position: relative; z-index: 3;
+            max-width: 900px; text-align: center; padding: 0 20px;
         }
 
         .hero-content h1 {
             font-family: var(--font-serif);
             font-size: clamp(2.5rem, 6vw, 4.8rem);
-            font-weight: 400;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
+            font-weight: 400; line-height: 1.1; margin-bottom: 1.5rem;
         }
 
         .hero-content p {
-            font-size: 1.25rem;
-            font-weight: 300;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto;
+            font-size: 1.25rem; font-weight: 300; opacity: 0.9;
+            max-width: 700px; margin: 0 auto;
         }
 
-        /* --- Dark Vision Strip --- */
-        .vision-strip {
-            background-color: var(--navy-creamy-dark);
-            color: var(--text-light);
-            padding: 6rem 8%;
-        }
+        .vision-strip { background-color: var(--navy-creamy-dark); color: var(--text-light); padding: 6rem 8%; }
+        .vision-container { max-width: 1100px; margin: 0 auto; text-align: center; }
+        .vision-container h2 { font-family: var(--font-serif); font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 400; line-height: 1.3; margin-bottom: 3rem; }
+        .vision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; text-align: left; }
+        .vision-grid p { font-size: 1.1rem; color: #CBD5E1; line-height: 1.8; }
 
-        .vision-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .vision-container h2 {
-            font-family: var(--font-serif);
-            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-            font-weight: 400;
-            line-height: 1.3;
-            margin-bottom: 3rem;
-        }
-
-        .vision-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-            text-align: left;
-        }
-
-        .vision-grid p {
-            font-size: 1.1rem;
-            color: #CBD5E1;
-            line-height: 1.8;
-        }
-
-        /* --- Standard Video Frame Styling --- */
         .video-card-frame {
-            width: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            background-color: var(--navy-creamy-mid);
-            position: relative;
+            width: 100%; border-radius: 8px; overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            background-color: var(--navy-creamy-mid); position: relative;
         }
+        .video-card-frame video { width: 100%; height: 100%; display: block; object-fit: cover; }
 
-        .video-card-frame video {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
-        }
-
-        /* --- Section Titles --- */
         .section-label {
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            text-align: center;
+            text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem;
+            font-weight: 700; color: var(--text-muted); margin-bottom: 2rem; text-align: center;
         }
 
-        /* --- Portfolio / Programs Section --- */
-        .programs-section {
-            padding: 6rem 8%;
-            max-width: 1300px;
-            margin: 0 auto;
-        }
+        .programs-section { padding: 6rem 8%; max-width: 1300px; margin: 0 auto; }
+        .program-card { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem; }
+        .program-card.reverse { direction: rtl; }
+        .program-card.reverse .program-info, .program-card.reverse .video-card-frame { direction: ltr; }
+        .program-info { padding: 1rem; }
+        .program-tag { font-size: 0.85rem; color: var(--blue-accent); font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .program-info h3 { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 400; margin-bottom: 1rem; color: var(--navy-creamy-dark); }
+        .program-info p { font-size: 1.05rem; color: #475569; margin-bottom: 1.8rem; line-height: 1.7; }
+        .btn-link { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--blue-accent); border-bottom: 2px solid transparent; padding-bottom: 2px; transition: all 0.2s; }
+        .btn-link:hover { border-bottom-color: var(--blue-accent); }
 
-        .program-card {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            margin-bottom: 6rem;
-        }
+        .metrics-section { background-color: var(--bg-milky-card); border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; padding: 5rem 8%; }
+        .metrics-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center; }
+        .metric-item { position: relative; padding: 0 1rem; }
+        .metric-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 15%; height: 70%; width: 1px; background-color: #CBD5E1; }
+        .metric-number { font-family: var(--font-serif); font-size: clamp(3rem, 5vw, 4.5rem); color: var(--blue-accent); line-height: 1; margin-bottom: 0.8rem; }
+        .metric-label { font-size: 0.95rem; color: var(--text-muted); max-width: 220px; margin: 0 auto; }
 
-        .program-card.reverse {
-            grid-template-columns: 1fr 1fr;
-            direction: rtl;
-        }
+        .quote-section { padding: 6rem 8%; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .quote-section blockquote { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.5rem); color: var(--navy-creamy-dark); line-height: 1.3; margin-bottom: 2rem; }
+        .quote-author { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
+        .quote-role { font-size: 0.9rem; color: var(--text-muted); }
 
-        .program-card.reverse .program-info {
-            direction: ltr;
-        }
-
-        .program-card.reverse .video-card-frame {
-            direction: ltr;
-        }
-
-        .program-info {
-            padding: 1rem;
-        }
-
-        .program-tag {
-            font-size: 0.85rem;
-            color: var(--blue-accent);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-        }
-
-        .program-info h3 {
-            font-family: var(--font-serif);
-            font-size: 2.2rem;
-            font-weight: 400;
-            margin-bottom: 1rem;
-            color: var(--navy-creamy-dark);
-        }
-
-        .program-info p {
-            font-size: 1.05rem;
-            color: #475569;
-            margin-bottom: 1.8rem;
-            line-height: 1.7;
-        }
-
-        .btn-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-            color: var(--blue-accent);
-            border-bottom: 2px solid transparent;
-            padding-bottom: 2px;
-            transition: all 0.2s;
-        }
-
-        .btn-link:hover {
-            border-bottom-color: var(--blue-accent);
-        }
-
-        /* --- Metrics / Impact Counter --- */
-        .metrics-section {
-            background-color: var(--bg-milky-card);
-            border-top: 1px solid #E2E8F0;
-            border-bottom: 1px solid #E2E8F0;
-            padding: 5rem 8%;
-        }
-
-        .metrics-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            text-align: center;
-        }
-
-        .metric-item {
-            position: relative;
-            padding: 0 1rem;
-        }
-
-        .metric-item:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 15%;
-            height: 70%;
-            width: 1px;
-            background-color: #CBD5E1;
-        }
-
-        .metric-number {
-            font-family: var(--font-serif);
-            font-size: clamp(3rem, 5vw, 4.5rem);
-            color: var(--blue-accent);
-            line-height: 1;
-            margin-bottom: 0.8rem;
-        }
-
-        .metric-label {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            max-width: 220px;
-            margin: 0 auto;
-        }
-
-        /* --- Quote Section --- */
-        .quote-section {
-            padding: 6rem 8%;
-            max-width: 1000px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .quote-section blockquote {
-            font-family: var(--font-serif);
-            font-size: clamp(1.8rem, 3vw, 2.5rem);
-            color: var(--navy-creamy-dark);
-            line-height: 1.3;
-            margin-bottom: 2rem;
-        }
-
-        .quote-author {
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--text-dark);
-        }
-
-        .quote-role {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* --- CTA Banner --- */
         .cta-banner {
             background: linear-gradient(135deg, #1E3A8A 0%, var(--navy-creamy-dark) 100%);
-            color: var(--text-light);
-            padding: 5rem 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto 6rem auto;
-            border-radius: 12px;
-            box-shadow: 0 25px 50px -12px rgba(14, 23, 38, 0.25);
+            color: var(--text-light); padding: 5rem 8%;
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 1200px; margin: 0 auto 6rem auto; border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(14,23,38,0.25);
         }
+        .cta-banner h2 { font-family: var(--font-serif); font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 400; }
+        .btn-primary { background-color: var(--text-light); color: var(--navy-creamy-dark); padding: 1rem 2rem; border-radius: 4px; font-weight: 600; font-size: 1rem; transition: all 0.2s; white-space: nowrap; }
+        .btn-primary:hover { background-color: var(--bg-milky-white); transform: translateY(-2px); }
 
-        .cta-banner h2 {
-            font-family: var(--font-serif);
-            font-size: clamp(2rem, 3.5vw, 3rem);
-            font-weight: 400;
-        }
+        footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; }
+        .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
+        .footer-brand { font-family: var(--font-serif); font-size: 1.8rem; color: var(--text-light); }
+        .footer-links { display: flex; gap: 3rem; flex-wrap: wrap; }
+        .footer-links div h4 { color: var(--text-light); margin-bottom: 1rem; font-size: 0.95rem; }
+        .footer-links div ul { list-style: none; }
+        .footer-links div ul li { margin-bottom: 0.6rem; }
+        .footer-links div ul li a:hover { color: var(--text-light); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
 
-        .btn-primary {
-            background-color: var(--text-light);
-            color: var(--navy-creamy-dark);
-            padding: 1rem 2rem;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--bg-milky-white);
-            transform: translateY(-2px);
-        }
-
-        /* --- Footer --- */
-        footer {
-            background-color: #070C14;
-            color: #94A3B8;
-            padding: 4rem 8% 2rem 8%;
-            font-size: 0.9rem;
-        }
-
-        .footer-top {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-
-        .footer-brand {
-            font-family: var(--font-serif);
-            font-size: 1.8rem;
-            color: var(--text-light);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 3rem;
-        }
-
-        .footer-links div h4 {
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
-
-        .footer-links div ul {
-            list-style: none;
-        }
-
-        .footer-links div ul li {
-            margin-bottom: 0.6rem;
-        }
-
-        .footer-links div ul li a:hover {
-            color: var(--text-light);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Responsive Layout Adjustments */
         @media (max-width: 900px) {
-            .vision-grid, .program-card, .program-card.reverse {
-                grid-template-columns: 1fr;
-                direction: ltr;
-            }
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-            .metric-item:not(:last-child)::after {
-                display: none;
-            }
-            .cta-banner {
-                flex-direction: column;
-                text-align: center;
-                gap: 2rem;
-            }
+            .vision-grid, .program-card, .program-card.reverse { grid-template-columns: 1fr; direction: ltr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .metric-item:not(:last-child)::after { display: none; }
+            .cta-banner { flex-direction: column; text-align: center; gap: 2rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ==== HEADER / NAV (see assets/header-partial.html for the source of truth) ==== -->
     <header>
-        <div class="logo">Penelope Inc.</div>
+        <a href="/" class="logo">Penelope Inc.</a>
+
         <ul class="nav-links">
-            <li><a href="#phi-lab">PHI Lab</a></li>
-            <li><a href="#twin">PHI-Twin</a></li>
-            <li><a href="#chain">PHI-Chain</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger">PHI Suites <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="/suites/phi-twin.html" class="nav-panel-link">
+                            <span class="nav-panel-tag">PHI-01</span>
+                            <span class="nav-panel-copy"><h4>PHI-Twin</h4><p>Edge digital twins for landing gear &amp; structural health monitoring.</p></span>
+                        </a>
+                        <a href="/suites/phi-chain.html" class="nav-panel-link">
+                            <span class="nav-panel-tag">PHI-02</span>
+                            <span class="nav-panel-copy"><h4>PHI-Chain</h4><p>Split-payload blockchain security for aviation communications.</p></span>
+                        </a>
+                        <a href="/suites/phi-arc.html" class="nav-panel-link">
+                            <span class="nav-panel-tag">PHI-03</span>
+                            <span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Turbine blade prognostics with real-time fault injection.</p></span>
+                        </a>
+                        <a href="/suites/phi-drone.html" class="nav-panel-link">
+                            <span class="nav-panel-tag">PHI-04</span>
+                            <span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span>
+                        </a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger">Services <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="/services/digital-twin-training.html" class="nav-panel-link"><span class="nav-panel-tag">01</span><span class="nav-panel-copy"><h4>Digital Twin Training</h4><p>For universities, MRO teams &amp; individuals.</p></span></a>
+                        <a href="/services/school-apps.html" class="nav-panel-link"><span class="nav-panel-tag">02</span><span class="nav-panel-copy"><h4>School Apps</h4><p>Lightweight screen-share learning platforms.</p></span></a>
+                        <a href="/services/church-apps.html" class="nav-panel-link"><span class="nav-panel-tag">03</span><span class="nav-panel-copy"><h4>Church Apps</h4><p>Full digital building for your congregation.</p></span></a>
+                        <a href="/services/lifestones.html" class="nav-panel-link"><span class="nav-panel-tag">04</span><span class="nav-panel-copy"><h4>Lifestones</h4><p>Autonomous sermon-intelligence &amp; verse display.</p></span></a>
+                        <a href="/services/penelope-agent.html" class="nav-panel-link"><span class="nav-panel-tag">05</span><span class="nav-panel-copy"><h4>Penelope AI Agent</h4><p>Hardware-locked, private autonomous agents.</p></span></a>
+                        <a href="/services/social-apps.html" class="nav-panel-link"><span class="nav-panel-tag">06</span><span class="nav-panel-copy"><h4>Social &amp; Mobile Apps</h4><p>Windows, Android, macOS, Linux — built affordably.</p></span></a>
+                        <a href="/services/security.html" class="nav-panel-link"><span class="nav-panel-tag">07</span><span class="nav-panel-copy"><h4>Security Architecture</h4><p>Predictive digital &amp; physical threat systems.</p></span></a>
+                        <a href="/services/fintech-crypto.html" class="nav-panel-link"><span class="nav-panel-tag">08</span><span class="nav-panel-copy"><h4>Financial Cryptography</h4><p>Networks that secure people's finances.</p></span></a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item"><a href="/lab.html" class="nav-trigger">The Lab</a></li>
+            <li class="nav-item"><a href="/about.html" class="nav-trigger">About</a></li>
+            <li class="nav-item"><a href="/join.html" class="nav-trigger">Join Us</a></li>
+            <li class="nav-item"><a href="/contact.html" class="nav-trigger">Contact</a></li>
         </ul>
+
+        <button class="nav-hamburger" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
     </header>
+
+    <div class="mobile-drawer">
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger">PHI Suites <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="/suites/phi-twin.html"><span class="nav-panel-tag">PHI-01</span> PHI-Twin</a>
+                <a href="/suites/phi-chain.html"><span class="nav-panel-tag">PHI-02</span> PHI-Chain</a>
+                <a href="/suites/phi-arc.html"><span class="nav-panel-tag">PHI-03</span> PHI-Arc</a>
+                <a href="/suites/phi-drone.html"><span class="nav-panel-tag">PHI-04</span> PHI-Drone</a>
+            </div>
+        </div>
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger">Services <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="/services/digital-twin-training.html">Digital Twin Training</a>
+                <a href="/services/school-apps.html">School Apps</a>
+                <a href="/services/church-apps.html">Church Apps</a>
+                <a href="/services/lifestones.html">Lifestones</a>
+                <a href="/services/penelope-agent.html">Penelope AI Agent</a>
+                <a href="/services/social-apps.html">Social &amp; Mobile Apps</a>
+                <a href="/services/security.html">Security Architecture</a>
+                <a href="/services/fintech-crypto.html">Financial Cryptography</a>
+            </div>
+        </div>
+        <a href="/lab.html" class="mobile-simple-link">The Lab</a>
+        <a href="/about.html" class="mobile-simple-link">About</a>
+        <a href="/join.html" class="mobile-simple-link">Join Us</a>
+        <a href="/contact.html" class="mobile-simple-link">Contact</a>
+    </div>
 
     <section class="hero">
         <video class="hero-video-bg scroll-video" autoplay muted loop playsinline poster="assets/poster-hero.jpg">
@@ -511,10 +275,10 @@
                 </video>
             </div>
             <div class="program-info">
-                <div class="program-tag">Edge Prognostics</div>
+                <div class="program-tag">Edge Prognostics — PHI-01</div>
                 <h3>PHI-Twin Framework</h3>
                 <p>Physics-Informed Edge Digital Twins integrating zero-leakage CNN-BiLSTM architectures and offline LLM reasoning for real-time landing gear and structural health monitoring.</p>
-                <a href="#contact" class="btn-link">Explore PHI-Twin &rarr;</a>
+                <a href="/suites/phi-twin.html" class="btn-link">Explore PHI-Twin &rarr;</a>
             </div>
         </div>
 
@@ -525,10 +289,10 @@
                 </video>
             </div>
             <div class="program-info">
-                <div class="program-tag">Aviation Communications & Security</div>
+                <div class="program-tag">Aviation Communications &amp; Security — PHI-02</div>
                 <h3>PHI-Chain Architecture</h3>
                 <p>A split-payload blockchain network designed for multi-protocol aviation communications security, ensuring TCAS compatibility and tamper-proof telemetry streams.</p>
-                <a href="#contact" class="btn-link">Explore PHI-Chain &rarr;</a>
+                <a href="/suites/phi-chain.html" class="btn-link">Explore PHI-Chain &rarr;</a>
             </div>
         </div>
 
@@ -539,10 +303,10 @@
                 </video>
             </div>
             <div class="program-info">
-                <div class="program-tag">Structural Architecture</div>
+                <div class="program-tag">Structural Architecture — PHI-03</div>
                 <h3>PHI-Arc Platform</h3>
                 <p>Component-specific simulation engines featuring real-time fault injection and dynamic load distribution telemetry for next-generation airframes.</p>
-                <a href="#contact" class="btn-link">Explore PHI-Arc &rarr;</a>
+                <a href="/suites/phi-arc.html" class="btn-link">Explore PHI-Arc &rarr;</a>
             </div>
         </div>
 
@@ -553,10 +317,10 @@
                 </video>
             </div>
             <div class="program-info">
-                <div class="program-tag">Autonomous Systems</div>
+                <div class="program-tag">Autonomous Systems — PHI-04</div>
                 <h3>PHI-Drone Suite</h3>
                 <p>Hardware-in-the-loop (HIL) validation environments for autonomous UAV trajectory planning, adaptive flight control, and dynamic failure mitigation.</p>
-                <a href="#contact" class="btn-link">Explore PHI-Drone &rarr;</a>
+                <a href="/suites/phi-drone.html" class="btn-link">Explore PHI-Drone &rarr;</a>
             </div>
         </div>
     </section>
@@ -579,9 +343,9 @@
     </section>
 
     <section class="quote-section">
-        <div class="section-label">VALIDATION & RESEARCH</div>
+        <div class="section-label">VALIDATION &amp; RESEARCH</div>
         <blockquote>
-            “PHI Lab’s zero-leakage framework bridges the critical gap between computational flight dynamics and onboard real-time diagnostic execution.”
+            "PHI Lab's zero-leakage framework bridges the critical gap between computational flight dynamics and onboard real-time diagnostic execution."
         </blockquote>
         <div class="quote-author">Aerospace Systems Engineering Lead</div>
         <div class="quote-role">Penelope Inc. Research Division</div>
@@ -589,30 +353,37 @@
 
     <div class="cta-banner" id="contact">
         <h2>Let us help you build your next mission-critical twin</h2>
-        <a href="mailto:contact@penelope.inc" class="btn-primary">Get in touch</a>
+        <a href="/contact.html" class="btn-primary">Get in touch</a>
     </div>
 
     <footer>
         <div class="footer-top">
-            <div class="footer-brand">
-                Penelope Inc.
-            </div>
+            <div class="footer-brand">Penelope Inc.</div>
             <div class="footer-links">
                 <div>
-                    <h4>Ecosystem</h4>
+                    <h4>PHI Suites</h4>
                     <ul>
-                        <li><a href="#twin">PHI-Twin</a></li>
-                        <li><a href="#chain">PHI-Chain</a></li>
-                        <li><a href="#arc">PHI-Arc</a></li>
-                        <li><a href="#drone">PHI-Drone</a></li>
+                        <li><a href="/suites/phi-twin.html">PHI-Twin</a></li>
+                        <li><a href="/suites/phi-chain.html">PHI-Chain</a></li>
+                        <li><a href="/suites/phi-arc.html">PHI-Arc</a></li>
+                        <li><a href="/suites/phi-drone.html">PHI-Drone</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="/services/digital-twin-training.html">Digital Twin Training</a></li>
+                        <li><a href="/services/church-apps.html">Church Apps</a></li>
+                        <li><a href="/services/security.html">Security Architecture</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4>Organization</h4>
                     <ul>
-                        <li><a href="#phi-lab">PHI Lab</a></li>
-                        <li><a href="#">Publications</a></li>
-                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="/lab.html">The Lab (Kaduna)</a></li>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/join.html">Join Us</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
@@ -625,39 +396,25 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Select all videos configured with the scroll-video class
             const scrollVideos = document.querySelectorAll('.scroll-video');
-
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.4 // Video plays when 40% visible in screen
-            };
-
-            const videoObserver = new IntersectionObserver((entries, observer) => {
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.4 };
+            const videoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const video = entry.target;
                     if (entry.isIntersecting) {
-                        // Play video when scrolled into view
-                        var playPromise = video.play();
+                        const playPromise = video.play();
                         if (playPromise !== undefined) {
-                            playPromise.catch(error => {
-                                // Auto-play was prevented (browser rule or low power mode)
-                                console.log("Autoplay prevented:", error);
-                            });
+                            playPromise.catch(() => {});
                         }
                     } else {
-                        // Pause video when scrolled out of view to conserve memory & power
                         video.pause();
                     }
                 });
             }, observerOptions);
-
-            scrollVideos.forEach(video => {
-                videoObserver.observe(video);
-            });
+            scrollVideos.forEach(video => videoObserver.observe(video));
         });
     </script>
+    <script src="assets/nav.js" defer></script>
     <script src="penelope.js"></script>
 </body>
 </html>
