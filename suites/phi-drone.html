@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PHI-Drone | Penelope Inc.</title>
+    <meta name="description" content="PHI-Drone — hardware-in-the-loop validation for autonomous UAV trajectory planning and vision-based recognition." />
+    <link rel="icon" href="../assets/penelope-logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../assets/design-system.css">
+    <style>
+        .suite-body { max-width: 820px; margin: 0 auto; padding: 5rem 2rem 2rem; }
+        .suite-body p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; margin-bottom: 1.3rem; }
+        .suite-body .note { font-size: 0.9rem; border-left: 3px solid var(--accent-orange); padding-left: 1.2rem; color: #cbd5e1; margin-top: 1.5rem; }
+        .suite-video-frame { max-width: 900px; margin: 2rem auto 6rem; padding: 0 2rem; }
+        .suite-video-frame .embed { position: relative; padding-top: 56.25%; border-radius: 12px; overflow: hidden; background: var(--bg-card); border: 1px solid var(--border-color); }
+        .suite-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+        .ongoing-block { max-width: 820px; margin: 0 auto; padding: 5rem 2rem; }
+        .ongoing-block h2 { font-family: var(--ff-display); font-size: 1.7rem; margin-bottom: 0.6rem; }
+        .ongoing-block > p { color: var(--text-muted); margin-bottom: 2rem; }
+        .ongoing-block .btn-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 1.5rem; color: var(--accent-orange); font-weight: 600; font-family: var(--ff-display); }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div class="container nav-container">
+            <a href="/" class="brand">
+                <img src="../assets/penelope-logo.png" alt="Penelope Inc." onerror="this.style.display='none'">
+                Penelope Inc.
+            </a>
+            <nav class="desktop-nav">
+                <div class="nav-item">
+                    Enterprise Suites <i class="fas fa-chevron-down"></i>
+                    <div class="mega-menu">
+                        <div class="mega-menu-sidebar">
+                            <h3>Core Architecture</h3>
+                            <p>Deep-tech validation frameworks for next-generation aerospace compliance and security.</p>
+                            <a href="/#suites" class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">View All Suites</a>
+                        </div>
+                        <div class="mega-menu-grid">
+                            <a href="phi-twin.html" class="mega-link">
+                                <div class="mega-icon"><i class="fas fa-network-wired"></i></div>
+                                <div class="mega-text"><h4>PHI-Twin</h4><p>Edge Prognostics</p></div>
+                            </a>
+                            <a href="phi-chain.html" class="mega-link mega-blue">
+                                <div class="mega-icon"><i class="fas fa-link"></i></div>
+                                <div class="mega-text"><h4>PHI-Chain</h4><p>Avionics Blockchain</p></div>
+                            </a>
+                            <a href="phi-arc.html" class="mega-link mega-blue">
+                                <div class="mega-icon"><i class="fas fa-cogs"></i></div>
+                                <div class="mega-text"><h4>PHI-Arc</h4><p>Lab Twin Engines</p></div>
+                            </a>
+                            <a href="phi-drone.html" class="mega-link">
+                                <div class="mega-icon"><i class="fas fa-satellite-dish"></i></div>
+                                <div class="mega-text"><h4>PHI-Drone</h4><p>UAV Recon Hub</p></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    Community Services <i class="fas fa-chevron-down"></i>
+                    <div class="mega-menu">
+                        <div class="mega-menu-sidebar">
+                            <h3>Giving Back</h3>
+                            <p>Leveraging our deep-tech stack to build affordable, high-end infrastructure for education, faith, and local enterprise.</p>
+                        </div>
+                        <div class="mega-menu-grid">
+                            <a href="/services/#training" class="mega-link mega-blue"><div class="mega-icon"><i class="fas fa-graduation-cap"></i></div><div class="mega-text"><h4>DT Education</h4><p>University & MRO</p></div></a>
+                            <a href="/services/#school-apps" class="mega-link"><div class="mega-icon"><i class="fas fa-school"></i></div><div class="mega-text"><h4>School Apps</h4><p>Lightweight WebRTC</p></div></a>
+                            <a href="/services/#church-apps" class="mega-link"><div class="mega-icon"><i class="fas fa-church"></i></div><div class="mega-text"><h4>Church Hubs</h4><p>Digital Buildings</p></div></a>
+                            <a href="/services/#security" class="mega-link mega-blue"><div class="mega-icon"><i class="fas fa-shield-alt"></i></div><div class="mega-text"><h4>Cybersecurity</h4><p>Predictive defense</p></div></a>
+                        </div>
+                    </div>
+                </div>
+                <a href="/#building-plan" class="nav-item">Facility Plan</a>
+                <a href="/#about" class="nav-item">About Us</a>
+                <a href="/#company-walls" class="btn-secondary" style="padding: 0.5rem 1.2rem; font-size: 0.85rem; height: auto; margin-top: 20px; margin-bottom: 20px;">
+                    <i class="fas fa-fingerprint"></i> Company Walls
+                </a>
+            </nav>
+            <button class="mobile-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mob-item">
+            <div class="mob-head" onclick="this.nextElementSibling.classList.toggle('open')">Enterprise Suites <i class="fas fa-chevron-down"></i></div>
+            <div class="mob-body">
+                <a href="phi-twin.html">PHI-Twin</a>
+                <a href="phi-chain.html">PHI-Chain</a>
+                <a href="phi-arc.html">PHI-Arc</a>
+                <a href="phi-drone.html">PHI-Drone</a>
+            </div>
+        </div>
+        <a href="/#building-plan" class="mob-head mob-item" style="border:none;">Facility Plan</a>
+        <a href="/#company-walls" class="mob-head mob-item" style="border:none; color:var(--accent-orange);">Company Walls Login</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="page-hero">
+        <div class="container">
+            <span class="section-eyebrow">PHI-04 — AUTONOMOUS SYSTEMS & UAV VALIDATION</span>
+            <h1>PHI-Drone: a flight-test range that exists entirely in software, before a single motor spins.</h1>
+            <p class="lede">Hardware-in-the-loop and software-in-the-loop validation for autonomous UAV trajectory planning, vision-based object recognition, and failure-mode recovery — built to find what breaks before a real airframe does.</p>
+        </div>
+    </section>
+
+    <!-- STORY -->
+    <section class="suite-body reveal">
+        <p>Flight-testing autonomy is expensive and slow when every trajectory-planning bug or vision-recognition edge case costs you a real airframe, a real flight, and real risk. PHI-Drone treats simulation as the proving ground, not an afterthought.</p>
+        <p>The framework integrates ArduPilot's software-in-the-loop simulator with FlightGear for realistic flight dynamics and YOLOv8 for real-time object detection and tracking, so trajectory planning, adaptive flight control, and failure-mitigation logic get stress-tested thousands of times before anything touches real hardware.</p>
+        <p>Every simulated flight logs full MAVLink telemetry, which means every failure mode is fully reproducible and debuggable — not a one-off crash you can't reconstruct.</p>
+        <p class="note">Full trajectory-planning architecture and vision-model training pipeline are reserved for OEM, research, and flight-test partners under NDA — this page covers what the system does, not how it's built.</p>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="container reveal" style="padding: 2rem 0 5rem;">
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="../assets/phi-drone/prototype-1.jpg" alt="PHI-Drone SITL simulation view"></div>
+            <div class="gallery-item"><img src="../assets/phi-drone/prototype-2.jpg" alt="PHI-Drone trajectory planning dashboard"></div>
+            <div class="gallery-item"><img src="../assets/phi-drone/prototype-3.jpg" alt="PHI-Drone YOLOv8 detection output"></div>
+            <div class="gallery-item"><img src="../assets/phi-drone/prototype-4.jpg" alt="PHI-Drone HIL testbed setup"></div>
+            <div class="gallery-item"><img src="../assets/phi-drone/prototype-5.jpg" alt="PHI-Drone MAVLink telemetry log view"></div>
+        </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="suite-video-frame reveal">
+        <div class="embed">
+            <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="PHI-Drone demo" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <!-- VALIDATION CTA -->
+    <section class="container reveal" style="padding-bottom: 5rem;">
+        <div class="validation-cta">
+            <span class="section-eyebrow">WE NEED YOU</span>
+            <h2>We built PHI-Drone to the edge of what a small lab can validate alone. If you're an OEM, MRO authority, or research body who can push it further — we want to hear from you.</h2>
+            <p>Independent validation, real operational telemetry, or certification pathway guidance would move PHI-Drone from lab-proven to field-proven faster than we can do it solo.</p>
+            <a href="/contact.html" class="btn-primary">Talk to us about validation</a>
+        </div>
+    </section>
+
+    <!-- ONGOING PROJECT -->
+    <section class="ongoing-block reveal">
+        <h2>On-going: PHI-Drone</h2>
+        <p>This is being built in the open. The strip below reflects real progress, pulled live.</p>
+        <div class="telemetry-strip" id="phi-drone-telemetry"></div>
+        <a href="/join.html?project=phi-drone" class="btn-link">Want to help build this? Join the project <i class="fas fa-arrow-right"></i></a>
+    </section>
+
+    <footer id="about">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2>Penelope Inc.</h2>
+                    <p>Strictly dedicated to the aerospace industry, specializing in digital twin technology for vehicle component health monitoring.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="/#suites">PHI-Suites</a></li>
+                        <li><a href="/#building-plan">Facility Plan</a></li>
+                        <li><a href="/#services">Services</a></li>
+                        <li><a href="/#company-walls">Company Walls</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal & Contact</h4>
+                    <ul>
+                        <li><a href="mailto:penelopeincorporated1@gmail.com">penelopeincorporated1@gmail.com</a></li>
+                        <li><a href="#">MOU Agreements</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Social</h4>
+                    <ul>
+                        <li><a href="https://smbello.vercel.app" target="_blank">Founder Portfolio</a></li>
+                        <li><a href="https://github.com/Penelope-Inco" target="_blank">GitHub Org</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Penelope Inc. All rights reserved.</p>
+                <p>System State: Nominal.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="Expanded View">
+    </div>
+
+    <script>
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            const icon = mobileToggle.querySelector('i');
+            icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times');
+        });
+        document.querySelectorAll('.mob-body a').forEach(link => {
+            link.addEventListener('click', () => { mobileMenu.classList.remove('active'); });
+        });
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        function openLightbox(src) { lightboxImg.src = src; lightbox.classList.add('active'); }
+        function closeLightbox() { lightbox.classList.remove('active'); }
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+        document.querySelectorAll('.gallery-item img').forEach(img => {
+            img.addEventListener('click', () => openLightbox(img.src));
+        });
+    </script>
+    <script src="../pb-realtime.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            PenelopeTelemetry.initProjectProgress('phi-drone', '#phi-drone-telemetry');
+        });
+    </script>
+</body>
+</html>
