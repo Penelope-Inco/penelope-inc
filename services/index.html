@@ -3,289 +3,34 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Community Services | Penelope Inc.</title>
-    <meta name="description" content="Penelope Inc. Community Services — Educational platforms, cybersecurity, church digital hubs, and sovereign AI agents." />
+    <title>Services | Penelope Inc.</title>
+    <meta name="description" content="Penelope Inc. software services — digital twin training, education platforms, church systems, and security architecture, built by the same team behind PHI Suite." />
     <link rel="icon" href="../assets/penelope-logo.png" type="image/png">
-    
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-    <!-- Note: In a true production environment, these styles are linked via <link rel="stylesheet" href="../assets/design-system.css">. 
-         They are included inline here to ensure the Canvas preview renders perfectly standalone. -->
+    <link rel="stylesheet" href="../assets/design-system.css">
     <style>
-        :root {
-            --bg-deep: #030712;
-            --bg-card: #0f172a;
-            --bg-hover: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-orange: #dd5a12;
-            --accent-orange-glow: rgba(221, 90, 18, 0.4);
-            --accent-blue: #0ea5e9;
-            --accent-green: #10b981;
-            --accent-purple: #8b5cf6;
-            --border-color: rgba(255, 255, 255, 0.1);
-            
-            --ff-display: 'Space Grotesk', sans-serif;
-            --ff-body: 'Inter', sans-serif;
-            --ff-mono: 'JetBrains Mono', monospace;
-            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: var(--ff-body);
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        img { max-width: 100%; height: auto; display: block; }
-
-        .container { max-width: 1350px; margin: 0 auto; padding: 0 2rem; }
-        .section-padding { padding: 6rem 0; }
-        .reveal { opacity: 0; transform: translateY(30px); transition: var(--transition); transition-duration: 0.8s; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        .section-header { text-align: center; margin-bottom: 4rem; }
-        .section-eyebrow { font-family: var(--ff-mono); font-size: 0.8rem; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; display: block; }
-        .section-title { font-family: var(--ff-display); font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; }
-        .section-desc { color: var(--text-muted); max-width: 800px; margin: 0 auto; font-size: 1.1rem; line-height: 1.8; }
-
-        /* ─── BUTTONS ─── */
-        .btn-primary {
-            display: inline-flex; align-items: center; gap: 10px; justify-content: center;
-            background: linear-gradient(135deg, var(--accent-orange), #f97316);
-            color: #fff; padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 600; font-family: var(--ff-display); font-size: 0.95rem;
-            transition: var(--transition); border: 1px solid transparent; cursor: pointer; white-space: nowrap;
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--accent-orange-glow); }
-        
-        .btn-secondary {
-            display: inline-flex; align-items: center; gap: 10px; justify-content: center;
-            background: rgba(255,255,255,0.05); color: #fff; padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 600; font-family: var(--ff-display); font-size: 0.95rem;
-            transition: var(--transition); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; white-space: nowrap;
-        }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: translateY(-2px); }
-
-        .btn-outline-blue {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: transparent; color: var(--accent-blue); padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; font-family: var(--ff-display); font-size: 0.85rem;
-            transition: var(--transition); border: 1px solid var(--accent-blue); cursor: pointer; white-space: nowrap;
-        }
-        .btn-outline-blue:hover { background: rgba(14, 165, 233, 0.1); transform: translateY(-2px); }
-
-        /* ─── MEGA MENU NAVIGATION ─── */
-        header {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
-            background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color);
-            transition: var(--transition);
-        }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; height: 80px; }
-        .brand { font-family: var(--ff-display); font-size: 1.5rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; }
-        .brand img { width: 32px; height: 32px; border-radius: 50%; }
-
-        .desktop-nav { display: flex; gap: 2rem; height: 100%; }
-        .nav-item { position: relative; display: flex; align-items: center; height: 100%; font-family: var(--ff-display); font-weight: 500; font-size: 0.95rem; cursor: pointer; color: var(--text-muted); transition: color 0.3s; }
-        .nav-item:hover, .nav-item.active { color: #fff; }
-        .nav-item i { font-size: 0.7rem; margin-left: 6px; transition: transform 0.3s; }
-        .nav-item:hover i { transform: rotate(180deg); }
-
-        .mega-menu {
-            position: absolute; top: 80px; left: 50%; transform: translateX(-50%) translateY(10px);
-            width: 1000px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(30px);
-            border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5); opacity: 0; pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: grid; gap: 2rem;
-            grid-template-columns: 1fr 2fr;
-        }
-        .nav-item:hover .mega-menu { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        
-        .mega-menu-sidebar h3 { font-family: var(--ff-mono); font-size: 0.8rem; color: var(--accent-orange); text-transform: uppercase; margin-bottom: 1rem; }
-        .mega-menu-sidebar p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem; }
-        .mega-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .mega-link { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; border-radius: 12px; transition: var(--transition); background: rgba(255,255,255,0.02); border: 1px solid transparent; }
-        .mega-link:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); transform: translateX(5px); }
-        .mega-icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(221, 90, 18, 0.1); color: var(--accent-orange); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-        .mega-blue .mega-icon { background: rgba(14, 165, 233, 0.1); color: var(--accent-blue); }
-        .mega-text h4 { font-size: 1rem; color: #fff; margin-bottom: 0.2rem; font-family: var(--ff-display); }
-        .mega-text p { font-size: 0.8rem; color: var(--text-muted); }
-
-        .mobile-toggle { display: none; font-size: 1.5rem; color: #fff; background: none; border: none; cursor: pointer; }
-
-        /* ─── PAGE HERO ─── */
-        .page-hero {
-            padding: 12rem 0 6rem;
-            position: relative;
-            background: linear-gradient(180deg, var(--bg-deep), var(--bg-card));
-            border-bottom: 1px solid var(--border-color);
-            overflow: hidden;
-            text-align: center;
-        }
-        #hero-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.3; }
-        .page-hero .container { position: relative; z-index: 2; }
-        .page-hero h1 { font-family: var(--ff-display); font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -1px; }
-        .page-hero .highlight { background: linear-gradient(135deg, var(--accent-blue), #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .page-hero p.lede { font-size: 1.2rem; color: var(--text-muted); max-width: 800px; margin: 0 auto; line-height: 1.7; }
-
-        /* ─── SERVICE SHOWCASE BLOCKS ─── */
-        .service-showcase {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            margin-bottom: 4rem;
-            overflow: hidden;
-            position: relative;
-            transition: var(--transition);
-        }
-        .service-showcase:hover {
-            border-color: rgba(255,255,255,0.2);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        }
-        /* Color themes for different services */
-        .theme-blue { border-top: 3px solid var(--accent-blue); }
-        .theme-orange { border-top: 3px solid var(--accent-orange); }
-        .theme-green { border-top: 3px solid var(--accent-green); }
-        .theme-purple { border-top: 3px solid var(--accent-purple); }
-
-        .service-header {
-            padding: 3rem 4rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: flex-start;
-            gap: 2rem;
-            position: relative;
-            background: rgba(255,255,255,0.01);
-        }
-        .service-header-icon {
-            width: 70px; height: 70px; border-radius: 16px; background: rgba(255,255,255,0.05);
-            display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .theme-blue .service-header-icon { color: var(--accent-blue); background: rgba(14,165,233,0.1); border-color: rgba(14,165,233,0.2); }
-        .theme-orange .service-header-icon { color: var(--accent-orange); background: rgba(221,90,18,0.1); border-color: rgba(221,90,18,0.2); }
-        .theme-green .service-header-icon { color: var(--accent-green); background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.2); }
-        .theme-purple .service-header-icon { color: var(--accent-purple); background: rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.2); }
-
-        .service-info h2 { font-family: var(--ff-display); font-size: 2.2rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
-        .service-info p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; max-width: 800px; margin-bottom: 1.5rem; }
-        .service-meta-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-        .service-meta-tags span { font-family: var(--ff-mono); font-size: 0.75rem; padding: 4px 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 100px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        
-        .service-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-        /* Media Gallery Grid */
-        .service-gallery {
-            padding: 2rem 4rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            background: #000;
-        }
-        .gallery-item {
-            aspect-ratio: 16/9;
-            background: #0f172a;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            position: relative;
-            cursor: zoom-in;
-            group: 'gallery';
-        }
-        .gallery-item img {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: var(--transition);
-        }
-        .gallery-item:hover img { opacity: 1; transform: scale(1.05); }
-        
-        /* Video Thumbnail Specifics */
-        .gallery-item.video::before {
-            content: '\f04b'; /* FontAwesome play icon */
-            font-family: 'Font Awesome 6 Free'; font-weight: 900;
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 60px; height: 60px; background: rgba(14, 165, 233, 0.8);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; color: #fff; z-index: 10; transition: var(--transition);
-            backdrop-filter: blur(4px); cursor: pointer;
-        }
-        .theme-orange .gallery-item.video::before { background: rgba(221, 90, 18, 0.8); }
-        .gallery-item.video:hover::before { transform: translate(-50%, -50%) scale(1.1); }
-
-        /* ─── PARTNER MOU NETWORK ─── */
-        .mou-section {
-            background: linear-gradient(135deg, rgba(14,165,233,0.05), rgba(3,7,18,1));
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 5rem 4rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .mou-section h2 { font-family: var(--ff-display); font-size: 2.5rem; margin-bottom: 1rem; }
-        .mou-section p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 3rem; }
-        
-        .form-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 16px; padding: 3rem; max-width: 700px; margin: 0 auto; backdrop-filter: blur(10px); text-align: left; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; font-family: var(--ff-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #fff; margin-bottom: 0.6rem; }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px;
-            padding: 1rem; color: #fff; font-family: var(--ff-body); font-size: 0.95rem;
-            transition: var(--transition);
-        }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
-        }
-        .form-group textarea { resize: vertical; min-height: 120px; }
-
-        /* ─── LIGHTBOX ─── */
-        .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(10px); }
-        .lightbox.active { opacity: 1; pointer-events: auto; }
-        .lightbox img, .lightbox iframe { max-width: 90vw; max-height: 90vh; border-radius: 12px; transform: scale(0.9); transition: transform 0.3s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .lightbox.active img, .lightbox.active iframe { transform: scale(1); }
-        .lightbox-close { position: absolute; top: 2rem; right: 3rem; color: #fff; font-size: 3rem; cursor: pointer; transition: color 0.2s; z-index: 10001; }
-        .lightbox-close:hover { color: var(--accent-orange); }
-
-        /* ─── FOOTER ─── */
-        footer { background: #000; padding: 4rem 0 2rem; border-top: 1px solid var(--border-color); }
-        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
-        .footer-brand h2 { font-family: var(--ff-display); font-size: 1.5rem; margin-bottom: 1rem; }
-        .footer-brand p { color: var(--text-muted); font-size: 0.9rem; max-width: 300px; }
-        .footer-col h4 { font-family: var(--ff-mono); font-size: 0.8rem; text-transform: uppercase; color: #fff; margin-bottom: 1.5rem; }
-        .footer-col ul li { margin-bottom: 0.8rem; }
-        .footer-col ul li a { color: var(--text-muted); font-size: 0.9rem; transition: color 0.2s; }
-        .footer-col ul li a:hover { color: var(--accent-orange); }
-        .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.85rem; }
-
-        @media (max-width: 1024px) {
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-            .service-header { flex-direction: column; padding: 2rem; gap: 1.5rem; }
-            .service-gallery { padding: 1.5rem 2rem; grid-template-columns: 1fr 1fr; }
-            .mou-section { padding: 3rem 1.5rem; }
-        }
-        @media (max-width: 768px) {
-            .service-gallery { grid-template-columns: 1fr; }
-            .form-card { padding: 2rem 1.5rem; }
-        }
+        .page-hero { padding: 11rem 0 5rem; text-align: left; }
+        .page-hero h1 { max-width: 820px; }
+        .service-nav-strip { position: sticky; top: 80px; z-index: 90; background: rgba(3,7,18,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); padding: 1rem 0; overflow-x: auto; }
+        .service-nav-strip .container { display: flex; gap: 1.8rem; white-space: nowrap; }
+        .service-nav-strip a { font-family: var(--ff-mono); font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .service-nav-strip a:hover { color: var(--accent-orange); }
+        .mou-section { background: linear-gradient(135deg, rgba(14,165,233,0.06), var(--bg-deep) 60%); border: 1px solid var(--border-color); border-radius: 20px; padding: 4rem 3rem; text-align: center; }
+        .mou-section h2 { font-family: var(--ff-display); font-size: 2rem; margin-bottom: 0.8rem; }
+        .mou-section p { color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem; }
     </style>
 </head>
 <body>
 
-    <!-- ─── HEADER & MEGA MENU ─── -->
     <header id="header">
         <div class="container nav-container">
             <a href="/" class="brand">
                 <img src="../assets/penelope-logo.png" alt="Penelope Inc." onerror="this.style.display='none'">
                 Penelope Inc.
             </a>
-
-            <!-- Desktop Nav -->
             <nav class="desktop-nav">
                 <div class="nav-item">
                     Enterprise Suites <i class="fas fa-chevron-down"></i>
@@ -296,294 +41,236 @@
                             <a href="/#suites" class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">View All Suites</a>
                         </div>
                         <div class="mega-menu-grid">
-                            <a href="/#suites" class="mega-link">
-                                <div class="mega-icon"><i class="fas fa-network-wired"></i></div>
-                                <div class="mega-text"><h4>PHI-Twin</h4><p>Edge Prognostics</p></div>
-                            </a>
-                            <a href="/#suites" class="mega-link mega-blue">
-                                <div class="mega-icon"><i class="fas fa-link"></i></div>
-                                <div class="mega-text"><h4>PHI-Chain</h4><p>Avionics Blockchain</p></div>
-                            </a>
-                            <a href="/#suites" class="mega-link mega-blue">
-                                <div class="mega-icon"><i class="fas fa-cogs"></i></div>
-                                <div class="mega-text"><h4>PHI-Arc</h4><p>Lab Twin Engines</p></div>
-                            </a>
-                            <a href="/#suites" class="mega-link">
-                                <div class="mega-icon"><i class="fas fa-satellite-dish"></i></div>
-                                <div class="mega-text"><h4>PHI-Drone</h4><p>UAV Recon Hub</p></div>
-                            </a>
+                            <a href="../suites/phi-twin.html" class="mega-link"><div class="mega-icon"><i class="fas fa-network-wired"></i></div><div class="mega-text"><h4>PHI-Twin</h4><p>Edge Prognostics</p></div></a>
+                            <a href="../suites/phi-chain.html" class="mega-link mega-blue"><div class="mega-icon"><i class="fas fa-link"></i></div><div class="mega-text"><h4>PHI-Chain</h4><p>Avionics Blockchain</p></div></a>
+                            <a href="../suites/phi-arc.html" class="mega-link mega-blue"><div class="mega-icon"><i class="fas fa-cogs"></i></div><div class="mega-text"><h4>PHI-Arc</h4><p>Lab Twin Engines</p></div></a>
+                            <a href="../suites/phi-drone.html" class="mega-link"><div class="mega-icon"><i class="fas fa-satellite-dish"></i></div><div class="mega-text"><h4>PHI-Drone</h4><p>UAV Recon Hub</p></div></a>
                         </div>
                     </div>
                 </div>
-                
-                <div class="nav-item active">
+                <div class="nav-item">
                     Community Services <i class="fas fa-chevron-down"></i>
                     <div class="mega-menu">
                         <div class="mega-menu-sidebar">
                             <h3>Giving Back</h3>
-                            <p>Leveraging our deep-tech stack to build affordable, high-end infrastructure for education, faith, and local enterprise.</p>
+                            <p>Our engineering team applies aerospace-grade rigor to education, faith, and local enterprise software.</p>
                         </div>
                         <div class="mega-menu-grid">
-                            <a href="#dt-education" class="mega-link mega-blue">
-                                <div class="mega-icon"><i class="fas fa-graduation-cap"></i></div>
-                                <div class="mega-text"><h4>DT Education</h4><p>University & MRO</p></div>
-                            </a>
-                            <a href="#school-apps" class="mega-link">
-                                <div class="mega-icon"><i class="fas fa-school"></i></div>
-                                <div class="mega-text"><h4>School Apps</h4><p>Lightweight WebRTC</p></div>
-                            </a>
-                            <a href="#church-hubs" class="mega-link">
-                                <div class="mega-icon"><i class="fas fa-church"></i></div>
-                                <div class="mega-text"><h4>Church Hubs</h4><p>Digital Buildings</p></div>
-                            </a>
-                            <a href="#cybersecurity" class="mega-link mega-blue">
-                                <div class="mega-icon"><i class="fas fa-shield-alt"></i></div>
-                                <div class="mega-text"><h4>Cybersecurity</h4><p>Predictive defense</p></div>
-                            </a>
+                            <a href="#dt-education" class="mega-link mega-blue"><div class="mega-icon"><i class="fas fa-graduation-cap"></i></div><div class="mega-text"><h4>DT Education</h4><p>University & MRO</p></div></a>
+                            <a href="#school-apps" class="mega-link"><div class="mega-icon"><i class="fas fa-school"></i></div><div class="mega-text"><h4>School Apps</h4><p>Lightweight WebRTC</p></div></a>
+                            <a href="#church-hubs" class="mega-link"><div class="mega-icon"><i class="fas fa-church"></i></div><div class="mega-text"><h4>Church Hubs</h4><p>Digital Buildings</p></div></a>
+                            <a href="#cybersecurity" class="mega-link mega-blue"><div class="mega-icon"><i class="fas fa-shield-alt"></i></div><div class="mega-text"><h4>Cybersecurity</h4><p>Predictive defense</p></div></a>
                         </div>
                     </div>
                 </div>
-
                 <a href="/#building-plan" class="nav-item">Facility Plan</a>
                 <a href="/about.html" class="nav-item">About Us</a>
-                
-                <a href="/#company-walls" class="btn-secondary" style="padding: 0.5rem 1.2rem; font-size: 0.85rem; height: auto; margin-top: 20px; margin-bottom: 20px;">
-                    <i class="fas fa-fingerprint"></i> Company Walls
-                </a>
+                <a href="/#company-walls" class="btn-secondary" style="padding: 0.5rem 1.2rem; font-size: 0.85rem; height: auto; margin-top: 20px; margin-bottom: 20px;"><i class="fas fa-fingerprint"></i> Company Walls</a>
             </nav>
-
             <button class="mobile-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
         </div>
     </header>
 
-    <!-- Mobile Fullscreen Menu -->
     <div class="mobile-menu" id="mobile-menu">
         <div class="mob-item">
             <div class="mob-head" onclick="this.nextElementSibling.classList.toggle('open')">Enterprise Suites <i class="fas fa-chevron-down"></i></div>
             <div class="mob-body">
-                <a href="/#suites">PHI-Twin</a>
-                <a href="/#suites">PHI-Chain</a>
-                <a href="/#suites">PHI-Arc</a>
-                <a href="/#suites">PHI-Drone</a>
+                <a href="../suites/phi-twin.html">PHI-Twin</a>
+                <a href="../suites/phi-chain.html">PHI-Chain</a>
+                <a href="../suites/phi-arc.html">PHI-Arc</a>
+                <a href="../suites/phi-drone.html">PHI-Drone</a>
             </div>
         </div>
-        <div class="mob-item">
-            <div class="mob-head" onclick="this.nextElementSibling.classList.toggle('open')">Community Services <i class="fas fa-chevron-down"></i></div>
-            <div class="mob-body">
-                <a href="#dt-education">DT Education</a>
-                <a href="#school-apps">School/Church Apps</a>
-                <a href="#penelope-agents">Penelope Agents</a>
-                <a href="#cybersecurity">Cybersecurity</a>
-            </div>
-        </div>
-        <a href="/#building-plan" class="mob-head mob-item" style="border:none; text-decoration:none; color:#fff;">Facility Plan</a>
-        <a href="/#company-walls" class="mob-head mob-item" style="border:none; color:var(--accent-orange); text-decoration:none;">Company Walls Login</a>
+        <a href="/#building-plan" class="mob-head mob-item" style="border:none;">Facility Plan</a>
+        <a href="/#company-walls" class="mob-head mob-item" style="border:none; color:var(--accent-orange);">Company Walls Login</a>
     </div>
 
-    <!-- ─── PAGE HERO ─── -->
+    <!-- PAGE HERO -->
     <section class="page-hero">
-        <canvas id="hero-canvas"></canvas>
-        <div class="container reveal">
-            <span class="section-eyebrow" style="text-align: center; margin-bottom: 1.5rem;">The Penelope Inc. Network</span>
-            <h1>Community & <span class="highlight">Enterprise Services</span></h1>
-            <p class="lede">While our specialty is aerospace digital twin technology, we leverage our deep-tech engineering expertise as a way of giving back to the community. From robust educational platforms to sovereign AI agents, explore our custom software architectures.</p>
+        <div class="container">
+            <span class="section-eyebrow">Outside our specialty, on purpose</span>
+            <h1>Software services, built by the same engineering standard as PHI Suite.</h1>
+            <p class="lede">Our specialty is aerospace digital twin technology. Everything on this page is us applying that same engineering discipline to education, faith communities, and local enterprise — priced to be accessible, not to maximize margin.</p>
         </div>
     </section>
 
+    <!-- QUICK NAV -->
+    <nav class="service-nav-strip">
+        <div class="container">
+            <a href="#dt-education">Digital Twin Training</a>
+            <a href="#school-apps">School Apps</a>
+            <a href="#church-hubs">Church Apps</a>
+            <a href="#lifestones">Lifestones</a>
+            <a href="#penelope-agents">Penelope Agent</a>
+            <a href="#social-apps">Social & Mobile Apps</a>
+            <a href="#cybersecurity">Cybersecurity</a>
+            <a href="#cryptography">Fintech Cryptography</a>
+            <a href="#partner-network">Partner With Us</a>
+        </div>
+    </nav>
+
     <main class="container" style="padding-top: 4rem; padding-bottom: 6rem;">
 
-        <!-- 01: Digital Twin Education -->
-        <article id="dt-education" class="service-showcase theme-blue reveal">
+        <!-- 01: DIGITAL TWIN TRAINING -->
+        <article id="dt-education" class="service-showcase theme-orange reveal">
             <div class="service-header">
                 <div class="service-header-icon"><i class="fas fa-graduation-cap"></i></div>
                 <div class="service-info">
-                    <h2>Digital Twin Masterclasses</h2>
-                    <div class="service-meta-tags">
-                        <span>Universities</span><span>MRO Officials</span><span>Individual Training</span>
-                    </div>
-                    <p>We provide comprehensive live courses on building digital twins. Using our custom school app for low-latency screen sharing, we guide you through the physics-informed AI lifecycle. For institutions requiring in-person setup, physical deployment modules are available.</p>
+                    <h2>Digital Twin Training</h2>
+                    <div class="service-meta-tags"><span>Universities</span><span>MRO Officials</span><span>Individuals</span></div>
+                    <p>Live, instructor-led training on building digital twins — taught by the people who actually built PHI-Twin, not a licensed curriculum reseller. Three pricing tiers depending on who you are:</p>
+                    <ul class="feature-list">
+                        <li><strong>University departments</strong> — full-cohort pricing, custom curriculum scope</li>
+                        <li><strong>MRO officials</strong> — professional-track pricing, applied case studies from real aircraft components</li>
+                        <li><strong>Individuals</strong> — self-enrollment pricing, same material as the professional track</li>
+                    </ul>
+                    <p style="font-size:0.92rem;">Sessions run over our own screen-share app (see School Apps below). In-person delivery is available if you cover travel costs. On enrollment we send a meeting link and course access directly — no separate app download required to start.</p>
                     <div class="service-actions">
-                        <a href="mailto:penelopeincorporated1@gmail.com?subject=University DT Course" class="btn-primary">Book University Module</a>
-                        <a href="mailto:penelopeincorporated1@gmail.com?subject=MRO DT Course" class="btn-secondary">Book MRO Training</a>
-                        <button class="btn-outline-blue" onclick="alert('Voov/Custom Meeting Client download link will be provisioned upon course registration.')"><i class="fas fa-download"></i> Download Client</button>
+                        <a href="mailto:penelopeincorporated1@gmail.com?subject=University%20Digital%20Twin%20Training" class="btn-primary">Enroll a University</a>
+                        <a href="mailto:penelopeincorporated1@gmail.com?subject=MRO%20Digital%20Twin%20Training" class="btn-secondary">Enroll as MRO Staff</a>
+                        <a href="mailto:penelopeincorporated1@gmail.com?subject=Individual%20Digital%20Twin%20Training" class="btn-secondary">Enroll as an Individual</a>
                     </div>
-                </div>
-            </div>
-            <div class="service-gallery">
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800')">
-                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800" alt="Training Session">
-                </div>
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800')">
-                    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800" alt="Curriculum Design">
                 </div>
             </div>
         </article>
 
-        <!-- 02: School Apps -->
-        <article id="school-apps" class="service-showcase theme-orange reveal">
+        <!-- 02: SCHOOL APPS -->
+        <article id="school-apps" class="service-showcase theme-blue reveal">
             <div class="service-header">
                 <div class="service-header-icon"><i class="fas fa-school"></i></div>
                 <div class="service-info">
-                    <h2>Educational WebRTC Platforms</h2>
-                    <div class="service-meta-tags">
-                        <span>Desktop & Mobile</span><span>Livekit Integrated</span><span>Low Bandwidth</span>
-                    </div>
-                    <p>We are big in education. We build lightweight, data-efficient apps that allow teachers and students to share screens and learn seamlessly. The architecture guarantees stable video and highly audible streams regardless of location.</p>
+                    <h2>School Apps</h2>
+                    <div class="service-meta-tags"><span>Desktop & Mobile</span><span>Low Bandwidth</span><span>Screen Share</span></div>
+                    <p>A screen-sharing platform for teachers and students, built to work on the kind of connection most schools actually have — not a best-case-scenario broadband demo. Light on data, stable audio, clear video, no account-heavy onboarding.</p>
+                    <p style="font-size:0.92rem;">This is the same platform our own Digital Twin Training runs on.</p>
                     <div class="service-actions">
-                        <a href="mailto:penelopeincorporated1@gmail.com?subject=School App Commission" class="btn-primary">Commission a Build</a>
-                        <button class="btn-secondary" onclick="alert('Demo environment currently staging. Check back soon.')"><i class="fas fa-desktop"></i> Desktop App (Coming Soon)</button>
+                        <a href="mailto:penelopeincorporated1@gmail.com?subject=School%20App%20Commission" class="btn-primary">Commission a Build</a>
+                        <button class="btn-secondary" onclick="alert('Desktop download isn\'t ready yet — we\'ll email you when it is. Reach out to get on the list.')"><i class="fas fa-desktop"></i> Desktop App</button>
                     </div>
-                </div>
-            </div>
-            <div class="service-gallery" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=800')">
-                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=800" alt="WebRTC Interface">
-                </div>
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=800')">
-                    <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=800" alt="Mobile View">
-                </div>
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=800')">
-                    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=800" alt="Classroom Data">
-                </div>
-                <!-- Video Placeholder -->
-                <div class="gallery-item video" onclick="openVideoLightbox('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')">
-                    <img src="https://images.unsplash.com/photo-1610484826967-09c5720778c7?auto=format&fit=crop&q=80&w=800" alt="Demo Video Placeholder">
                 </div>
             </div>
         </article>
 
-        <!-- 03: Church Digital Hubs -->
-        <article id="church-hubs" class="service-showcase theme-purple reveal">
+        <!-- 03: CHURCH HUBS -->
+        <article id="church-hubs" class="service-showcase theme-orange reveal">
             <div class="service-header">
                 <div class="service-header-icon"><i class="fas fa-church"></i></div>
                 <div class="service-info">
                     <h2>Church Digital Buildings</h2>
-                    <div class="service-meta-tags">
-                        <span>Live Meetings</span><span>Group Chat</span><span>Private Counseling</span>
-                    </div>
-                    <p>We are dedicated to preserving moral standards by advancing Jesus' kingdom digitally. We construct complete church apps serving as "digital buildings"—featuring live sermon broadcasts (pastor-controlled), private counseling portals, member directories, and secure group chats.</p>
+                    <div class="service-meta-tags"><span>Sermons</span><span>Counseling</span><span>Live Meetings</span><span>Chat</span></div>
+                    <p>A complete church app — think of it as your congregation's digital building, not just a livestream box:</p>
+                    <ul class="feature-list">
+                        <li><strong>Home</strong> — sermon archive and announcements</li>
+                        <li><strong>Private counseling</strong> — a direct line to pastoral staff, kept separate from general chat</li>
+                        <li><strong>Live meetings</strong> — pastor-initiated only; members join, they don't start</li>
+                        <li><strong>Member directory</strong> — who's who in the congregation</li>
+                        <li><strong>Chat</strong> — general congregation chat plus dedicated group chats</li>
+                        <li><strong>Profiles</strong> — individual member pages</li>
+                    </ul>
                     <div class="service-actions">
-                        <a href="mailto:penelopeincorporated1@gmail.com?subject=Church Digital Hub Build" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-purple), #a855f7); box-shadow: 0 8px 20px rgba(139,92,246,0.3);">Hire Us to Build</a>
+                        <a href="mailto:penelopeincorporated1@gmail.com?subject=Church%20App%20Build" class="btn-primary">Get a Church Build Quote</a>
                     </div>
                 </div>
             </div>
-            <div class="service-gallery" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
-                <!-- 5 Images -->
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80&w=800')"><img src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80&w=800" alt="Hub UI 1"></div>
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&q=80&w=800')"><img src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&q=80&w=800" alt="Hub UI 2"></div>
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&q=80&w=800')"><img src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&q=80&w=800" alt="Hub UI 3"></div>
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1511649475669-e288648b2339?auto=format&fit=crop&q=80&w=800')"><img src="https://images.unsplash.com/photo-1511649475669-e288648b2339?auto=format&fit=crop&q=80&w=800" alt="Hub UI 4"></div>
-                <div class="gallery-item video" onclick="openVideoLightbox('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')"><img src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=800" alt="Video Demo"></div>
-            </div>
         </article>
 
-        <!-- 04: Lifestones (Desktop Apps) -->
-        <article id="desktop-apps" class="service-showcase theme-green reveal">
+        <!-- 04: LIFESTONES -->
+        <article id="lifestones" class="service-showcase theme-blue reveal">
             <div class="service-header">
                 <div class="service-header-icon"><i class="fas fa-laptop-code"></i></div>
                 <div class="service-info">
-                    <h2>Lifestones: Autonomous EasyWorship</h2>
-                    <div class="service-meta-tags">
-                        <span>Tauri v2</span><span>Rust</span><span>Whisper-RS STT</span><span>Cross-Platform</span>
-                    </div>
-                    <p>We tested our grit by building a superior, autonomous EasyWorship alternative. The system actively listens to the speaker, utilizes AI voice recognition (STT) natively, and automatically parses and displays Bible verses on screen. Built for local churches—plug-and-play, no heavy OBS routing required.</p>
+                    <h2>Lifestones — Autonomous Sermon Display</h2>
+                    <div class="service-meta-tags"><span>Tauri v2 / Rust</span><span>Offline Speech Recognition</span><span>Windows · macOS · Linux</span></div>
+                    <p>We built this because existing church presentation software makes you route through OBS and manually cue every verse. Lifestones listens to the sermon locally (no cloud, no internet dependency), recognizes when a Bible verse is being referenced, and displays it automatically — no operator required, no heavyweight video-routing setup.</p>
                     <div class="service-actions">
-                        <button class="btn-secondary" onclick="alert('Lifestones Windows x64 Binary building. Check GitHub for releases.')"><i class="fab fa-windows"></i> Windows</button>
-                        <button class="btn-secondary" onclick="alert('Lifestones macOS ARM64 Binary building.')"><i class="fab fa-apple"></i> MacOS</button>
-                        <button class="btn-secondary" onclick="alert('Lifestones Linux AppImage building.')"><i class="fab fa-linux"></i> Linux</button>
+                        <button class="btn-secondary" onclick="alert('Windows build not yet released. Watch our GitHub for the first release.')"><i class="fab fa-windows"></i> Windows</button>
+                        <button class="btn-secondary" onclick="alert('macOS build not yet released. Watch our GitHub for the first release.')"><i class="fab fa-apple"></i> macOS</button>
+                        <button class="btn-secondary" onclick="alert('Linux build not yet released. Watch our GitHub for the first release.')"><i class="fab fa-linux"></i> Linux</button>
                     </div>
                 </div>
             </div>
         </article>
 
-        <!-- 05: Penelope AI Agents -->
-        <article id="penelope-agents" class="service-showcase theme-blue reveal">
+        <!-- 05: PENELOPE AGENT -->
+        <article id="penelope-agents" class="service-showcase theme-orange reveal">
             <div class="service-header">
                 <div class="service-header-icon"><i class="fas fa-robot"></i></div>
                 <div class="service-info">
-                    <h2>Penelope AI Agent Integration</h2>
-                    <div class="service-meta-tags">
-                        <span>Hardware-Locked</span><span>Data Privacy</span><span>ReAct Loop</span>
-                    </div>
-                    <p>We deploy sovereign, offline-first autonomous AI agents customized for your enterprise. Complete data privacy secured by hardware soul-locks, ensuring your proprietary data never touches a public vendor cloud.</p>
+                    <h2>Penelope Agent Deployment</h2>
+                    <div class="service-meta-tags"><span>Runs on your hardware</span><span>No cloud dependency</span></div>
+                    <p>We deploy a private AI agent, customized for your business, that runs on hardware you control — not a vendor's cloud. Your data stays where you decide to keep it. This is the same underlying agent architecture we use to run our own operations.</p>
                     <div class="service-actions">
-                        <a href="mailto:penelopeincorporated1@gmail.com?subject=Custom Penelope Agent" class="btn-primary">Deploy an Agent</a>
+                        <a href="mailto:penelopeincorporated1@gmail.com?subject=Penelope%20Agent%20Deployment" class="btn-primary">Discuss a Deployment</a>
                     </div>
                 </div>
             </div>
-            <div class="service-gallery" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800')"><img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800" alt="Agent Logic"></div>
-                <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&q=80&w=800')"><img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&q=80&w=800" alt="Agent Terminal"></div>
-                <div class="gallery-item video" onclick="openVideoLightbox('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800" alt="Agent Demo Video"></div>
-            </div>
         </article>
 
-        <!-- 06: Social & Custom Apps -->
-        <article id="social-apps" class="service-showcase theme-orange reveal">
+        <!-- 06: SOCIAL / MOBILE APPS -->
+        <article id="social-apps" class="service-showcase theme-blue reveal">
             <div class="service-header">
                 <div class="service-header-icon"><i class="fas fa-share-alt"></i></div>
                 <div class="service-info">
-                    <h2>Custom Social Media Platforms</h2>
-                    <div class="service-meta-tags">
-                        <span>iOS & Android</span><span>macOS & Linux</span><span>Full-Stack</span>
-                    </div>
-                    <p>While deep-tech aerospace is our specialty, our engineering rigour applies perfectly to social and mobile app development. Tested and trusted, we architect highly performant apps at affordable rates to support local enterprise and community startups.</p>
+                    <h2>Social & Mobile Apps</h2>
+                    <div class="service-meta-tags"><span>iOS</span><span>Android</span><span>macOS</span><span>Linux</span><span>Windows</span></div>
+                    <p>Full-stack app development, priced to be accessible for local businesses and community projects rather than enterprise-margin rates. Not our specialty — we do it because we can, and because it's a straightforward way to support people building something outside aerospace.</p>
                     <div class="service-actions">
-                        <a href="mailto:penelopeincorporated1@gmail.com?subject=Custom App Development" class="btn-primary">Request an Estimate</a>
+                        <a href="mailto:penelopeincorporated1@gmail.com?subject=App%20Development%20Quote" class="btn-primary">Request a Quote</a>
                     </div>
                 </div>
             </div>
         </article>
 
-        <!-- 07: Cybersecurity -->
-        <article id="cybersecurity" class="service-showcase theme-purple reveal">
+        <!-- 07: CYBERSECURITY -->
+        <article id="cybersecurity" class="service-showcase theme-orange reveal">
             <div class="service-header">
                 <div class="service-header-icon"><i class="fas fa-shield-virus"></i></div>
                 <div class="service-info">
-                    <h2>Enterprise Cybersecurity Audits</h2>
-                    <div class="service-meta-tags">
-                        <span>Predictive Warning</span><span>Network Architecture</span><span>Digital/Physical Layer</span>
-                    </div>
-                    <p>We architect full company-size security layer networks. Our cybersecurity team deploys predictive warning system algorithms capable of tracking intrusion vectors before a breach occurs. Unsecure? Get us involved.</p>
+                    <h2>Cybersecurity Architecture</h2>
+                    <div class="service-meta-tags"><span>Network Design</span><span>Intrusion Detection</span></div>
+                    <p>Company-scale security architecture — both digital network design and physical-access considerations — built by the same team designing PHI-Chain's tamper-evident ledger for aviation. If you don't have a clear answer to "how would we know if we'd been breached," that's the gap we close.</p>
                     <div class="service-actions">
-                        <a href="mailto:penelopeincorporated1@gmail.com?subject=Security Audit" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-purple), #a855f7); box-shadow: 0 8px 20px rgba(139,92,246,0.3);">Audit Our Systems</a>
+                        <a href="mailto:penelopeincorporated1@gmail.com?subject=Security%20Audit%20Request" class="btn-primary">Request an Audit</a>
                     </div>
                 </div>
             </div>
         </article>
 
-        <!-- 08: Cryptographic Networks -->
+        <!-- 08: FINTECH CRYPTOGRAPHY -->
         <article id="cryptography" class="service-showcase theme-blue reveal">
             <div class="service-header">
                 <div class="service-header-icon"><i class="fas fa-lock"></i></div>
                 <div class="service-info">
-                    <h2>Cryptographic Financial Networks</h2>
-                    <div class="service-meta-tags">
-                        <span>Ledger Architecture</span><span>Smart Contracts</span><span>Hyperledger</span>
-                    </div>
-                    <p>Banking the unbanked. We build cryptographic networks and permissioned ledgers designed to secure people's finances and establish decentralized trust layers for enterprise operations.</p>
+                    <h2>Financial Cryptography</h2>
+                    <div class="service-meta-tags"><span>Ledger Design</span><span>Permissioned Networks</span></div>
+                    <p>Secure ledger architecture for organizations handling money that can't afford ambiguity about where it went. Same permissioned-network engineering behind PHI-Chain, applied to financial rather than avionics data.</p>
                     <div class="service-actions">
-                        <a href="mailto:penelopeincorporated1@gmail.com?subject=Cryptographic Network Inquiry" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-blue), #38bdf8); box-shadow: 0 8px 20px rgba(14,165,233,0.3);">Discuss Architecture</a>
+                        <a href="mailto:penelopeincorporated1@gmail.com?subject=Financial%20Cryptography%20Inquiry" class="btn-primary">Discuss Your Requirements</a>
                     </div>
                 </div>
             </div>
         </article>
 
-        <!-- ─── MOU PARTNER NETWORK FORM ─── -->
+        <!-- PARTNER NETWORK -->
         <div class="mou-section reveal" id="partner-network">
-            <h2>Join the Service Network</h2>
-            <p>We partner with trusted, high-caliber developers to expand our service offerings. Submit an application to establish an MOU. Quality and proof of work are strictly verified.</p>
-            
+            <span class="section-eyebrow">Expanding the network</span>
+            <h2>Want to be listed as a Penelope Inc. partner?</h2>
+            <p>We list outside developers and firms we trust, under a signed MOU — not an open marketplace. Tell us what you do and show us proof of work; we review every application before anything gets listed.</p>
+
             <div class="form-card">
-                <form id="mou-form" onsubmit="handleMOUSubmit(event)">
+                <form id="mou-form">
                     <div class="form-group">
-                        <label>Organization / Developer Name</label>
-                        <input type="text" required placeholder="Enter name">
+                        <label>Company / Developer Name</label>
+                        <input type="text" name="company_name" required placeholder="Enter name">
                     </div>
                     <div class="form-group">
-                        <label>Service Specialization</label>
-                        <select required style="color: #fff; background: rgba(0,0,0,0.5);">
-                            <option value="">Select an area of expertise...</option>
+                        <label>Contact Name</label>
+                        <input type="text" name="contact_name" required placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label>Service Category</label>
+                        <select name="service_category" required>
+                            <option value="">Select an area of expertise…</option>
                             <option value="Mobile Development">Mobile Development</option>
                             <option value="UI/UX Design">UI/UX Design</option>
                             <option value="Cloud Architecture">Cloud Architecture</option>
@@ -592,23 +279,22 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Proof of Work (GitHub / Portfolio URL)</label>
-                        <input type="url" required placeholder="https://...">
+                        <label>Proof of Work (portfolio or repository URL)</label>
+                        <input type="url" name="pitch_url" required placeholder="https://...">
                     </div>
                     <div class="form-group">
                         <label>Contact Email</label>
-                        <input type="email" required placeholder="you@domain.com">
+                        <input type="email" name="email" required placeholder="you@domain.com">
                     </div>
-                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Submit for Review</button>
-                    <div id="mou-status" class="form-status" style="margin-top: 1rem; text-align: center; display: none;"></div>
+                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem;">Submit for Review</button>
+                    <div id="mou-status" class="form-status" style="display: none;"></div>
                 </form>
             </div>
         </div>
 
     </main>
 
-    <!-- ─── FOOTER ─── -->
-    <footer>
+    <footer id="about">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
@@ -620,7 +306,7 @@
                     <ul>
                         <li><a href="/#suites">PHI-Suites</a></li>
                         <li><a href="/#building-plan">Facility Plan</a></li>
-                        <li><a href="/services/index.html">Services</a></li>
+                        <li><a href="/services/">Services</a></li>
                         <li><a href="/#company-walls">Company Walls</a></li>
                     </ul>
                 </div>
@@ -647,141 +333,64 @@
         </div>
     </footer>
 
-    <!-- ─── LIGHTBOX OVERLAY ─── -->
-    <div class="lightbox" id="lightbox">
-        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-        <img id="lightbox-img" src="" alt="Expanded View" style="display: none;">
-        <iframe id="lightbox-video" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="display: none; width: 80vw; height: 80vh;"></iframe>
-    </div>
-
     <script>
-        // ── Navigation Logic ──
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) header.style.background = 'rgba(3, 7, 18, 0.98)';
-            else header.style.background = 'rgba(3, 7, 18, 0.85)';
-        });
-
-        // Mobile Menu
         const mobileToggle = document.getElementById('mobile-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
         mobileToggle.addEventListener('click', () => {
             mobileMenu.classList.toggle('active');
             const icon = mobileToggle.querySelector('i');
-            if(mobileMenu.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
+            icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times');
+        });
+        document.querySelectorAll('.mob-body a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.remove('active'));
         });
 
-        // ── Scroll Reveal Logic ──
-        const revealElements = document.querySelectorAll('.reveal');
         const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-        revealElements.forEach(el => revealObserver.observe(el));
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-        // ── Hero Canvas Background ──
-        (function() {
-            const canvas = document.getElementById('hero-canvas');
-            const ctx = canvas.getContext('2d');
-            let w = canvas.width = window.innerWidth;
-            let h = canvas.height = window.innerHeight;
-
-            window.addEventListener('resize', () => {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
-            });
-
-            const nodes = Array.from({length: 60}, () => ({
-                x: Math.random() * w, y: Math.random() * h,
-                vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
-                size: Math.random() * 2 + 1
-            }));
-
-            function animate() {
-                ctx.clearRect(0,0,w,h);
-                ctx.fillStyle = 'rgba(14, 165, 233, 0.4)';
-                ctx.strokeStyle = 'rgba(14, 165, 233, 0.1)';
-                ctx.lineWidth = 1;
-
-                nodes.forEach(node => {
-                    node.x += node.vx; node.y += node.vy;
-                    if(node.x < 0 || node.x > w) node.vx *= -1;
-                    if(node.y < 0 || node.y > h) node.vy *= -1;
-                    
-                    ctx.beginPath(); ctx.arc(node.x, node.y, node.size, 0, Math.PI*2); ctx.fill();
-
-                    nodes.forEach(other => {
-                        const dist = Math.hypot(node.x - other.x, node.y - other.y);
-                        if(dist < 150) {
-                            ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(other.x, other.y); ctx.stroke();
-                        }
-                    });
-                });
-                requestAnimationFrame(animate);
-            }
-            animate();
-        })();
-
-        // ── Lightbox Logic ──
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        const lightboxVid = document.getElementById('lightbox-video');
-
-        function openLightbox(src) {
-            lightboxImg.style.display = 'block';
-            lightboxVid.style.display = 'none';
-            lightboxVid.src = ''; // stop video playback
-            lightboxImg.src = src;
-            lightbox.classList.add('active');
-        }
-
-        function openVideoLightbox(src) {
-            lightboxImg.style.display = 'none';
-            lightboxVid.style.display = 'block';
-            lightboxImg.src = ''; 
-            lightboxVid.src = src;
-            lightbox.classList.add('active');
-        }
-
-        function closeLightbox() {
-            lightbox.classList.remove('active');
-            setTimeout(() => {
-                lightboxVid.src = ''; // halt youtube playback on close
-            }, 300);
-        }
-        
-        lightbox.addEventListener('click', (e) => {
-            if(e.target === lightbox) closeLightbox();
-        });
-
-        // ── MOU Form Submission Mock ──
-        function handleMOUSubmit(e) {
+        // Real form submission — POSTs to the Vercel proxy, which forwards
+        // to the Hetzner backend's service_partner_requests endpoint.
+        // NOTE: /api/partner-request.js needs to exist server-side (same
+        // pattern as /api/projects.js) — flag to Bello/Kimi if not built yet.
+        document.getElementById('mou-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const form = e.target;
+            const btn = form.querySelector('button[type="submit"]');
             const status = document.getElementById('mou-status');
-            const btn = e.target.querySelector('button');
-            
+            const payload = Object.fromEntries(new FormData(form).entries());
+
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            
-            // Mock network request
-            setTimeout(() => {
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting…';
+            status.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/partner-request', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
                 status.style.display = 'block';
-                status.className = 'form-status success';
-                status.innerHTML = '<i class="fas fa-check-circle"></i> Application securely transmitted to Penelope Inc. Legal Team. We will reach out shortly.';
-                e.target.reset();
+                if (data.ok) {
+                    status.className = 'form-status success';
+                    status.innerHTML = '<i class="fas fa-check-circle"></i> Application received. We review every partner request before listing — expect a reply by email.';
+                    form.reset();
+                } else {
+                    status.className = 'form-status error';
+                    status.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${data.error || 'Something went wrong. Please try again or email us directly.'}`;
+                }
+            } catch (err) {
+                status.style.display = 'block';
+                status.className = 'form-status error';
+                status.innerHTML = '<i class="fas fa-exclamation-circle"></i> Could not reach the server. Please email penelopeincorporated1@gmail.com directly for now.';
+            } finally {
                 btn.disabled = false;
                 btn.innerHTML = 'Submit for Review';
-            }, 1500);
-        }
+            }
+        });
     </script>
 </body>
 </html>
