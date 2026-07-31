@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Lab | Penelope Inc. Kaduna Facility</title>
+    <meta name="description" content="Zone-by-zone equipment layout and bill of materials for the Penelope Inc. PHI Lab — a physics-informed hardware-in-the-loop aerospace facility proposed for Kaduna State, Nigeria." />
+    <link rel="icon" href="../assets/penelope-logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../assets/design-system.css">
+    <style>
+        .page-hero { padding: 11rem 0 5rem; text-align: left; }
+        .page-hero h1 { max-width: 820px; }
+        .facility-stats { display: flex; gap: 3rem; flex-wrap: wrap; margin-top: 2.5rem; }
+        .facility-stat { font-family: var(--ff-mono); }
+        .facility-stat .num { display: block; font-family: var(--ff-display); font-size: 1.8rem; color: var(--accent-orange); }
+        .facility-stat .label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .lab-gallery { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 240px; gap: 1rem; margin: 3rem 0 5rem; }
+        .gallery-cell { position: relative; border-radius: 14px; overflow: hidden; background: #000; border: 1px solid var(--border-color); cursor: zoom-in; }
+        .gallery-cell img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: var(--transition); }
+        .gallery-cell:hover img { opacity: 1; transform: scale(1.04); }
+        .gallery-cell::after {
+            content: attr(data-caption); position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 1.2rem 1rem 0.9rem; background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);
+            color: #fff; font-family: var(--ff-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .span-2-col { grid-column: span 2; }
+        .span-2-row { grid-row: span 2; }
+
+        /* Zone-by-zone BOM */
+        .zone-block { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; margin-bottom: 2rem; overflow: hidden; }
+        .zone-head { display: flex; align-items: center; gap: 1.2rem; padding: 1.6rem 2rem; border-bottom: 1px solid var(--border-color); cursor: pointer; }
+        .zone-letter { font-family: var(--ff-display); font-weight: 700; font-size: 1.3rem; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(221,90,18,0.12); color: var(--accent-orange); border: 1px solid rgba(221,90,18,0.3); }
+        .zone-head h3 { font-family: var(--ff-display); font-size: 1.3rem; margin-bottom: 0.2rem; }
+        .zone-head p { color: var(--text-muted); font-size: 0.88rem; }
+        .zone-head .toggle-icon { margin-left: auto; color: var(--text-muted); transition: transform 0.25s; }
+        .zone-block.open .toggle-icon { transform: rotate(180deg); }
+        .zone-equipment { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .zone-block.open .zone-equipment { max-height: 2000px; }
+        .zone-equipment table { width: 100%; border-collapse: collapse; }
+        .zone-equipment th { font-family: var(--ff-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); text-align: left; padding: 0.8rem 2rem; border-bottom: 1px solid var(--border-color); }
+        .zone-equipment td { padding: 0.9rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+        .zone-equipment tr:last-child td { border-bottom: none; }
+        .eq-item { font-family: var(--ff-display); font-weight: 600; color: #fff; }
+        .eq-spec { color: var(--text-muted); }
+
+        .capex-summary { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; margin-top: 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+        .capex-summary .label { font-family: var(--ff-mono); font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.4rem; }
+        .capex-summary .amount { font-family: var(--ff-display); font-size: 2.3rem; color: var(--accent-green); }
+        .capex-note { color: var(--text-muted); font-size: 0.88rem; max-width: 480px; }
+
+        @media (max-width: 1024px) {
+            .lab-gallery { grid-template-columns: repeat(2, 1fr); }
+            .span-2-col { grid-column: span 1; }
+            .span-2-row { grid-row: span 1; }
+        }
+        @media (max-width: 700px) {
+            .lab-gallery { grid-template-columns: 1fr; grid-auto-rows: 200px; }
+            .zone-equipment td, .zone-equipment th { padding: 0.8rem 1.2rem; }
+            .zone-head { padding: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div class="container nav-container">
+            <a href="/" class="brand"><img src="../assets/penelope-logo.png" alt="Penelope Inc." onerror="this.style.display='none'">Penelope Inc.</a>
+            <nav class="desktop-nav">
+                <div class="nav-item">
+                    Enterprise Suites <i class="fas fa-chevron-down"></i>
+                    <div class="mega-menu">
+                        <div class="mega-menu-sidebar">
+                            <h3>Core Architecture</h3>
+                            <p>Deep-tech validation frameworks for next-generation aerospace compliance and security.</p>
+                            <a href="/#suites" class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">View All Suites</a>
+                        </div>
+                        <div class="mega-menu-grid">
+                            <a href="../suites/phi-twin.html" class="mega-link"><div class="mega-icon"><i class="fas fa-network-wired"></i></div><div class="mega-text"><h4>PHI-Twin</h4><p>Edge Prognostics</p></div></a>
+                            <a href="../suites/phi-chain.html" class="mega-link mega-blue"><div class="mega-icon"><i class="fas fa-link"></i></div><div class="mega-text"><h4>PHI-Chain</h4><p>Avionics Blockchain</p></div></a>
+                            <a href="../suites/phi-arc.html" class="mega-link mega-blue"><div class="mega-icon"><i class="fas fa-cogs"></i></div><div class="mega-text"><h4>PHI-Arc</h4><p>Lab Twin Engines</p></div></a>
+                            <a href="../suites/phi-drone.html" class="mega-link"><div class="mega-icon"><i class="fas fa-satellite-dish"></i></div><div class="mega-text"><h4>PHI-Drone</h4><p>UAV Recon Hub</p></div></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    Community Services <i class="fas fa-chevron-down"></i>
+                    <div class="mega-menu">
+                        <div class="mega-menu-sidebar">
+                            <h3>Giving Back</h3>
+                            <p>Our engineering team applies aerospace-grade rigor to education, faith, and local enterprise software.</p>
+                        </div>
+                        <div class="mega-menu-grid">
+                            <a href="/services/#dt-education" class="mega-link mega-blue"><div class="mega-icon"><i class="fas fa-graduation-cap"></i></div><div class="mega-text"><h4>DT Education</h4><p>University & MRO</p></div></a>
+                            <a href="/services/#school-apps" class="mega-link"><div class="mega-icon"><i class="fas fa-school"></i></div><div class="mega-text"><h4>School Apps</h4><p>Lightweight WebRTC</p></div></a>
+                            <a href="/services/#church-hubs" class="mega-link"><div class="mega-icon"><i class="fas fa-church"></i></div><div class="mega-text"><h4>Church Hubs</h4><p>Digital Buildings</p></div></a>
+                            <a href="/services/#cybersecurity" class="mega-link mega-blue"><div class="mega-icon"><i class="fas fa-shield-alt"></i></div><div class="mega-text"><h4>Cybersecurity</h4><p>Predictive defense</p></div></a>
+                        </div>
+                    </div>
+                </div>
+                <a href="/lab.html" class="nav-item active">Facility Plan</a>
+                <a href="/about.html" class="nav-item">About Us</a>
+                <a href="/contact.html" class="nav-item">Contact</a>
+                <a href="/join.html" class="btn-secondary" style="padding: 0.5rem 1.2rem; font-size: 0.85rem; height: auto; margin-top: 20px; margin-bottom: 20px;"><i class="fas fa-fingerprint"></i> Company Walls</a>
+            </nav>
+            <button class="mobile-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mob-item">
+            <div class="mob-head" onclick="this.nextElementSibling.classList.toggle('open')">Enterprise Suites <i class="fas fa-chevron-down"></i></div>
+            <div class="mob-body">
+                <a href="../suites/phi-twin.html">PHI-Twin</a>
+                <a href="../suites/phi-chain.html">PHI-Chain</a>
+                <a href="../suites/phi-arc.html">PHI-Arc</a>
+                <a href="../suites/phi-drone.html">PHI-Drone</a>
+            </div>
+        </div>
+        <a href="/lab.html" class="mob-head mob-item" style="border:none; color:var(--accent-orange);">Facility Plan</a>
+        <a href="/about.html" class="mob-head mob-item" style="border:none;">About Us</a>
+        <a href="/contact.html" class="mob-head mob-item" style="border:none;">Contact</a>
+        <a href="/join.html" class="mob-head mob-item" style="border:none;">Join the Mission</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="page-hero">
+        <div class="container">
+            <span class="section-eyebrow">Physical Infrastructure — Kaduna State, Nigeria</span>
+            <h1>PHI Lab: six purpose-built test zones, one physics-informed aerospace facility.</h1>
+            <p class="lede">This isn't a rendering exercise. What follows is the actual zone-by-zone equipment layout — drop test bay, engine test cell, wind tunnel, HIL control center, structural fatigue bay, and avionics electrical HIL — as specified for construction.</p>
+            <div class="facility-stats">
+                <div class="facility-stat"><span class="num">2,400 m²</span><span class="label">Total Facility Area</span></div>
+                <div class="facility-stat"><span class="num">60m × 40m</span><span class="label">Building Footprint</span></div>
+                <div class="facility-stat"><span class="num">6</span><span class="label">Dedicated Test Zones</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="container reveal">
+        <div class="lab-gallery">
+            <div class="gallery-cell span-2-col span-2-row" data-caption="Overall Facility Floor Plan — 6 Zones, 2400m²">
+                <img src="../assets/lab-blueprint-1.jpg" alt="PHI Lab overall floor plan" onclick="openLightbox(this.src)">
+            </div>
+            <div class="gallery-cell" data-caption="Zone A — Landing Gear Drop Test Bay">
+                <img src="../assets/lab-equipment.jpg" alt="Zone A landing gear drop test bay" onclick="openLightbox(this.src)">
+            </div>
+            <div class="gallery-cell" data-caption="Zone B — Engine Test Cell & Thrust Stand">
+                <img src="../assets/lab-exterior-2.jpg" alt="Zone B engine test cell" onclick="openLightbox(this.src)">
+            </div>
+            <div class="gallery-cell span-2-col" data-caption="Zone C — Wind Tunnel & UAV Test Bay">
+                <img src="../assets/lab-interior-drone.jpg" alt="Zone C wind tunnel and UAV test bay" onclick="openLightbox(this.src)">
+            </div>
+            <div class="gallery-cell" data-caption="Zone D — HIL Control & Digital Twin Center">
+                <img src="../assets/lab-interior-server.jpg" alt="Zone D HIL control and digital twin center" onclick="openLightbox(this.src)">
+            </div>
+            <div class="gallery-cell span-2-col" data-caption="Zone E — Structural & Fatigue Test Bay">
+                <img src="../assets/lab-interior-workstation.jpg" alt="Zone E structural and fatigue test bay" onclick="openLightbox(this.src)">
+            </div>
+            <div class="gallery-cell" data-caption="Zone F — Avionics & Electrical HIL">
+                <img src="../assets/lab-blueprint-2.jpg" alt="Zone F avionics and electrical HIL" onclick="openLightbox(this.src)">
+            </div>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: -3rem; margin-bottom: 3rem;">
+            <i class="fas fa-info-circle"></i> Filenames above are placeholders — rename your 8 uploaded images to match, or tell me the actual filenames and I'll correct the paths.
+        </p>
+    </section>
+
+    <!-- BILL OF MATERIALS BY ZONE -->
+    <section class="container reveal" style="padding-bottom: 3rem;">
+        <span class="section-eyebrow">Equipment Schedule</span>
+        <h2 class="section-title" style="text-align:left; font-size: clamp(1.8rem, 3vw, 2.6rem);">Bill of Materials, by Zone</h2>
+        <p class="section-desc" style="text-align:left; margin: 0 0 3rem;">Pulled directly from the equipment schedules on each zone's layout drawing. Click a zone to expand its full equipment list.</p>
+
+        <!-- ZONE A -->
+        <div class="zone-block">
+            <div class="zone-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="zone-letter">A</div>
+                <div><h3>Landing Gear Drop Test Bay</h3><p>12m guided drop tower, 25-ton capacity, 6-DOF impact platform</p></div>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="zone-equipment">
+                <table>
+                    <thead><tr><th>Item</th><th>Specification</th></tr></thead>
+                    <tbody>
+                        <tr><td class="eq-item">Drop Tower</td><td class="eq-spec">12m max height, guided rail, 25-ton capacity</td></tr>
+                        <tr><td class="eq-item">Impact Platform</td><td class="eq-spec">6-DOF, 3m × 3m, piezo force plate</td></tr>
+                        <tr><td class="eq-item">High-Speed Cameras</td><td class="eq-spec">Phantom v2010, up to 2000 fps, ×4</td></tr>
+                        <tr><td class="eq-item">Wheel Spin-Up System</td><td class="eq-spec">0–10,000 RPM, torque control</td></tr>
+                        <tr><td class="eq-item">Ballast Weight System</td><td class="eq-spec">500–10,000 kg steel weights</td></tr>
+                        <tr><td class="eq-item">Overhead Crane</td><td class="eq-spec">5-ton capacity, double girder</td></tr>
+                        <tr><td class="eq-item">DAQ System</td><td class="eq-spec">NI PXIe, 10 kHz/channel, 256 channels</td></tr>
+                        <tr><td class="eq-item">Safety Enclosure & E-Stops</td><td class="eq-spec">Reinforced steel, impact rated, 4 emergency stop stations</td></tr>
+                        <tr><td class="eq-item">Fire Suppression</td><td class="eq-spec">FM-200 clean agent</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ZONE B -->
+        <div class="zone-block">
+            <div class="zone-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="zone-letter">B</div>
+                <div><h3>Engine Test Cell & Thrust Stand</h3><p>50kN thrust stand, FADEC HIL interface, blast-resistant control room</p></div>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="zone-equipment">
+                <table>
+                    <thead><tr><th>Item</th><th>Specification</th></tr></thead>
+                    <tbody>
+                        <tr><td class="eq-item">Thrust Stand</td><td class="eq-spec">50kN capacity, 6-DOF load measurement</td></tr>
+                        <tr><td class="eq-item">Engine Mount Frame</td><td class="eq-spec">Adaptable — turbofan / turboprop / piston / turboshaft</td></tr>
+                        <tr><td class="eq-item">Acoustic & Thermal Isolation Wall</td><td class="eq-spec">300mm thick, 1,200°C rated</td></tr>
+                        <tr><td class="eq-item">FADEC HIL Interface</td><td class="eq-spec">Digital twin / software-in-the-loop / hardware-in-the-loop</td></tr>
+                        <tr><td class="eq-item">Fuel Flow Station</td><td class="eq-spec">Coriolis mass flow meters</td></tr>
+                        <tr><td class="eq-item">Exhaust Gas Analysis Bench</td><td class="eq-spec">EGT, EPR, N1/N2 pickups</td></tr>
+                        <tr><td class="eq-item">Vibration Monitoring</td><td class="eq-spec">8-accelerometer array</td></tr>
+                        <tr><td class="eq-item">Exhaust Scrubber</td><td class="eq-spec">Catalytic converter system</td></tr>
+                        <tr><td class="eq-item">Fire Suppression</td><td class="eq-spec">FM-200 & water mist system</td></tr>
+                        <tr><td class="eq-item">Control Room</td><td class="eq-spec">Blast-resistant observation glass</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ZONE C -->
+        <div class="zone-block">
+            <div class="zone-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="zone-letter">C</div>
+                <div><h3>Wind Tunnel & UAV Test Bay</h3><p>Subsonic closed-circuit tunnel, 12-camera motion capture UAV bay</p></div>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="zone-equipment">
+                <table>
+                    <thead><tr><th>Item</th><th>Specification</th></tr></thead>
+                    <tbody>
+                        <tr><td class="eq-item">Wind Tunnel (Subsonic)</td><td class="eq-spec">1.5m × 1.5m test section, contraction ratio 9:1, turbulence intensity ≤0.1%, closed circuit</td></tr>
+                        <tr><td class="eq-item">Axial Flow Fan Drive</td><td class="eq-spec">0–100 m/s, variable speed</td></tr>
+                        <tr><td class="eq-item">6-Component Balance</td><td class="eq-spec">Strain gauge, 360° yaw rotation</td></tr>
+                        <tr><td class="eq-item">Schlieren System</td><td class="eq-spec">Mirrors + light source, flow visualization</td></tr>
+                        <tr><td class="eq-item">UAV Propulsion Test Rig</td><td class="eq-spec">Thrust/torque dynamometer</td></tr>
+                        <tr><td class="eq-item">UAV Flight Envelope Test Area</td><td class="eq-spec">10m × 8m netted volume, 12× ceiling-mounted motion capture cameras</td></tr>
+                        <tr><td class="eq-item">Pressure Manifold</td><td class="eq-spec">64-channel Scanivalve</td></tr>
+                        <tr><td class="eq-item">Model Prep Workshop</td><td class="eq-spec">3D printer, composite repair station</td></tr>
+                        <tr><td class="eq-item">Control Room</td><td class="eq-spec">Real-time data monitoring</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ZONE D -->
+        <div class="zone-block">
+            <div class="zone-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="zone-letter">D</div>
+                <div><h3>HIL Control & Digital Twin Center</h3><p>6-rack GPU cluster, 5m digital twin display wall, 3 operator workstations</p></div>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="zone-equipment">
+                <table>
+                    <thead><tr><th>Item</th><th>Specification</th></tr></thead>
+                    <tbody>
+                        <tr><td class="eq-item">GPU Server Cluster</td><td class="eq-spec">6× racks, 3–20kW each, dual 10GbE</td></tr>
+                        <tr><td class="eq-item">Digital Twin Display Wall</td><td class="eq-spec">5.0m wide, 1kW</td></tr>
+                        <tr><td class="eq-item">Operator Workstations</td><td class="eq-spec">3× stations, dual 1GbE each</td></tr>
+                        <tr><td class="eq-item">Simulation Workstation</td><td class="eq-spec">1× dedicated, 2kW, quad 10GbE</td></tr>
+                        <tr><td class="eq-item">Conference Table & Storage</td><td class="eq-spec">Seats team reviews; 4× storage cabinets</td></tr>
+                        <tr><td class="eq-item">Server / Network / Electrical Rooms</td><td class="eq-spec">Dedicated utility and UPS rooms adjoining the center</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ZONE E -->
+        <div class="zone-block">
+            <div class="zone-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="zone-letter">E</div>
+                <div><h3>Structural & Fatigue Test Bay</h3><p>500kN universal test machine, multi-axis fatigue rig, 10-ton gantry crane</p></div>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="zone-equipment">
+                <table>
+                    <thead><tr><th>Item</th><th>Specification</th></tr></thead>
+                    <tbody>
+                        <tr><td class="eq-item">Universal Test Machine</td><td class="eq-spec">500kN, 2m vertical daylight opening</td></tr>
+                        <tr><td class="eq-item">Multi-Axis Fatigue Test Rig</td><td class="eq-spec">4× servo-hydraulic actuators, ±250kN each, biaxial loading</td></tr>
+                        <tr><td class="eq-item">Electrodynamic Shaker Table</td><td class="eq-spec">50kN force, 2m × 2m table, seismic isolation base</td></tr>
+                        <tr><td class="eq-item">Environmental Chamber</td><td class="eq-spec">−70°C to +300°C, humidity control</td></tr>
+                        <tr><td class="eq-item">DIC Camera System</td><td class="eq-spec">2× 12MP cameras, digital image correlation</td></tr>
+                        <tr><td class="eq-item">Data Acquisition System</td><td class="eq-spec">256 channels at 50kHz</td></tr>
+                        <tr><td class="eq-item">Overhead Gantry Crane</td><td class="eq-spec">10-ton capacity</td></tr>
+                        <tr><td class="eq-item">Specimen Prep Area</td><td class="eq-spec">CNC mill & grinding equipment</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ZONE F -->
+        <div class="zone-block">
+            <div class="zone-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="zone-letter">F</div>
+                <div><h3>Avionics & Electrical HIL</h3><p>dSPACE flight control & power HIL racks, anechoic EMC/EMI chamber</p></div>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="zone-equipment">
+                <table>
+                    <thead><tr><th>Item</th><th>Specification</th></tr></thead>
+                    <tbody>
+                        <tr><td class="eq-item">Power HIL Test Rack</td><td class="eq-spec">dSPACE SCALEXIO, 100kW regen, battery emulator, generator simulation</td></tr>
+                        <tr><td class="eq-item">FCS-HIL Rack</td><td class="eq-spec">dSPACE HIL604 — A320/B787 modules, actuator sim, aeroelastic interface</td></tr>
+                        <tr><td class="eq-item">Navigation HIL Rack</td><td class="eq-spec">Spirent GSS9000 — GNSS simulator, IMU stimulus, radar altimeter</td></tr>
+                        <tr><td class="eq-item">Environmental Chamber</td><td class="eq-spec">−55°C to +85°C, altitude to 50,000 ft</td></tr>
+                        <tr><td class="eq-item">EMC/EMI Chamber</td><td class="eq-spec">3m × 3m anechoic RF test area</td></tr>
+                        <tr><td class="eq-item">Avionics Integration Bench</td><td class="eq-spec">Wiring harness mockups, connector breakout panels</td></tr>
+                        <tr><td class="eq-item">Cable Harness Fabrication Station</td><td class="eq-spec">Crimping, continuity tester</td></tr>
+                        <tr><td class="eq-item">Power Distribution Unit</td><td class="eq-spec">480V/208V/120V, UPS backup</td></tr>
+                        <tr><td class="eq-item">Clean Air Unit</td><td class="eq-spec">HEPA, positive pressure, ISO 8</td></tr>
+                        <tr><td class="eq-item">Fire Suppression</td><td class="eq-spec">NOVEC 1230 clean agent</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="capex-summary">
+            <div>
+                <div class="label">Estimated Total Capital Requirement</div>
+                <div class="amount">$4.2M USD</div>
+            </div>
+            <p class="capex-note">Covers construction, all equipment listed above across six zones, and an 18-month operational runway. Full line-item costing available on request under NDA.</p>
+            <a href="mailto:penelopeincorporated1@gmail.com?subject=PHI%20Lab%20Investment%20Inquiry" class="btn-primary">Request Full Prospectus</a>
+        </div>
+    </section>
+
+    <footer id="about">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2>Penelope Inc.</h2>
+                    <p>Strictly dedicated to the aerospace industry, specializing in digital twin technology for vehicle component health monitoring.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul><li><a href="/#suites">PHI-Suites</a></li><li><a href="/lab.html">Facility Plan</a></li><li><a href="/services/">Services</a></li><li><a href="/join.html">Company Walls</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal & Contact</h4>
+                    <ul><li><a href="mailto:penelopeincorporated1@gmail.com">penelopeincorporated1@gmail.com</a></li><li><a href="#">MOU Agreements</a></li><li><a href="#">Privacy Policy</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Social</h4>
+                    <ul><li><a href="https://smbello.vercel.app" target="_blank">Founder Portfolio</a></li><li><a href="https://github.com/Penelope-Inco" target="_blank">GitHub Org</a></li></ul>
+                </div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2026 Penelope Inc. All rights reserved.</p><p>System State: Nominal.</p></div>
+        </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="Expanded View">
+    </div>
+
+    <script>
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            const icon = mobileToggle.querySelector('i');
+            icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times');
+        });
+        document.querySelectorAll('.mob-body a, .mob-item[href]').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.remove('active'));
+        });
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        function openLightbox(src) { lightboxImg.src = src; lightbox.classList.add('active'); }
+        function closeLightbox() { lightbox.classList.remove('active'); }
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+        // First zone open by default
+        document.querySelector('.zone-block').classList.add('open');
+    </script>
+</body>
+</html>
