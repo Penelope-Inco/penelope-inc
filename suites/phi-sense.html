@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHI-Sense | Penelope Inc.</title>
+    <meta name="description" content="PHI-Sense — a 1,027-sensor CNN-BiLSTM-Attention fusion array for aircraft Health and Usage Monitoring.">
+    <link rel="icon" href="../assets/penelope-logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/nav.css">
+
+    <style>
+        :root {
+            --bg-milky-white: #FAF9F5; --bg-milky-card: #F3F0E8;
+            --navy-creamy-dark: #0E1726; --navy-creamy-mid: #1E293B;
+            --blue-accent: #2563EB; --text-dark: #1A1A1A;
+            --text-light: #F8FAFC; --text-muted: #64748B;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-milky-white); color: var(--text-dark); font-family: var(--font-sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        a { text-decoration: none; color: inherit; }
+        .section-label { text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 1rem; }
+
+        .page-hero { background-color: var(--navy-creamy-dark); color: var(--text-light); padding: 11rem 8% 5rem; }
+        .page-hero .section-label { color: #94A3B8; }
+        .page-hero h1 { font-family: var(--font-serif); font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 400; line-height: 1.2; margin: 1rem 0 1.2rem; max-width: 780px; }
+        .page-hero p.lede { font-size: 1.1rem; color: #CBD5E1; max-width: 640px; }
+
+        .suite-story { max-width: 820px; margin: 0 auto; padding: 5rem 8% 2rem; }
+        .suite-story p { color: #475569; font-size: 1.05rem; line-height: 1.8; margin-bottom: 1.3rem; }
+        .suite-story .note { font-size: 0.9rem; color: var(--text-muted); border-left: 3px solid var(--blue-accent); padding-left: 1.2rem; margin-top: 1.5rem; }
+
+        .suite-gallery { padding: 2rem 8% 5rem; max-width: 1300px; margin: 0 auto; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; }
+        .gallery-item { aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; cursor: zoom-in; background: var(--bg-milky-card); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: all 0.3s; opacity: 0.92; }
+        .gallery-item:hover img { opacity: 1; transform: scale(1.04); }
+
+        .suite-video { max-width: 900px; margin: 0 auto; padding: 0 8% 5rem; }
+        .suite-video .embed-frame { position: relative; padding-top: 56.25%; border-radius: 8px; overflow: hidden; background: var(--navy-creamy-mid); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .suite-video .embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+        .validation-cta { background: linear-gradient(135deg, #1E3A8A 0%, var(--navy-creamy-dark) 100%); color: var(--text-light); text-align: center; padding: 4.5rem 8%; max-width: 1200px; margin: 0 auto 6rem; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(14,23,38,0.25); }
+        .validation-cta .section-label { color: #FCA5A5; }
+        .validation-cta h2 { font-family: var(--font-serif); font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 400; max-width: 780px; margin: 0 auto 1.2rem; }
+        .validation-cta p { color: #CBD5E1; max-width: 620px; margin: 0 auto 2rem; }
+        .btn-light { display: inline-block; background-color: var(--text-light); color: var(--navy-creamy-dark); padding: 1rem 2rem; border-radius: 4px; font-weight: 600; font-size: 1rem; transition: all 0.2s; }
+        .btn-light:hover { transform: translateY(-2px); }
+
+        .ongoing-project { max-width: 820px; margin: 0 auto; padding: 0 8% 6rem; }
+        .ongoing-project h2 { font-family: var(--font-serif); font-size: 1.7rem; font-weight: 400; color: var(--navy-creamy-dark); margin-bottom: 0.6rem; }
+        .ongoing-project > p { color: var(--text-muted); margin-bottom: 2rem; }
+        .telemetry-strip { background: var(--navy-creamy-dark); border-radius: 10px; padding: 1.6rem 1.8rem; color: var(--text-light); }
+        .telemetry-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .telemetry-label { font-weight: 600; font-size: 1.05rem; font-family: var(--font-sans); }
+        .telemetry-status { font-size: 0.72rem; letter-spacing: 1px; padding: 0.25rem 0.6rem; border-radius: 3px; border: 1px solid rgba(255,255,255,0.25); text-transform: uppercase; }
+        .telemetry-status.status-development { color: #93C5FD; border-color: rgba(147,197,253,0.4); }
+        .telemetry-status.status-planning { color: #CBD5E1; }
+        .telemetry-status.status-testing { color: #FCD34D; border-color: rgba(252,211,77,0.4); }
+        .telemetry-status.status-complete { color: #86EFAC; border-color: rgba(134,239,172,0.4); }
+        .telemetry-track { position: relative; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+        .telemetry-fill { height: 100%; background: linear-gradient(90deg, var(--blue-accent), #60A5FA); border-radius: 4px; transition: width 0.6s ease; }
+        .telemetry-foot { display: flex; justify-content: space-between; margin-top: 0.8rem; font-size: 0.85rem; color: #94A3B8; }
+        .telemetry-pct { color: var(--text-light); }
+        .telemetry-loading, .telemetry-empty { color: #94A3B8; font-size: 0.95rem; }
+        .ongoing-project .btn-link { display: inline-block; margin-top: 1.6rem; color: var(--blue-accent); font-weight: 600; }
+
+        .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .lightbox.active { opacity: 1; pointer-events: auto; }
+        .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
+        .lightbox-close { position: absolute; top: 2rem; right: 3rem; color: #fff; font-size: 3rem; cursor: pointer; }
+        .lightbox-close:hover { color: var(--blue-accent); }
+
+        footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; }
+        .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
+        .footer-brand { font-family: var(--font-serif); font-size: 1.8rem; color: var(--text-light); }
+        .footer-links { display: flex; gap: 3rem; flex-wrap: wrap; }
+        .footer-links div h4 { color: var(--text-light); margin-bottom: 1rem; font-size: 0.95rem; }
+        .footer-links div ul { list-style: none; }
+        .footer-links div ul li { margin-bottom: 0.6rem; }
+        .footer-links div ul li a:hover { color: var(--text-light); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="logo">Penelope Inc.</a>
+        <ul class="nav-links">
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger">PHI Suites <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="phi-twin.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-01</span><span class="nav-panel-copy"><h4>PHI-Twin</h4><p>Edge digital twins for landing gear &amp; structural health monitoring.</p></span></a>
+                        <a href="phi-chain.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-02</span><span class="nav-panel-copy"><h4>PHI-Chain</h4><p>Split-payload blockchain security for aviation communications.</p></span></a>
+                        <a href="phi-arc.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-03</span><span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Proprietary low-cost, high-standard engineering methodology.</p></span></a>
+                        <a href="phi-sense.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-04</span><span class="nav-panel-copy"><h4>PHI-Sense</h4><p>1,027-sensor HUMS fusion array.</p></span></a>
+                        <a href="phi-engine.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-05</span><span class="nav-panel-copy"><h4>PHI-Engine</h4><p>Rotating detonation &amp; gas turbine research.</p></span></a>
+                        <a href="phi-drone.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-06</span><span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span></a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="/lab.html" class="nav-trigger">The Lab</a></li>
+            <li class="nav-item"><a href="/about.html" class="nav-trigger">About</a></li>
+            <li class="nav-item"><a href="/join.html" class="nav-trigger">Join Us</a></li>
+            <li class="nav-item"><a href="/contact.html" class="nav-trigger">Contact</a></li>
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger" style="color: var(--text-muted); font-size: 0.85rem;">Services <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="/services/#dt-education" class="nav-panel-link"><span class="nav-panel-tag">01</span><span class="nav-panel-copy"><h4>Digital Twin Training</h4><p>For universities, MRO teams &amp; individuals.</p></span></a>
+                        <a href="/services/#school-apps" class="nav-panel-link"><span class="nav-panel-tag">02</span><span class="nav-panel-copy"><h4>School Apps</h4><p>Lightweight screen-share learning platforms.</p></span></a>
+                        <a href="/services/#church-hubs" class="nav-panel-link"><span class="nav-panel-tag">03</span><span class="nav-panel-copy"><h4>Church Apps</h4><p>Full digital building for your congregation.</p></span></a>
+                        <a href="/services/#lifestones" class="nav-panel-link"><span class="nav-panel-tag">04</span><span class="nav-panel-copy"><h4>Lifestones</h4><p>Autonomous sermon-intelligence &amp; verse display.</p></span></a>
+                        <a href="/services/#penelope-agents" class="nav-panel-link"><span class="nav-panel-tag">05</span><span class="nav-panel-copy"><h4>Penelope AI Agent</h4><p>Hardware-locked, private autonomous agents.</p></span></a>
+                        <a href="/services/#social-apps" class="nav-panel-link"><span class="nav-panel-tag">06</span><span class="nav-panel-copy"><h4>Social &amp; Mobile Apps</h4><p>Windows, Android, macOS, Linux — built affordably.</p></span></a>
+                        <a href="/services/#cybersecurity" class="nav-panel-link"><span class="nav-panel-tag">07</span><span class="nav-panel-copy"><h4>Security Architecture</h4><p>Predictive digital &amp; physical threat systems.</p></span></a>
+                        <a href="/services/#cryptography" class="nav-panel-link"><span class="nav-panel-tag">08</span><span class="nav-panel-copy"><h4>Financial Cryptography</h4><p>Networks that secure people's finances.</p></span></a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <button class="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </header>
+
+    <div class="mobile-drawer">
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger">PHI Suites <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="phi-twin.html"><span class="nav-panel-tag">PHI-01</span> PHI-Twin</a>
+                <a href="phi-chain.html"><span class="nav-panel-tag">PHI-02</span> PHI-Chain</a>
+                <a href="phi-arc.html"><span class="nav-panel-tag">PHI-03</span> PHI-Arc</a>
+                <a href="phi-sense.html"><span class="nav-panel-tag">PHI-04</span> PHI-Sense</a>
+                <a href="phi-engine.html"><span class="nav-panel-tag">PHI-05</span> PHI-Engine</a>
+                <a href="phi-drone.html"><span class="nav-panel-tag">PHI-06</span> PHI-Drone</a>
+            </div>
+        </div>
+        <a href="/lab.html" class="mobile-simple-link">The Lab</a>
+        <a href="/about.html" class="mobile-simple-link">About</a>
+        <a href="/join.html" class="mobile-simple-link">Join Us</a>
+        <a href="/contact.html" class="mobile-simple-link">Contact</a>
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger" style="font-size: 1rem; color: var(--text-muted);">Services <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="/services/#dt-education">Digital Twin Training</a>
+                <a href="/services/#school-apps">School Apps</a>
+                <a href="/services/#church-hubs">Church Apps</a>
+                <a href="/services/#lifestones">Lifestones</a>
+                <a href="/services/#penelope-agents">Penelope AI Agent</a>
+                <a href="/services/#social-apps">Social &amp; Mobile Apps</a>
+                <a href="/services/#cybersecurity">Security Architecture</a>
+                <a href="/services/#cryptography">Financial Cryptography</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="page-hero">
+        <div class="section-label">PHI-04 — HEALTH &amp; USAGE MONITORING</div>
+        <h1>PHI-Sense: 1,027 sensors, one continuous picture of aircraft health.</h1>
+        <p class="lede">A CNN-BiLSTM-Attention sensor fusion array built for Health and Usage Monitoring Systems (HUMS) — the nervous system layer underneath every other PHI Suite product.</p>
+    </section>
+
+    <!-- STORY -->
+    <section class="suite-story">
+        <p>Most HUMS implementations bolt sensors onto an airframe and hope correlation reveals itself in post-processing. PHI-Sense is architected the other way around: a 1,027-sensor array processed through a CNN-BiLSTM-Attention pipeline built to fuse multi-channel structural, vibration, and thermal data into one coherent health signal, with 47ms inference and 98.5% accuracy in validation.</p>
+        <p>PHI-Sense is the sensor and fusion layer integrated into our STRATOS-14E conceptual aircraft design — and the same underlying architecture that feeds live telemetry into PHI-Twin's landing gear prognostics. It's built to be the shared nervous system other PHI Suite products plug into, not a one-off instrument.</p>
+        <p class="note">Full sensor placement schema and fusion model architecture are reserved for OEM and institutional partners under NDA — this page covers what the system does, not how it's built.</p>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="suite-gallery">
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="../assets/phi-sense/prototype-1.jpg" alt="PHI-Sense sensor array placement"></div>
+            <div class="gallery-item"><img src="../assets/phi-sense/prototype-2.jpg" alt="PHI-Sense fusion pipeline dashboard"></div>
+            <div class="gallery-item"><img src="../assets/phi-sense/prototype-3.jpg" alt="PHI-Sense inference accuracy benchmark"></div>
+            <div class="gallery-item"><img src="../assets/phi-sense/prototype-4.jpg" alt="PHI-Sense STRATOS-14E integration"></div>
+            <div class="gallery-item"><img src="../assets/phi-sense/prototype-5.jpg" alt="PHI-Sense live health signal view"></div>
+        </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="suite-video">
+        <div class="embed-frame">
+            <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="PHI-Sense demo" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <!-- VALIDATION CTA -->
+    <section class="validation-cta">
+        <div class="section-label">WE NEED YOU</div>
+        <h2>We built PHI-Sense to the edge of what a small lab can validate alone. If you're an OEM, MRO authority, or research body who can push it further — we want to hear from you.</h2>
+        <p>Independent validation against real flight telemetry, or certification pathway guidance, would move PHI-Sense from lab-proven to field-proven faster than we can do it solo.</p>
+        <a href="/contact.html" class="btn-light">Talk to us about validation</a>
+    </section>
+
+    <!-- ONGOING PROJECT -->
+    <section class="ongoing-project">
+        <h2>On-going: PHI-Sense</h2>
+        <p>This is being built in the open. The strip below reflects real progress, pulled live.</p>
+        <div class="telemetry-strip" id="phi-sense-telemetry"></div>
+        <a href="/join.html?project=phi-sense" class="btn-link">Want to help build this? Join the project &rarr;</a>
+    </section>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">Penelope Inc.</div>
+            <div class="footer-links">
+                <div>
+                    <h4>PHI Suites</h4>
+                    <ul>
+                        <li><a href="phi-twin.html">PHI-Twin</a></li>
+                        <li><a href="phi-chain.html">PHI-Chain</a></li>
+                        <li><a href="phi-arc.html">PHI-Arc</a></li>
+                        <li><a href="phi-sense.html">PHI-Sense</a></li>
+                        <li><a href="phi-engine.html">PHI-Engine</a></li>
+                        <li><a href="phi-drone.html">PHI-Drone</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Organization</h4>
+                    <ul>
+                        <li><a href="/lab.html">The Lab (Kaduna)</a></li>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/join.html">Join Us</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:#94A3B8; font-size:0.85rem;">Community Services</h4>
+                    <ul>
+                        <li><a href="/services/#dt-education">Digital Twin Training</a></li>
+                        <li><a href="/services/#church-hubs">Church Apps</a></li>
+                        <li><a href="/services/#cybersecurity">Security Architecture</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Penelope Inc. All rights reserved.</p>
+            <p>PHI Lab Aerospace Technologies</p>
+        </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="Expanded View">
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        function openLightbox(src) { lightboxImg.src = src; lightbox.classList.add('active'); }
+        function closeLightbox() { lightbox.classList.remove('active'); }
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+        document.querySelectorAll('.gallery-item img').forEach(img => img.addEventListener('click', () => openLightbox(img.src)));
+    </script>
+    <script src="../pb-realtime.js"></script>
+    <script src="../assets/nav.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            PenelopeTelemetry.initProjectProgress('phi-sense', '#phi-sense-telemetry');
+        });
+    </script>
+</body>
+</html>
