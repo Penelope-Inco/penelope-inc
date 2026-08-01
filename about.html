@@ -1,459 +1,336 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us | Penelope Inc.</title>
-    <meta name="description" content="Strictly aerospace. Specialists in digital twin technology for vehicle component health monitoring." />
+    <meta name="description" content="Strictly aerospace. Specialists in digital twin technology for vehicle component health monitoring.">
     <link rel="icon" href="assets/penelope-logo.png" type="image/png">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/favicon.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/nav.css">
 
     <style>
         :root {
-            --bg-deep: #030712;
-            --bg-card: #0f172a;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-orange: #dd5a12;
-            --accent-blue: #0ea5e9;
-            --accent-green: #10b981;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --ff-display: 'Space Grotesk', sans-serif;
-            --ff-body: 'Inter', sans-serif;
-            --ff-mono: 'JetBrains Mono', monospace;
-            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            --bg-milky-white: #FAF9F5;
+            --bg-milky-card: #F3F0E8;
+            --navy-creamy-dark: #0E1726;
+            --navy-creamy-mid: #1E293B;
+            --blue-accent: #2563EB;
+            --text-dark: #1A1A1A;
+            --text-light: #F8FAFC;
+            --text-muted: #64748B;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--ff-body); background-color: var(--bg-deep); color: var(--text-main); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-milky-white); color: var(--text-dark); font-family: var(--font-sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
         a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        img { max-width: 100%; height: auto; display: block; }
 
-        .container { max-width: 1350px; margin: 0 auto; padding: 0 2rem; }
-        .section-padding { padding: 8rem 0; }
-        .reveal { opacity: 0; transform: translateY(30px); transition: var(--transition); transition-duration: 0.8s; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        .section-header { text-align: center; margin-bottom: 4rem; }
-        .section-eyebrow { font-family: var(--ff-mono); font-size: 0.8rem; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; display: block; }
-        .section-title { font-family: var(--ff-display); font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; }
+        .page-hero { background-color: var(--navy-creamy-dark); color: var(--text-light); padding: 11rem 8% 6rem; text-align: center; }
+        .page-hero .section-label { color: #94A3B8; }
+        .page-hero h1 { font-family: var(--font-serif); font-size: clamp(2.6rem, 5.5vw, 4.2rem); font-weight: 400; line-height: 1.15; margin: 1rem 0 1.2rem; }
+        .page-hero p { font-size: 1.15rem; color: #CBD5E1; max-width: 680px; margin: 0 auto; }
 
-        .btn-primary { display: inline-flex; align-items: center; gap: 10px; justify-content: center; background: linear-gradient(135deg, var(--accent-orange), #f97316); color: #fff; padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 600; font-family: var(--ff-display); font-size: 0.95rem; transition: var(--transition); border: 1px solid transparent; cursor: pointer; white-space: nowrap; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(221, 90, 18, 0.4); }
-        .btn-secondary { display: inline-flex; align-items: center; gap: 10px; justify-content: center; background: rgba(255,255,255,0.05); color: #fff; padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 600; font-family: var(--ff-display); font-size: 0.95rem; transition: var(--transition); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; white-space: nowrap; }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: translateY(-2px); }
+        .section-label { text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 1rem; }
 
-        /* ─── MEGA MENU NAVIGATION ─── */
-        header { position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color); transition: var(--transition); }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; height: 80px; }
-        .brand { font-family: var(--ff-display); font-size: 1.5rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; }
-        .brand img { width: 32px; height: 32px; border-radius: 50%; }
-        .desktop-nav { display: flex; gap: 2rem; height: 100%; }
-        .nav-item { position: relative; display: flex; align-items: center; height: 100%; font-family: var(--ff-display); font-weight: 500; font-size: 0.95rem; cursor: pointer; color: var(--text-muted); transition: color 0.3s; }
-        .nav-item:hover, .nav-item.active { color: #fff; }
-        .nav-item i { font-size: 0.7rem; margin-left: 6px; transition: transform 0.3s; }
-        .nav-item:hover i { transform: rotate(180deg); }
+        /* Where We Stand */
+        .stand-section { padding: 6rem 8%; max-width: 1200px; margin: 0 auto; }
+        .stand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .stand-text h2 { font-family: var(--font-serif); font-size: 2.4rem; font-weight: 400; margin-bottom: 1.3rem; color: var(--navy-creamy-dark); }
+        .stand-text p { font-size: 1.05rem; color: #475569; line-height: 1.8; margin-bottom: 1.3rem; }
+        .stand-text p strong { color: var(--text-dark); }
+        .btn-primary { display: inline-block; background-color: var(--navy-creamy-dark); color: var(--text-light); padding: 1rem 2rem; border-radius: 4px; font-weight: 600; font-size: 1rem; transition: all 0.2s; }
+        .btn-primary:hover { background-color: var(--blue-accent); transform: translateY(-2px); }
+        .stand-visual { border-radius: 8px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.15); background-color: var(--bg-milky-card); aspect-ratio: 4/3; }
+        .stand-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .mega-menu { position: absolute; top: 80px; left: 50%; transform: translateX(-50%) translateY(10px); width: 1000px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(30px); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; box-shadow: 0 30px 60px rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: grid; gap: 2rem; grid-template-columns: 1fr 2fr; }
-        .nav-item:hover .mega-menu { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .mega-menu-sidebar h3 { font-family: var(--ff-mono); font-size: 0.8rem; color: var(--accent-orange); text-transform: uppercase; margin-bottom: 1rem; }
-        .mega-menu-sidebar p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem; }
-        .mega-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .mega-link { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; border-radius: 12px; transition: var(--transition); background: rgba(255,255,255,0.02); border: 1px solid transparent; }
-        .mega-link:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); transform: translateX(5px); }
-        .mega-icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(221, 90, 18, 0.1); color: var(--accent-orange); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-        .mega-blue .mega-icon { background: rgba(14, 165, 233, 0.1); color: var(--accent-blue); }
-        .mega-text h4 { font-size: 1rem; color: #fff; margin-bottom: 0.2rem; font-family: var(--ff-display); }
-        .mega-text p { font-size: 0.8rem; color: var(--text-muted); }
-        .mobile-toggle { display: none; font-size: 1.5rem; color: #fff; background: none; border: none; cursor: pointer; }
+        /* Tour / program-card style alternating section */
+        .tour-section { background-color: var(--bg-milky-card); padding: 6rem 8%; }
+        .tour-inner { max-width: 1200px; margin: 0 auto; }
+        .tour-header { text-align: center; margin-bottom: 3.5rem; }
+        .tour-header h2 { font-family: var(--font-serif); font-size: clamp(1.9rem, 3.5vw, 2.6rem); font-weight: 400; color: var(--navy-creamy-dark); margin-bottom: 1rem; }
+        .tour-header p { color: var(--text-muted); max-width: 680px; margin: 0 auto; font-size: 1.05rem; }
 
-        /* ─── PAGE HERO ─── */
-        .page-hero { padding: 12rem 0 6rem; position: relative; background: linear-gradient(180deg, var(--bg-deep), var(--bg-card)); border-bottom: 1px solid var(--border-color); overflow: hidden; text-align: center; }
-        #hero-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.3; }
-        .page-hero .container { position: relative; z-index: 2; }
-        .page-hero h1 { font-family: var(--ff-display); font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -1px; }
-        .page-hero .highlight { background: linear-gradient(135deg, var(--accent-orange), #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .page-hero p.lede { font-size: 1.2rem; color: var(--text-muted); max-width: 800px; margin: 0 auto; line-height: 1.7; }
-
-        /* ─── ABOUT CONTENT ─── */
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-        .about-text h2 { font-family: var(--ff-display); font-size: 2.5rem; margin-bottom: 1.5rem; color: #fff; }
-        .about-text p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem; }
-        .about-text p strong { color: #fff; }
-        .about-visual { position: relative; }
-        .about-visual img { border-radius: 16px; border: 1px solid rgba(14, 165, 233, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.5); opacity: 0.8; }
-        .about-visual::before { content: ''; position: absolute; top: -20px; right: -20px; width: 100%; height: 100%; background: radial-gradient(circle, rgba(14,165,233,0.15) 0%, transparent 70%); z-index: -1; }
-
-        /* ─── DIGITAL TWIN TOUR SECTION ─── */
-        .tour-section { background: #000; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); position: relative; overflow: hidden; }
-        .tour-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; }
-        .tour-video-box { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); background: #0f172a; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .tour-video-box img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transition: var(--transition); }
-        .tour-video-box .play-icon { position: absolute; width: 80px; height: 80px; background: rgba(14, 165, 233, 0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #fff; z-index: 2; transition: var(--transition); backdrop-filter: blur(4px); }
-        .tour-video-box:hover img { opacity: 0.3; }
-        .tour-video-box:hover .play-icon { transform: scale(1.1); background: var(--accent-blue); }
-
-        .form-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(221, 90, 18, 0.3); border-radius: 16px; padding: 2.5rem; backdrop-filter: blur(10px); }
-        .form-card h3 { font-family: var(--ff-display); font-size: 1.5rem; margin-bottom: 0.5rem; color: #fff; }
-        .form-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; font-family: var(--ff-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #fff; margin-bottom: 0.6rem; }
-        .form-group input, .form-group select { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.8rem 1rem; color: #fff; font-family: var(--ff-body); font-size: 0.95rem; transition: var(--transition); }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-orange); box-shadow: 0 0 0 3px rgba(221, 90, 18, 0.15); }
-        
-        /* ─── LIGHTBOX ─── */
-        .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(10px); }
-        .lightbox.active { opacity: 1; pointer-events: auto; }
-        .lightbox iframe { max-width: 90vw; max-height: 90vh; border-radius: 12px; transform: scale(0.9); transition: transform 0.3s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.5); width: 80vw; height: 80vh; }
-        .lightbox.active iframe { transform: scale(1); }
-        .lightbox-close { position: absolute; top: 2rem; right: 3rem; color: #fff; font-size: 3rem; cursor: pointer; transition: color 0.2s; z-index: 10001; }
-        .lightbox-close:hover { color: var(--accent-orange); }
-
-        /* ─── FOOTER ─── */
-        footer { background: #000; padding: 4rem 0 2rem; }
-        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
-        .footer-brand h2 { font-family: var(--ff-display); font-size: 1.5rem; margin-bottom: 1rem; }
-        .footer-brand p { color: var(--text-muted); font-size: 0.9rem; max-width: 300px; }
-        .footer-col h4 { font-family: var(--ff-mono); font-size: 0.8rem; text-transform: uppercase; color: #fff; margin-bottom: 1.5rem; }
-        .footer-col ul li { margin-bottom: 0.8rem; }
-        .footer-col ul li a { color: var(--text-muted); font-size: 0.9rem; transition: color 0.2s; }
-        .footer-col ul li a:hover { color: var(--accent-orange); }
-        .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.85rem; }
-
-        @media (max-width: 1024px) {
-            .desktop-nav { display: none; }
-            .mobile-toggle { display: block; }
-            .about-grid, .tour-grid { grid-template-columns: 1fr; gap: 3rem; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
+        .tour-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 3rem; align-items: stretch; }
+        .tour-video-box {
+            position: relative; border-radius: 8px; overflow: hidden; background-color: var(--navy-creamy-mid);
+            aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
-        
-        .mobile-menu { position: fixed; inset: 0; background: rgba(3,7,18,0.98); z-index: 999; padding: 100px 2rem 2rem; display: flex; flex-direction: column; gap: 1.5rem; opacity: 0; pointer-events: none; transition: all 0.3s ease; backdrop-filter: blur(20px); overflow-y: auto; }
-        .mobile-menu.active { opacity: 1; pointer-events: auto; }
-        .mob-item { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; }
-        .mob-head { display: flex; justify-content: space-between; font-family: var(--ff-display); font-size: 1.3rem; font-weight: 600; cursor: pointer; color: #fff; }
-        .mob-body { display: none; padding-top: 1rem; flex-direction: column; gap: 1rem; }
-        .mob-body.open { display: flex; }
-        .mob-body a { color: var(--text-muted); font-size: 1rem; }
+        .tour-video-box img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: opacity 0.3s; }
+        .tour-video-box:hover img { opacity: 0.4; }
+        .tour-video-box .play-icon { position: absolute; width: 72px; height: 72px; background: rgba(37,99,235,0.85); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.6rem; }
+
+        .form-card { background-color: var(--bg-milky-white); border: 1px solid #E2E8F0; border-radius: 8px; padding: 2.2rem; }
+        .form-card h3 { font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--navy-creamy-dark); }
+        .form-card > p { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.4rem; }
+        .form-group { margin-bottom: 1.1rem; }
+        .form-group label { display: block; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 0.5rem; font-weight: 600; }
+        .form-group input, .form-group select {
+            width: 100%; background: #fff; border: 1px solid #CBD5E1; border-radius: 6px;
+            padding: 0.8rem 1rem; color: var(--text-dark); font-family: var(--font-sans); font-size: 0.95rem;
+        }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--blue-accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+        .form-submit { width: 100%; margin-top: 0.5rem; border: none; cursor: pointer; }
+        .form-status { margin-top: 1rem; font-size: 0.88rem; }
+        .form-status.success { color: #15803D; }
+        .form-status.error { color: #B91C1C; }
+
+        .cta-banner {
+            background: linear-gradient(135deg, #1E3A8A 0%, var(--navy-creamy-dark) 100%);
+            color: var(--text-light); padding: 5rem 8%;
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 1200px; margin: 6rem auto; border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(14,23,38,0.25);
+        }
+        .cta-banner h2 { font-family: var(--font-serif); font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 400; }
+        .btn-light { background-color: var(--text-light); color: var(--navy-creamy-dark); padding: 1rem 2rem; border-radius: 4px; font-weight: 600; font-size: 1rem; transition: all 0.2s; white-space: nowrap; }
+        .btn-light:hover { transform: translateY(-2px); }
+
+        footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; }
+        .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
+        .footer-brand { font-family: var(--font-serif); font-size: 1.8rem; color: var(--text-light); }
+        .footer-links { display: flex; gap: 3rem; flex-wrap: wrap; }
+        .footer-links div h4 { color: var(--text-light); margin-bottom: 1rem; font-size: 0.95rem; }
+        .footer-links div ul { list-style: none; }
+        .footer-links div ul li { margin-bottom: 0.6rem; }
+        .footer-links div ul li a:hover { color: var(--text-light); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+
+        @media (max-width: 900px) {
+            .stand-grid, .tour-grid { grid-template-columns: 1fr; }
+            .cta-banner { flex-direction: column; text-align: center; gap: 2rem; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- ─── HEADER & MEGA MENU ─── -->
-    <header id="header">
-        <div class="container nav-container">
-            <a href="/" class="brand">
-                <img src="assets/penelope-logo.png" alt="Penelope Inc." onerror="this.style.display='none'">
-                Penelope Inc.
-            </a>
-
-            <!-- Desktop Nav -->
-            <nav class="desktop-nav">
-                <div class="nav-item">
-                    Enterprise Suites <i class="fas fa-chevron-down"></i>
-                    <div class="mega-menu">
-                        <div class="mega-menu-sidebar">
-                            <h3>Core Architecture</h3>
-                            <p>Deep-tech validation frameworks for next-generation aerospace compliance and security.</p>
-                            <a href="/index.html#suites" class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">View All Suites</a>
-                        </div>
-                        <div class="mega-menu-grid">
-                            <a href="/index.html#suites" class="mega-link">
-                                <div class="mega-icon"><i class="fas fa-network-wired"></i></div>
-                                <div class="mega-text"><h4>PHI-Twin</h4><p>Edge Prognostics</p></div>
-                            </a>
-                            <a href="/index.html#suites" class="mega-link mega-blue">
-                                <div class="mega-icon"><i class="fas fa-link"></i></div>
-                                <div class="mega-text"><h4>PHI-Chain</h4><p>Avionics Blockchain</p></div>
-                            </a>
-                            <a href="/index.html#suites" class="mega-link mega-blue">
-                                <div class="mega-icon"><i class="fas fa-cogs"></i></div>
-                                <div class="mega-text"><h4>PHI-Arc</h4><p>Lab Twin Engines</p></div>
-                            </a>
-                            <a href="/index.html#suites" class="mega-link">
-                                <div class="mega-icon"><i class="fas fa-satellite-dish"></i></div>
-                                <div class="mega-text"><h4>PHI-Drone</h4><p>UAV Recon Hub</p></div>
-                            </a>
-                        </div>
+    <header>
+        <a href="/" class="logo">Penelope Inc.</a>
+        <ul class="nav-links">
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger">PHI Suites <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="/suites/phi-twin.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-01</span><span class="nav-panel-copy"><h4>PHI-Twin</h4><p>Edge digital twins for landing gear &amp; structural health monitoring.</p></span></a>
+                        <a href="/suites/phi-chain.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-02</span><span class="nav-panel-copy"><h4>PHI-Chain</h4><p>Split-payload blockchain security for aviation communications.</p></span></a>
+                        <a href="/suites/phi-arc.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-03</span><span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Turbine blade prognostics with real-time fault injection.</p></span></a>
+                        <a href="/suites/phi-drone.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-04</span><span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span></a>
                     </div>
                 </div>
-                
-                <div class="nav-item">
-                    Community Services <i class="fas fa-chevron-down"></i>
-                    <div class="mega-menu">
-                        <div class="mega-menu-sidebar">
-                            <h3>Giving Back</h3>
-                            <p>Leveraging our deep-tech stack to build affordable, high-end infrastructure for education, faith, and local enterprise.</p>
-                        </div>
-                        <div class="mega-menu-grid">
-                            <a href="/services/index.html#dt-education" class="mega-link mega-blue">
-                                <div class="mega-icon"><i class="fas fa-graduation-cap"></i></div>
-                                <div class="mega-text"><h4>DT Education</h4><p>University & MRO</p></div>
-                            </a>
-                            <a href="/services/index.html#school-apps" class="mega-link">
-                                <div class="mega-icon"><i class="fas fa-school"></i></div>
-                                <div class="mega-text"><h4>School Apps</h4><p>Lightweight WebRTC</p></div>
-                            </a>
-                            <a href="/services/index.html#church-hubs" class="mega-link">
-                                <div class="mega-icon"><i class="fas fa-church"></i></div>
-                                <div class="mega-text"><h4>Church Hubs</h4><p>Digital Buildings</p></div>
-                            </a>
-                            <a href="/services/index.html#cybersecurity" class="mega-link mega-blue">
-                                <div class="mega-icon"><i class="fas fa-shield-alt"></i></div>
-                                <div class="mega-text"><h4>Cybersecurity</h4><p>Predictive defense</p></div>
-                            </a>
-                        </div>
+            </li>
+            <li class="nav-item"><a href="/lab.html" class="nav-trigger">The Lab</a></li>
+            <li class="nav-item"><a href="/about.html" class="nav-trigger" style="color:#fff;">About</a></li>
+            <li class="nav-item"><a href="/join.html" class="nav-trigger">Join Us</a></li>
+            <li class="nav-item"><a href="/contact.html" class="nav-trigger">Contact</a></li>
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger" style="color: var(--text-muted); font-size: 0.85rem;">Services <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="/services/#dt-education" class="nav-panel-link"><span class="nav-panel-tag">01</span><span class="nav-panel-copy"><h4>Digital Twin Training</h4><p>For universities, MRO teams &amp; individuals.</p></span></a>
+                        <a href="/services/#school-apps" class="nav-panel-link"><span class="nav-panel-tag">02</span><span class="nav-panel-copy"><h4>School Apps</h4><p>Lightweight screen-share learning platforms.</p></span></a>
+                        <a href="/services/#church-hubs" class="nav-panel-link"><span class="nav-panel-tag">03</span><span class="nav-panel-copy"><h4>Church Apps</h4><p>Full digital building for your congregation.</p></span></a>
+                        <a href="/services/#lifestones" class="nav-panel-link"><span class="nav-panel-tag">04</span><span class="nav-panel-copy"><h4>Lifestones</h4><p>Autonomous sermon-intelligence &amp; verse display.</p></span></a>
+                        <a href="/services/#penelope-agents" class="nav-panel-link"><span class="nav-panel-tag">05</span><span class="nav-panel-copy"><h4>Penelope AI Agent</h4><p>Hardware-locked, private autonomous agents.</p></span></a>
+                        <a href="/services/#social-apps" class="nav-panel-link"><span class="nav-panel-tag">06</span><span class="nav-panel-copy"><h4>Social &amp; Mobile Apps</h4><p>Windows, Android, macOS, Linux — built affordably.</p></span></a>
+                        <a href="/services/#cybersecurity" class="nav-panel-link"><span class="nav-panel-tag">07</span><span class="nav-panel-copy"><h4>Security Architecture</h4><p>Predictive digital &amp; physical threat systems.</p></span></a>
+                        <a href="/services/#cryptography" class="nav-panel-link"><span class="nav-panel-tag">08</span><span class="nav-panel-copy"><h4>Financial Cryptography</h4><p>Networks that secure people's finances.</p></span></a>
                     </div>
                 </div>
-
-                <a href="/index.html#building-plan" class="nav-item">Facility Plan</a>
-                <a href="about.html" class="nav-item active">About Us</a>
-                <a href="contact.html" class="nav-item">Contact</a>
-                
-                <a href="join.html" class="btn-secondary" style="padding: 0.5rem 1.2rem; font-size: 0.85rem; height: auto; margin-top: 20px; margin-bottom: 20px;">
-                    <i class="fas fa-fingerprint"></i> Company Walls
-                </a>
-            </nav>
-
-            <button class="mobile-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
-        </div>
+            </li>
+        </ul>
+        <button class="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
     </header>
 
-    <!-- Mobile Fullscreen Menu -->
-    <div class="mobile-menu" id="mobile-menu">
-        <div class="mob-item">
-            <div class="mob-head" onclick="this.nextElementSibling.classList.toggle('open')">Enterprise Suites <i class="fas fa-chevron-down"></i></div>
-            <div class="mob-body">
-                <a href="/index.html#suites">PHI-Twin</a>
-                <a href="/index.html#suites">PHI-Chain</a>
-                <a href="/index.html#suites">PHI-Arc</a>
-                <a href="/index.html#suites">PHI-Drone</a>
+    <div class="mobile-drawer">
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger">PHI Suites <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="/suites/phi-twin.html"><span class="nav-panel-tag">PHI-01</span> PHI-Twin</a>
+                <a href="/suites/phi-chain.html"><span class="nav-panel-tag">PHI-02</span> PHI-Chain</a>
+                <a href="/suites/phi-arc.html"><span class="nav-panel-tag">PHI-03</span> PHI-Arc</a>
+                <a href="/suites/phi-drone.html"><span class="nav-panel-tag">PHI-04</span> PHI-Drone</a>
             </div>
         </div>
-        <div class="mob-item">
-            <div class="mob-head" onclick="this.nextElementSibling.classList.toggle('open')">Community Services <i class="fas fa-chevron-down"></i></div>
-            <div class="mob-body">
-                <a href="/services/index.html#dt-education">DT Education</a>
-                <a href="/services/index.html#school-apps">School/Church Apps</a>
-                <a href="/services/index.html#penelope-agents">Penelope Agents</a>
-                <a href="/services/index.html#cybersecurity">Cybersecurity</a>
+        <a href="/lab.html" class="mobile-simple-link">The Lab</a>
+        <a href="/about.html" class="mobile-simple-link">About</a>
+        <a href="/join.html" class="mobile-simple-link">Join Us</a>
+        <a href="/contact.html" class="mobile-simple-link">Contact</a>
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger" style="font-size: 1rem; color: var(--text-muted);">Services <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="/services/#dt-education">Digital Twin Training</a>
+                <a href="/services/#school-apps">School Apps</a>
+                <a href="/services/#church-hubs">Church Apps</a>
+                <a href="/services/#lifestones">Lifestones</a>
+                <a href="/services/#penelope-agents">Penelope AI Agent</a>
+                <a href="/services/#social-apps">Social &amp; Mobile Apps</a>
+                <a href="/services/#cybersecurity">Security Architecture</a>
+                <a href="/services/#cryptography">Financial Cryptography</a>
             </div>
         </div>
-        <a href="/index.html#building-plan" class="mob-head mob-item" style="border:none; text-decoration:none;">Facility Plan</a>
-        <a href="about.html" class="mob-head mob-item" style="border:none; text-decoration:none;">About Us</a>
-        <a href="contact.html" class="mob-head mob-item" style="border:none; text-decoration:none;">Contact</a>
-        <a href="join.html" class="mob-head mob-item" style="border:none; color:var(--accent-orange); text-decoration:none;">Join the Mission</a>
     </div>
 
-    <!-- ─── PAGE HERO ─── -->
+    <!-- HERO -->
     <section class="page-hero">
-        <canvas id="hero-canvas"></canvas>
-        <div class="container reveal">
-            <span class="section-eyebrow" style="text-align: center; margin-bottom: 1.5rem;">Who We Are</span>
-            <h1>Strictly Aerospace.<br><span class="highlight">Specialists in Digital Twins.</span></h1>
-            <p class="lede">We are Penelope Inc. We operate strictly within the aerospace sector, architecting high-fidelity, physics-informed digital twin technology for vehicle component health monitoring.</p>
-        </div>
+        <div class="section-label">WHO WE ARE</div>
+        <h1>Strictly aerospace.<br>Specialists in digital twins.</h1>
+        <p>We operate strictly within the aerospace sector, architecting high-fidelity, physics-informed digital twin technology for vehicle component health monitoring.</p>
     </section>
 
-    <!-- ─── WHERE WE STAND ─── -->
-    <section class="section-padding">
-        <div class="container about-grid reveal">
-            <div class="about-text">
+    <!-- WHERE WE STAND -->
+    <section class="stand-section">
+        <div class="stand-grid">
+            <div class="stand-text">
                 <h2>Where We Stand</h2>
-                <p><strong>We do not build generic software.</strong> Penelope Inc. exists to solve the hardest problems in aviation telemetry, structural compliance, and predictive maintenance.</p>
-                <p>Our core focus is embedding physical laws into machine learning matrices. Whether it is predicting micro-fractures in an AGTF30 turbine blade or ensuring the cryptographic integrity of ADS-B transmissions via the PHI-Chain ledger, our architecture is designed for zero-leakage, edge-deployable survival.</p>
-                <p>While we leverage our engineering team to provide community services (like school apps and security audits), our true north is, and always will be, <strong>flight-critical aerospace infrastructure.</strong></p>
-                
-                <a href="join.html" class="btn-primary" style="margin-top: 1rem;">View Open Positions</a>
+                <p><strong>We do not build generic software.</strong> Penelope Inc. exists to solve hard problems in aviation telemetry, structural compliance, and predictive maintenance.</p>
+                <p>Our core focus is embedding physical laws into machine learning — whether that's predicting micro-fractures in a turbine blade or securing the cryptographic integrity of ADS-B transmissions through the PHI-Chain ledger, our architecture is built for zero-leakage, edge-deployable operation.</p>
+                <p>We also apply our engineering discipline to community services — school apps, church systems, security audits — but our true north is, and always will be, <strong>flight-critical aerospace infrastructure.</strong></p>
+                <a href="/join.html" class="btn-primary">View Open Positions</a>
             </div>
-            <div class="about-visual">
-                <!-- Using an aerospace structural/lab placeholder -->
-                <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1000" alt="Aerospace Engineering Lab">
+            <div class="stand-visual">
+                <img src="assets/about-lab.jpg" alt="Penelope Inc. engineering work">
             </div>
         </div>
     </section>
 
-    <!-- ─── DIGITAL TWIN TOUR & CURIOSITY FILL ─── -->
-    <section class="tour-section section-padding">
-        <div class="container reveal">
-            <div class="section-header" style="text-align: left; margin-bottom: 3rem;">
-                <span class="section-eyebrow" style="color: var(--accent-blue);">Curiosity Fill & Education</span>
-                <h2 class="section-title">The Digital Twin Tour</h2>
-                <p class="section-desc" style="margin-left: 0; max-width: 800px;">Digital Twins are real. It is not just buzzword theory—this is how it is done, and this is how we build them. Watch the breakdown, and if you are ready to learn the architecture, join the waiting room for our upcoming Masterclass.</p>
+    <!-- DIGITAL TWIN TOUR -->
+    <section class="tour-section">
+        <div class="tour-inner">
+            <div class="tour-header">
+                <div class="section-label" style="color: var(--blue-accent);">CURIOSITY FILL &amp; EDUCATION</div>
+                <h2>The Digital Twin Tour</h2>
+                <p>Digital twins are real, not buzzword theory. Watch how we actually build them, and if you're ready to learn the architecture yourself, join the waiting room for our next Masterclass cohort.</p>
             </div>
 
             <div class="tour-grid">
-                <!-- Video Player -->
-                <div class="tour-video-box" onclick="openVideoLightbox('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')">
-                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=1000" alt="Digital Twin Explainer">
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <div style="position: absolute; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8); padding: 5px 15px; border-radius: 4px; font-family: var(--ff-mono); font-size: 0.8rem; color: #0ea5e9;">LIVE ARCHITECTURE DEMO</div>
+                <div class="tour-video-box" onclick="openVideoLightbox('https://www.youtube.com/embed/VIDEO_ID?autoplay=1')">
+                    <img src="assets/about-tour-thumb.jpg" alt="Digital Twin explainer thumbnail">
+                    <div class="play-icon"><i class="fas fa-play"></i>&#9658;</div>
                 </div>
 
-                <!-- Waiting Room Form -->
                 <div class="form-card">
                     <h3>Masterclass Waiting Room</h3>
-                    <p>Enter the queue for our next comprehensive Digital Twin training module (Voov integrated).</p>
-                    <form onsubmit="event.preventDefault(); alert('You have been added to the waiting list. We will email you when the next cohort opens.'); this.reset();">
+                    <p>Join the queue for our next Digital Twin training cohort.</p>
+                    <form id="waitlist-form">
                         <div class="form-group">
                             <label>Full Name</label>
-                            <input type="text" required placeholder="John Doe">
+                            <input type="text" name="full_name" required placeholder="Your name">
                         </div>
                         <div class="form-group">
                             <label>Email Address</label>
-                            <input type="email" required placeholder="john@university.edu">
+                            <input type="email" name="email" required placeholder="you@university.edu">
                         </div>
                         <div class="form-group">
-                            <label>Training Tier / Proposed Budget</label>
-                            <select required>
-                                <option value="">Select a tier...</option>
-                                <option value="student">Individual Student ($500 - $1k)</option>
-                                <option value="university">University Dept Group ($5k - $10k)</option>
-                                <option value="mro">MRO / Enterprise Team ($15k+)</option>
+                            <label>You are…</label>
+                            <select name="org_type" required>
+                                <option value="">Select one…</option>
+                                <option value="individual">Individual</option>
+                                <option value="university">University Department</option>
+                                <option value="mro_official">MRO / Enterprise Team</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Reserve My Seat</button>
+                        <button type="submit" class="btn-primary form-submit">Reserve My Seat</button>
+                        <div id="waitlist-status" class="form-status" style="display:none;"></div>
                     </form>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ─── FOOTER ─── -->
+    <div class="cta-banner">
+        <h2>Let us help you build your next mission-critical twin</h2>
+        <a href="/contact.html" class="btn-light">Get in touch</a>
+    </div>
+
     <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <h2>Penelope Inc.</h2>
-                    <p>Strictly dedicated to the aerospace industry, specializing in digital twin technology for vehicle component health monitoring.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Navigation</h4>
+        <div class="footer-top">
+            <div class="footer-brand">Penelope Inc.</div>
+            <div class="footer-links">
+                <div>
+                    <h4>PHI Suites</h4>
                     <ul>
-                        <li><a href="/index.html#suites">PHI-Suites</a></li>
-                        <li><a href="/index.html#building-plan">Facility Plan</a></li>
-                        <li><a href="/services/index.html">Services</a></li>
-                        <li><a href="join.html">Company Walls</a></li>
+                        <li><a href="/suites/phi-twin.html">PHI-Twin</a></li>
+                        <li><a href="/suites/phi-chain.html">PHI-Chain</a></li>
+                        <li><a href="/suites/phi-arc.html">PHI-Arc</a></li>
+                        <li><a href="/suites/phi-drone.html">PHI-Drone</a></li>
                     </ul>
                 </div>
-                <div class="footer-col">
-                    <h4>Legal & Contact</h4>
+                <div>
+                    <h4>Organization</h4>
                     <ul>
-                        <li><a href="mailto:penelopeincorporated1@gmail.com">penelopeincorporated1@gmail.com</a></li>
-                        <li><a href="#">MOU Agreements</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="/lab.html">The Lab (Kaduna)</a></li>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/join.html">Join Us</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
                     </ul>
                 </div>
-                <div class="footer-col">
-                    <h4>Social</h4>
+                <div>
+                    <h4 style="color:#94A3B8; font-size:0.85rem;">Community Services</h4>
                     <ul>
-                        <li><a href="https://smbello.vercel.app" target="_blank">Founder Portfolio</a></li>
-                        <li><a href="https://github.com/Penelope-Inco" target="_blank">GitHub Org</a></li>
+                        <li><a href="/services/#dt-education">Digital Twin Training</a></li>
+                        <li><a href="/services/#church-hubs">Church Apps</a></li>
+                        <li><a href="/services/#cybersecurity">Security Architecture</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Penelope Inc. All rights reserved.</p>
-                <p>System State: Nominal.</p>
-            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Penelope Inc. All rights reserved.</p>
+            <p>PHI Lab Aerospace Technologies</p>
         </div>
     </footer>
 
-    <!-- Lightbox Element -->
-    <div class="lightbox" id="lightbox">
-        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-        <iframe id="lightbox-video" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-    </div>
-
     <script>
-        // ── Navigation Logic ──
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) header.style.background = 'rgba(3, 7, 18, 0.98)';
-            else header.style.background = 'rgba(3, 7, 18, 0.85)';
-        });
+        document.getElementById('waitlist-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const btn = form.querySelector('button[type="submit"]');
+            const status = document.getElementById('waitlist-status');
+            const payload = Object.fromEntries(new FormData(form).entries());
 
-        // Mobile Menu
-        const mobileToggle = document.getElementById('mobile-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-            const icon = mobileToggle.querySelector('i');
-            if(mobileMenu.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
+            btn.disabled = true;
+            btn.textContent = 'Submitting…';
+            status.style.display = 'none';
 
-        // Close mobile menu on link click
-        document.querySelectorAll('.mob-body a, .mob-head').forEach(link => {
-            if(link.getAttribute('href')) {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.remove('active');
-                    mobileToggle.querySelector('i').classList.replace('fa-times', 'fa-bars');
+            try {
+                const res = await fetch('/api/waitlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
+                const data = await res.json();
+                status.style.display = 'block';
+                if (data.ok) {
+                    status.className = 'form-status success';
+                    status.textContent = "You're on the list. We'll email you when the next cohort opens.";
+                    form.reset();
+                } else {
+                    status.className = 'form-status error';
+                    status.textContent = data.error || 'Something went wrong. Please try again.';
+                }
+            } catch (err) {
+                status.style.display = 'block';
+                status.className = 'form-status error';
+                status.textContent = 'Could not reach the server. Email penelopeincorporated1@gmail.com directly for now.';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Reserve My Seat';
             }
         });
 
-        // ── Scroll Reveal ──
-        const revealElements = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
-            });
-        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-        revealElements.forEach(el => revealObserver.observe(el));
-
-        // ── Hero Canvas ──
-        (function() {
-            const canvas = document.getElementById('hero-canvas');
-            const ctx = canvas.getContext('2d');
-            let w = canvas.width = window.innerWidth;
-            let h = canvas.height = window.innerHeight;
-            window.addEventListener('resize', () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
-
-            const nodes = Array.from({length: 60}, () => ({
-                x: Math.random() * w, y: Math.random() * h,
-                vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
-                size: Math.random() * 2 + 1
-            }));
-
-            function animate() {
-                ctx.clearRect(0,0,w,h);
-                ctx.fillStyle = 'rgba(221, 90, 18, 0.4)';
-                ctx.strokeStyle = 'rgba(221, 90, 18, 0.1)';
-                ctx.lineWidth = 1;
-
-                nodes.forEach(node => {
-                    node.x += node.vx; node.y += node.vy;
-                    if(node.x < 0 || node.x > w) node.vx *= -1;
-                    if(node.y < 0 || node.y > h) node.vy *= -1;
-                    ctx.beginPath(); ctx.arc(node.x, node.y, node.size, 0, Math.PI*2); ctx.fill();
-                    nodes.forEach(other => {
-                        if(Math.hypot(node.x - other.x, node.y - other.y) < 150) {
-                            ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(other.x, other.y); ctx.stroke();
-                        }
-                    });
-                });
-                requestAnimationFrame(animate);
-            }
-            animate();
-        })();
-
-        // ── Video Lightbox ──
-        const lightbox = document.getElementById('lightbox');
-        const lightboxVid = document.getElementById('lightbox-video');
-        function openVideoLightbox(src) { lightboxVid.src = src; lightbox.classList.add('active'); }
-        function closeLightbox() { lightbox.classList.remove('active'); setTimeout(() => lightboxVid.src = '', 300); }
-        lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
+        function openVideoLightbox(src) {
+            window.open(src.replace('?autoplay=1', ''), '_blank');
+            // TODO: swap for the same lightbox pattern used on suite pages once
+            // this page shares assets/gallery-lightbox.js
+        }
     </script>
+    <script src="assets/nav.js" defer></script>
     <script src="penelope.js"></script>
 </body>
 </html>
