@@ -11,6 +11,7 @@
     <link rel="apple-touch-icon" href="assets/favicon.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/nav.css">
 
     <style>
@@ -31,7 +32,12 @@
         body { background-color: var(--bg-milky-white); color: var(--text-dark); font-family: var(--font-sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
         a { text-decoration: none; color: inherit; }
 
-        .page-hero { background-color: var(--navy-creamy-dark); color: var(--text-light); padding: 11rem 8% 6rem; text-align: center; }
+        .page-hero {
+            position: relative;
+            color: var(--text-light); padding: 12rem 8% 7rem; text-align: center;
+            background-image: linear-gradient(180deg, rgba(14,23,38,0.55) 0%, rgba(14,23,38,0.88) 100%), url('assets/banner.png');
+            background-size: cover; background-position: center; background-color: var(--navy-creamy-dark);
+        }
         .page-hero .section-label { color: #94A3B8; }
         .page-hero h1 { font-family: var(--font-serif); font-size: clamp(2.6rem, 5.5vw, 4.2rem); font-weight: 400; line-height: 1.15; margin: 1rem 0 1.2rem; }
         .page-hero p { font-size: 1.15rem; color: #CBD5E1; max-width: 680px; margin: 0 auto; }
@@ -48,6 +54,32 @@
         .btn-primary:hover { background-color: var(--blue-accent); transform: translateY(-2px); }
         .stand-visual { border-radius: 8px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.15); background-color: var(--bg-milky-card); aspect-ratio: 4/3; }
         .stand-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* Team Section */
+        .team-section { padding: 6rem 8%; max-width: 1200px; margin: 0 auto; }
+        .team-header { text-align: center; margin-bottom: 3.5rem; }
+        .team-header h2 { font-family: var(--font-serif); font-size: clamp(1.9rem, 3.5vw, 2.6rem); font-weight: 400; color: var(--navy-creamy-dark); margin-bottom: 1rem; }
+        .team-header p { color: var(--text-muted); max-width: 640px; margin: 0 auto; font-size: 1.05rem; }
+
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+        .team-card { text-align: center; }
+        .team-photo {
+            width: 160px; height: 160px; border-radius: 50%; margin: 0 auto 1.2rem;
+            overflow: hidden; background-color: var(--bg-milky-card); border: 3px solid var(--bg-milky-card);
+        }
+        .team-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .team-name { font-family: var(--font-serif); font-size: 1.3rem; color: var(--navy-creamy-dark); margin-bottom: 0.3rem; }
+        .team-role { font-size: 0.85rem; color: var(--blue-accent); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+        /* Placeholder / "more joining soon" cards */
+        .team-card.placeholder { opacity: 0.45; }
+        .team-card.placeholder .team-photo {
+            display: flex; align-items: center; justify-content: center;
+            border: 2px dashed #CBD5E1; background-color: transparent;
+        }
+        .team-card.placeholder .team-photo i { font-size: 2.8rem; color: #CBD5E1; }
+        .team-card.placeholder .team-name { color: var(--text-muted); font-style: italic; }
+        .team-card.placeholder .team-role { color: var(--text-muted); }
 
         /* Tour / program-card style alternating section */
         .tour-section { background-color: var(--bg-milky-card); padding: 6rem 8%; }
@@ -119,8 +151,10 @@
                     <div class="nav-panel-grid">
                         <a href="/suites/phi-twin.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-01</span><span class="nav-panel-copy"><h4>PHI-Twin</h4><p>Edge digital twins for landing gear &amp; structural health monitoring.</p></span></a>
                         <a href="/suites/phi-chain.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-02</span><span class="nav-panel-copy"><h4>PHI-Chain</h4><p>Split-payload blockchain security for aviation communications.</p></span></a>
-                        <a href="/suites/phi-arc.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-03</span><span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Turbine blade prognostics with real-time fault injection.</p></span></a>
-                        <a href="/suites/phi-drone.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-04</span><span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span></a>
+                        <a href="/suites/phi-arc.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-03</span><span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Proprietary low-cost, high-standard engineering methodology.</p></span></a>
+                        <a href="/suites/phi-sense.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-04</span><span class="nav-panel-copy"><h4>PHI-Sense</h4><p>1,027-sensor HUMS fusion array.</p></span></a>
+                        <a href="/suites/phi-engine.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-05</span><span class="nav-panel-copy"><h4>PHI-Engine</h4><p>Rotating detonation &amp; gas turbine research.</p></span></a>
+                        <a href="/suites/phi-drone.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-06</span><span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span></a>
                     </div>
                 </div>
             </li>
@@ -132,14 +166,10 @@
                 <button class="nav-trigger" style="color: var(--text-muted); font-size: 0.85rem;">Services <span class="caret"></span></button>
                 <div class="nav-panel">
                     <div class="nav-panel-grid">
-                        <a href="/services/#dt-education" class="nav-panel-link"><span class="nav-panel-tag">01</span><span class="nav-panel-copy"><h4>Digital Twin Training</h4><p>For universities, MRO teams &amp; individuals.</p></span></a>
-                        <a href="/services/#school-apps" class="nav-panel-link"><span class="nav-panel-tag">02</span><span class="nav-panel-copy"><h4>School Apps</h4><p>Lightweight screen-share learning platforms.</p></span></a>
-                        <a href="/services/#church-hubs" class="nav-panel-link"><span class="nav-panel-tag">03</span><span class="nav-panel-copy"><h4>Church Apps</h4><p>Full digital building for your congregation.</p></span></a>
-                        <a href="/services/#lifestones" class="nav-panel-link"><span class="nav-panel-tag">04</span><span class="nav-panel-copy"><h4>Lifestones</h4><p>Autonomous sermon-intelligence &amp; verse display.</p></span></a>
-                        <a href="/services/#penelope-agents" class="nav-panel-link"><span class="nav-panel-tag">05</span><span class="nav-panel-copy"><h4>Penelope AI Agent</h4><p>Hardware-locked, private autonomous agents.</p></span></a>
-                        <a href="/services/#social-apps" class="nav-panel-link"><span class="nav-panel-tag">06</span><span class="nav-panel-copy"><h4>Social &amp; Mobile Apps</h4><p>Windows, Android, macOS, Linux — built affordably.</p></span></a>
-                        <a href="/services/#cybersecurity" class="nav-panel-link"><span class="nav-panel-tag">07</span><span class="nav-panel-copy"><h4>Security Architecture</h4><p>Predictive digital &amp; physical threat systems.</p></span></a>
-                        <a href="/services/#cryptography" class="nav-panel-link"><span class="nav-panel-tag">08</span><span class="nav-panel-copy"><h4>Financial Cryptography</h4><p>Networks that secure people's finances.</p></span></a>
+                        <a href="/services/#digital-twin-training" class="nav-panel-link"><span class="nav-panel-tag">01</span><span class="nav-panel-copy"><h4>Digital Twin Training</h4><p>For universities, MRO teams &amp; individuals.</p></span></a>
+                        <a href="/services/#penelope-agent" class="nav-panel-link"><span class="nav-panel-tag">02</span><span class="nav-panel-copy"><h4>Penelope Agent</h4><p>Sovereign, hardware-locked AI for industrial teams.</p></span></a>
+                        <a href="/services/#cybersecurity" class="nav-panel-link"><span class="nav-panel-tag">03</span><span class="nav-panel-copy"><h4>Security Architecture</h4><p>Predictive digital &amp; physical threat systems.</p></span></a>
+                        <a href="/services/#fintech-crypto" class="nav-panel-link"><span class="nav-panel-tag">04</span><span class="nav-panel-copy"><h4>Financial Cryptography</h4><p>Ledger design built on PHI-Chain's engineering.</p></span></a>
                     </div>
                 </div>
             </li>
@@ -154,7 +184,9 @@
                 <a href="/suites/phi-twin.html"><span class="nav-panel-tag">PHI-01</span> PHI-Twin</a>
                 <a href="/suites/phi-chain.html"><span class="nav-panel-tag">PHI-02</span> PHI-Chain</a>
                 <a href="/suites/phi-arc.html"><span class="nav-panel-tag">PHI-03</span> PHI-Arc</a>
-                <a href="/suites/phi-drone.html"><span class="nav-panel-tag">PHI-04</span> PHI-Drone</a>
+                <a href="/suites/phi-sense.html"><span class="nav-panel-tag">PHI-04</span> PHI-Sense</a>
+                <a href="/suites/phi-engine.html"><span class="nav-panel-tag">PHI-05</span> PHI-Engine</a>
+                <a href="/suites/phi-drone.html"><span class="nav-panel-tag">PHI-06</span> PHI-Drone</a>
             </div>
         </div>
         <a href="/lab.html" class="mobile-simple-link">The Lab</a>
@@ -164,14 +196,10 @@
         <div class="mobile-accordion-item">
             <button class="mobile-accordion-trigger" style="font-size: 1rem; color: var(--text-muted);">Services <span class="caret"></span></button>
             <div class="mobile-accordion-panel">
-                <a href="/services/#dt-education">Digital Twin Training</a>
-                <a href="/services/#school-apps">School Apps</a>
-                <a href="/services/#church-hubs">Church Apps</a>
-                <a href="/services/#lifestones">Lifestones</a>
-                <a href="/services/#penelope-agents">Penelope AI Agent</a>
-                <a href="/services/#social-apps">Social &amp; Mobile Apps</a>
+                <a href="/services/#digital-twin-training">Digital Twin Training</a>
+                <a href="/services/#penelope-agent">Penelope Agent</a>
                 <a href="/services/#cybersecurity">Security Architecture</a>
-                <a href="/services/#cryptography">Financial Cryptography</a>
+                <a href="/services/#fintech-crypto">Financial Cryptography</a>
             </div>
         </div>
     </div>
@@ -190,11 +218,45 @@
                 <h2>Where We Stand</h2>
                 <p><strong>We do not build generic software.</strong> Penelope Inc. exists to solve hard problems in aviation telemetry, structural compliance, and predictive maintenance.</p>
                 <p>Our core focus is embedding physical laws into machine learning — whether that's predicting micro-fractures in a turbine blade or securing the cryptographic integrity of ADS-B transmissions through the PHI-Chain ledger, our architecture is built for zero-leakage, edge-deployable operation.</p>
-                <p>We also apply our engineering discipline to community services — school apps, church systems, security audits — but our true north is, and always will be, <strong>flight-critical aerospace infrastructure.</strong></p>
+                <p>We also occasionally apply our engineering discipline to <a href="/other-work.html" style="color: var(--blue-accent); text-decoration: underline;">community services</a> — but our true north is, and always will be, <strong>flight-critical aerospace infrastructure.</strong></p>
                 <a href="/join.html" class="btn-primary">View Open Positions</a>
             </div>
             <div class="stand-visual">
                 <img src="assets/about-lab.jpg" alt="Penelope Inc. engineering work">
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="team-section">
+        <div class="team-header">
+            <div class="section-label" style="color: var(--blue-accent);">THE PEOPLE</div>
+            <h2>Team</h2>
+            <p>Early-stage and building. Here's who's behind the work so far — more seats are opening as the lab grows.</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-photo">
+                    <img src="assets/team-bello.jpg" alt="Mohammed Bello Sani">
+                </div>
+                <div class="team-name">Mohammed Bello Sani</div>
+                <div class="team-role">Founder</div>
+            </div>
+
+            <div class="team-card placeholder">
+                <div class="team-photo"><i class="fas fa-user"></i></div>
+                <div class="team-name">Position Open</div>
+                <div class="team-role">More joining soon</div>
+            </div>
+            <div class="team-card placeholder">
+                <div class="team-photo"><i class="fas fa-user"></i></div>
+                <div class="team-name">Position Open</div>
+                <div class="team-role">More joining soon</div>
+            </div>
+            <div class="team-card placeholder">
+                <div class="team-photo"><i class="fas fa-user"></i></div>
+                <div class="team-name">Position Open</div>
+                <div class="team-role">More joining soon</div>
             </div>
         </div>
     </section>
@@ -243,11 +305,6 @@
         </div>
     </section>
 
-    <div class="cta-banner">
-        <h2>Let us help you build your next mission-critical twin</h2>
-        <a href="/contact.html" class="btn-light">Get in touch</a>
-    </div>
-
     <footer>
         <div class="footer-top">
             <div class="footer-brand">Penelope Inc.</div>
@@ -258,6 +315,8 @@
                         <li><a href="/suites/phi-twin.html">PHI-Twin</a></li>
                         <li><a href="/suites/phi-chain.html">PHI-Chain</a></li>
                         <li><a href="/suites/phi-arc.html">PHI-Arc</a></li>
+                        <li><a href="/suites/phi-sense.html">PHI-Sense</a></li>
+                        <li><a href="/suites/phi-engine.html">PHI-Engine</a></li>
                         <li><a href="/suites/phi-drone.html">PHI-Drone</a></li>
                     </ul>
                 </div>
@@ -271,11 +330,9 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 style="color:#94A3B8; font-size:0.85rem;">Community Services</h4>
+                    <h4 style="color:#94A3B8; font-size:0.85rem;">Other Work</h4>
                     <ul>
-                        <li><a href="/services/#dt-education">Digital Twin Training</a></li>
-                        <li><a href="/services/#church-hubs">Church Apps</a></li>
-                        <li><a href="/services/#cybersecurity">Security Architecture</a></li>
+                        <li><a href="/other-work.html">Education &amp; Community Systems</a></li>
                     </ul>
                 </div>
             </div>
