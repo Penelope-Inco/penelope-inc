@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,16 +123,87 @@
         .quote-author { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
         .quote-role { font-size: 0.9rem; color: var(--text-muted); }
 
-        .cta-banner {
-            background: linear-gradient(135deg, #1E3A8A 0%, var(--navy-creamy-dark) 100%);
-            color: var(--text-light); padding: 5rem 8%;
-            display: flex; justify-content: space-between; align-items: center;
-            max-width: 1200px; margin: 0 auto 6rem auto; border-radius: 12px;
-            box-shadow: 0 25px 50px -12px rgba(14,23,38,0.25);
+        /* ─── FLEETTWIN SHOWCASE (REPLACES CTA BANNER) ─── */
+        .fleettwin-showcase {
+            background: linear-gradient(135deg, #070B14 0%, var(--navy-creamy-dark) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 2px solid var(--blue-accent);
+            padding: 5rem 8%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1300px; margin: 0 auto 6rem auto; border-radius: 16px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 0 40px rgba(37, 99, 235, 0.05);
+            color: var(--text-light);
+            position: relative;
+            overflow: hidden;
         }
-        .cta-banner h2 { font-family: var(--font-serif); font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 400; }
-        .btn-primary { background-color: var(--text-light); color: var(--navy-creamy-dark); padding: 1rem 2rem; border-radius: 4px; font-weight: 600; font-size: 1rem; transition: all 0.2s; white-space: nowrap; }
-        .btn-primary:hover { background-color: var(--bg-milky-white); transform: translateY(-2px); }
+
+        /* Subtle grazing background artifact */
+        .fleettwin-showcase::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at center, rgba(142, 116, 96, 0.03) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .ft-content { position: relative; z-index: 2; }
+        .ft-tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: #38bdf8;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        .ft-content h2 { font-family: var(--font-serif); font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 400; margin-bottom: 1.5rem; line-height: 1.1; }
+        .ft-content p { color: #94A3B8; font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; max-width: 500px; }
+        
+        .ft-tech-stack { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2.5rem; }
+        .ft-tech-pill { font-family: var(--font-mono); font-size: 0.7rem; color: #CBD5E1; padding: 4px 10px; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; background: rgba(0,0,0,0.3); }
+
+        .btn-primary { background-color: var(--blue-accent); color: #fff; padding: 1rem 2rem; border-radius: 6px; font-weight: 600; font-size: 1rem; transition: all 0.3s; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; }
+        .btn-primary:hover { background-color: transparent; border-color: var(--blue-accent); color: var(--blue-accent); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
+
+        /* FleetTwin Federated Learning Animation */
+        .ft-visual { position: relative; height: 350px; display: flex; align-items: center; justify-content: center; z-index: 2; }
+        .ft-core { width: 80px; height: 80px; background: rgba(37, 99, 235, 0.1); border: 2px solid var(--blue-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 0 30px rgba(37, 99, 235, 0.4); position: relative; }
+        .ft-core i { font-size: 2rem; color: #fff; }
+        .ft-core::after { content: ''; position: absolute; inset: -15px; border: 1px dashed rgba(56, 189, 248, 0.3); border-radius: 50%; animation: spin 10s linear infinite; }
+        
+        .ft-orbit { position: absolute; width: 300px; height: 300px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.05); animation: spin 20s linear infinite; }
+        .ft-orbit-2 { width: 200px; height: 200px; animation: spin-reverse 15s linear infinite; }
+        
+        .ft-node { position: absolute; width: 36px; height: 36px; background: var(--navy-creamy-dark); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #94A3B8; }
+        .ft-node-1 { top: -18px; left: 50%; transform: translateX(-50%); }
+        .ft-node-2 { bottom: -18px; left: 50%; transform: translateX(-50%); }
+        .ft-node-3 { top: 50%; left: -18px; transform: translateY(-50%); }
+        .ft-node-4 { top: 50%; right: -18px; transform: translateY(-50%); }
+
+        /* Data Sync Particles */
+        .ft-particle { position: absolute; width: 6px; height: 6px; background: #38bdf8; border-radius: 50%; box-shadow: 0 0 10px #38bdf8; opacity: 0; }
+        .p-1 { top: 15%; left: 50%; animation: syncData 2s ease-in infinite; }
+        .p-2 { bottom: 15%; left: 50%; animation: syncData 2s ease-in infinite 1s; }
+        .p-3 { top: 50%; left: 15%; animation: syncData 2s ease-in infinite 0.5s; }
+        .p-4 { top: 50%; right: 15%; animation: syncData 2s ease-in infinite 1.5s; }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+        @keyframes syncData {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.5) translate(0, 0); top: 50%; left: 50%; opacity: 0; }
+        }
 
         footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; }
         .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
@@ -147,13 +219,14 @@
             .vision-grid, .program-card, .program-card.reverse { grid-template-columns: 1fr; direction: ltr; }
             .metrics-grid { grid-template-columns: 1fr; }
             .metric-item:not(:last-child)::after { display: none; }
-            .cta-banner { flex-direction: column; text-align: center; gap: 2rem; }
+            .fleettwin-showcase { grid-template-columns: 1fr; text-align: center; gap: 2rem; padding: 4rem 2rem; }
+            .ft-content p { margin: 0 auto 2rem auto; }
+            .ft-tech-stack { justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ==== HEADER / NAV (see assets/header-partial.html for the source of truth) ==== -->
     <header>
         <a href="/" class="logo">Penelope Inc.</a>
 
@@ -162,48 +235,49 @@
                 <button class="nav-trigger">PHI Suites <span class="caret"></span></button>
                 <div class="nav-panel">
                     <div class="nav-panel-grid">
-                        <a href="/suites/phi-twin.html" class="nav-panel-link">
+                        <a href="suites/phi-twin.html" class="nav-panel-link">
                             <span class="nav-panel-tag">PHI-01</span>
                             <span class="nav-panel-copy"><h4>PHI-Twin</h4><p>Edge digital twins for landing gear &amp; structural health monitoring.</p></span>
                         </a>
-                        <a href="/suites/phi-chain.html" class="nav-panel-link">
+                        <a href="suites/phi-chain.html" class="nav-panel-link">
                             <span class="nav-panel-tag">PHI-02</span>
                             <span class="nav-panel-copy"><h4>PHI-Chain</h4><p>Split-payload blockchain security for aviation communications.</p></span>
                         </a>
-                        <a href="/suites/phi-arc.html" class="nav-panel-link">
+                        <a href="suites/phi-arc.html" class="nav-panel-link">
                             <span class="nav-panel-tag">PHI-03</span>
-                            <span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Turbine blade prognostics with real-time fault injection.</p></span>
+                            <span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Proprietary low-cost, high-standard engineering methodology.</p></span>
                         </a>
-                        <a href="/suites/phi-drone.html" class="nav-panel-link">
+                        <a href="suites/phi-sense.html" class="nav-panel-link">
                             <span class="nav-panel-tag">PHI-04</span>
+                            <span class="nav-panel-copy"><h4>PHI-Sense</h4><p>1,027-sensor HUMS fusion array.</p></span>
+                        </a>
+                        <a href="suites/phi-engine.html" class="nav-panel-link">
+                            <span class="nav-panel-tag">PHI-05</span>
+                            <span class="nav-panel-copy"><h4>PHI-Engine</h4><p>Rotating detonation &amp; gas turbine research.</p></span>
+                        </a>
+                        <a href="suites/phi-drone.html" class="nav-panel-link">
+                            <span class="nav-panel-tag">PHI-06</span>
                             <span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span>
                         </a>
                     </div>
                 </div>
             </li>
-
-            <li class="nav-item"><a href="/lab.html" class="nav-trigger">The Lab</a></li>
-            <li class="nav-item"><a href="/about.html" class="nav-trigger">About</a></li>
-            <li class="nav-item"><a href="/join.html" class="nav-trigger">Join Us</a></li>
-            <li class="nav-item"><a href="/contact.html" class="nav-trigger">Contact</a></li>
-
+            <li class="nav-item"><a href="lab.html" class="nav-trigger">The Lab</a></li>
+            <li class="nav-item"><a href="about.html" class="nav-trigger">About</a></li>
+            <li class="nav-item"><a href="join.html" class="nav-trigger">Join Us</a></li>
+            <li class="nav-item"><a href="contact.html" class="nav-trigger">Contact</a></li>
             <li class="nav-item" data-has-panel>
                 <button class="nav-trigger" style="color: var(--text-muted); font-size: 0.85rem;">Services <span class="caret"></span></button>
                 <div class="nav-panel">
                     <div class="nav-panel-grid">
-                        <a href="/services/#dt-education" class="nav-panel-link"><span class="nav-panel-tag">01</span><span class="nav-panel-copy"><h4>Digital Twin Training</h4><p>For universities, MRO teams &amp; individuals.</p></span></a>
-                        <a href="/services/#school-apps" class="nav-panel-link"><span class="nav-panel-tag">02</span><span class="nav-panel-copy"><h4>School Apps</h4><p>Lightweight screen-share learning platforms.</p></span></a>
-                        <a href="/services/#church-hubs" class="nav-panel-link"><span class="nav-panel-tag">03</span><span class="nav-panel-copy"><h4>Church Apps</h4><p>Full digital building for your congregation.</p></span></a>
-                        <a href="/services/#lifestones" class="nav-panel-link"><span class="nav-panel-tag">04</span><span class="nav-panel-copy"><h4>Lifestones</h4><p>Autonomous sermon-intelligence &amp; verse display.</p></span></a>
-                        <a href="/services/#penelope-agents" class="nav-panel-link"><span class="nav-panel-tag">05</span><span class="nav-panel-copy"><h4>Penelope AI Agent</h4><p>Hardware-locked, private autonomous agents.</p></span></a>
-                        <a href="/services/#social-apps" class="nav-panel-link"><span class="nav-panel-tag">06</span><span class="nav-panel-copy"><h4>Social &amp; Mobile Apps</h4><p>Windows, Android, macOS, Linux — built affordably.</p></span></a>
-                        <a href="/services/#cybersecurity" class="nav-panel-link"><span class="nav-panel-tag">07</span><span class="nav-panel-copy"><h4>Security Architecture</h4><p>Predictive digital &amp; physical threat systems.</p></span></a>
-                        <a href="/services/#cryptography" class="nav-panel-link"><span class="nav-panel-tag">08</span><span class="nav-panel-copy"><h4>Financial Cryptography</h4><p>Networks that secure people's finances.</p></span></a>
+                        <a href="services/#dt-education" class="nav-panel-link"><span class="nav-panel-tag">01</span><span class="nav-panel-copy"><h4>Digital Twin Training</h4><p>For universities, MRO teams &amp; individuals.</p></span></a>
+                        <a href="services/#penelope-agent" class="nav-panel-link"><span class="nav-panel-tag">02</span><span class="nav-panel-copy"><h4>Penelope Agent</h4><p>Sovereign, hardware-locked AI for industrial teams.</p></span></a>
+                        <a href="services/#cybersecurity" class="nav-panel-link"><span class="nav-panel-tag">03</span><span class="nav-panel-copy"><h4>Security Architecture</h4><p>Predictive digital &amp; physical threat systems.</p></span></a>
+                        <a href="services/#fintech-crypto" class="nav-panel-link"><span class="nav-panel-tag">04</span><span class="nav-panel-copy"><h4>Financial Cryptography</h4><p>Ledger design built on PHI-Chain's engineering.</p></span></a>
                     </div>
                 </div>
             </li>
         </ul>
-
         <button class="nav-hamburger" aria-label="Open menu">
             <span></span><span></span><span></span>
         </button>
@@ -213,28 +287,25 @@
         <div class="mobile-accordion-item">
             <button class="mobile-accordion-trigger">PHI Suites <span class="caret"></span></button>
             <div class="mobile-accordion-panel">
-                <a href="/suites/phi-twin.html"><span class="nav-panel-tag">PHI-01</span> PHI-Twin</a>
-                <a href="/suites/phi-chain.html"><span class="nav-panel-tag">PHI-02</span> PHI-Chain</a>
-                <a href="/suites/phi-arc.html"><span class="nav-panel-tag">PHI-03</span> PHI-Arc</a>
-                <a href="/suites/phi-drone.html"><span class="nav-panel-tag">PHI-04</span> PHI-Drone</a>
+                <a href="suites/phi-twin.html"><span class="nav-panel-tag">PHI-01</span> PHI-Twin</a>
+                <a href="suites/phi-chain.html"><span class="nav-panel-tag">PHI-02</span> PHI-Chain</a>
+                <a href="suites/phi-arc.html"><span class="nav-panel-tag">PHI-03</span> PHI-Arc</a>
+                <a href="suites/phi-sense.html"><span class="nav-panel-tag">PHI-04</span> PHI-Sense</a>
+                <a href="suites/phi-engine.html"><span class="nav-panel-tag">PHI-05</span> PHI-Engine</a>
+                <a href="suites/phi-drone.html"><span class="nav-panel-tag">PHI-06</span> PHI-Drone</a>
             </div>
         </div>
-        <a href="/lab.html" class="mobile-simple-link">The Lab</a>
-        <a href="/about.html" class="mobile-simple-link">About</a>
-        <a href="/join.html" class="mobile-simple-link">Join Us</a>
-        <a href="/contact.html" class="mobile-simple-link">Contact</a>
-
+        <a href="lab.html" class="mobile-simple-link">The Lab</a>
+        <a href="about.html" class="mobile-simple-link">About</a>
+        <a href="join.html" class="mobile-simple-link">Join Us</a>
+        <a href="contact.html" class="mobile-simple-link">Contact</a>
         <div class="mobile-accordion-item">
             <button class="mobile-accordion-trigger" style="font-size: 1rem; color: var(--text-muted);">Services <span class="caret"></span></button>
             <div class="mobile-accordion-panel">
-                <a href="/services/#dt-education">Digital Twin Training</a>
-                <a href="/services/#school-apps">School Apps</a>
-                <a href="/services/#church-hubs">Church Apps</a>
-                <a href="/services/#lifestones">Lifestones</a>
-                <a href="/services/#penelope-agents">Penelope AI Agent</a>
-                <a href="/services/#social-apps">Social &amp; Mobile Apps</a>
-                <a href="/services/#cybersecurity">Security Architecture</a>
-                <a href="/services/#cryptography">Financial Cryptography</a>
+                <a href="services/#digital-twin-training">Digital Twin Training</a>
+                <a href="services/#penelope-agent">Penelope Agent</a>
+                <a href="services/#cybersecurity">Security Architecture</a>
+                <a href="services/#fintech-crypto">Financial Cryptography</a>
             </div>
         </div>
     </div>
@@ -280,7 +351,7 @@
                 <div class="program-tag">Edge Prognostics — PHI-01</div>
                 <h3>PHI-Twin Framework</h3>
                 <p>Physics-Informed Edge Digital Twins integrating zero-leakage CNN-BiLSTM architectures and offline LLM reasoning for real-time landing gear and structural health monitoring.</p>
-                <a href="/suites/phi-twin.html" class="btn-link">Explore PHI-Twin &rarr;</a>
+                <a href="suites/phi-twin.html" class="btn-link">Explore PHI-Twin &rarr;</a>
             </div>
         </div>
 
@@ -294,7 +365,7 @@
                 <div class="program-tag">Aviation Communications &amp; Security — PHI-02</div>
                 <h3>PHI-Chain Architecture</h3>
                 <p>A split-payload blockchain network designed for multi-protocol aviation communications security, ensuring TCAS compatibility and tamper-proof telemetry streams.</p>
-                <a href="/suites/phi-chain.html" class="btn-link">Explore PHI-Chain &rarr;</a>
+                <a href="suites/phi-chain.html" class="btn-link">Explore PHI-Chain &rarr;</a>
             </div>
         </div>
 
@@ -308,7 +379,7 @@
                 <div class="program-tag">Structural Architecture — PHI-03</div>
                 <h3>PHI-Arc Platform</h3>
                 <p>Component-specific simulation engines featuring real-time fault injection and dynamic load distribution telemetry for next-generation airframes.</p>
-                <a href="/suites/phi-arc.html" class="btn-link">Explore PHI-Arc &rarr;</a>
+                <a href="suites/phi-arc.html" class="btn-link">Explore PHI-Arc &rarr;</a>
             </div>
         </div>
 
@@ -322,7 +393,7 @@
                 <div class="program-tag">Autonomous Systems — PHI-04</div>
                 <h3>PHI-Drone Suite</h3>
                 <p>Hardware-in-the-loop (HIL) validation environments for autonomous UAV trajectory planning, adaptive flight control, and dynamic failure mitigation.</p>
-                <a href="/suites/phi-drone.html" class="btn-link">Explore PHI-Drone &rarr;</a>
+                <a href="suites/phi-drone.html" class="btn-link">Explore PHI-Drone &rarr;</a>
             </div>
         </div>
     </section>
@@ -353,9 +424,41 @@
         <div class="quote-role">Penelope Inc. Research Division</div>
     </section>
 
-    <div class="cta-banner" id="contact">
-        <h2>Let us help you build your next mission-critical twin</h2>
-        <a href="/contact.html" class="btn-primary">Get in touch</a>
+    <div class="fleettwin-showcase">
+        <div class="ft-content">
+            <span class="ft-tag">Proprietary Architecture</span>
+            <h2>FleetTwin™ Federated Intelligence</h2>
+            <p>Our home-born framework solves the industry's biggest data bottleneck. FleetTwin coordinates distributed deep sequence fault classifiers to update structural degradation weights across global airline fleets—without ever exposing raw, proprietary telemetry to a central cloud.</p>
+            
+            <div class="ft-tech-stack">
+                <span class="ft-tech-pill">Federated Learning</span>
+                <span class="ft-tech-pill">PyTorch Clusters</span>
+                <span class="ft-tech-pill">Zero-Leakage Sync</span>
+                <span class="ft-tech-pill">Cross-Airframe Models</span>
+            </div>
+
+            <a href="https://github.com/Sm-bello/FleetTwin" target="_blank" class="btn-primary">
+                <i class="fab fa-github"></i> Inspect Architecture
+            </a>
+        </div>
+
+        <div class="ft-visual">
+            <div class="ft-orbit">
+                <div class="ft-node ft-node-1"><i class="fas fa-plane"></i></div>
+                <div class="ft-node ft-node-2"><i class="fas fa-plane"></i></div>
+                <div class="ft-particle p-1"></div>
+                <div class="ft-particle p-2"></div>
+            </div>
+            <div class="ft-orbit ft-orbit-2">
+                <div class="ft-node ft-node-3"><i class="fas fa-server"></i></div>
+                <div class="ft-node ft-node-4"><i class="fas fa-server"></i></div>
+                <div class="ft-particle p-3"></div>
+                <div class="ft-particle p-4"></div>
+            </div>
+            <div class="ft-core">
+                <i class="fas fa-brain"></i>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -365,27 +468,27 @@
                 <div>
                     <h4>PHI Suites</h4>
                     <ul>
-                        <li><a href="/suites/phi-twin.html">PHI-Twin</a></li>
-                        <li><a href="/suites/phi-chain.html">PHI-Chain</a></li>
-                        <li><a href="/suites/phi-arc.html">PHI-Arc</a></li>
-                        <li><a href="/suites/phi-drone.html">PHI-Drone</a></li>
+                        <li><a href="suites/phi-twin.html">PHI-Twin</a></li>
+                        <li><a href="suites/phi-chain.html">PHI-Chain</a></li>
+                        <li><a href="suites/phi-arc.html">PHI-Arc</a></li>
+                        <li><a href="suites/phi-drone.html">PHI-Drone</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="services/#digital-twin-training">Digital Twin Training</a></li>
+                        <li><a href="services/#church-hubs">Church Apps</a></li>
+                        <li><a href="services/#cybersecurity">Security Architecture</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4>Organization</h4>
                     <ul>
-                        <li><a href="/lab.html">The Lab (Kaduna)</a></li>
-                        <li><a href="/about.html">About Us</a></li>
-                        <li><a href="/join.html">Join Us</a></li>
-                        <li><a href="/contact.html">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="color: var(--text-muted); font-size: 0.85rem;">Community Services</h4>
-                    <ul>
-                        <li><a href="/services/#dt-education">Digital Twin Training</a></li>
-                        <li><a href="/services/#church-hubs">Church Apps</a></li>
-                        <li><a href="/services/#cybersecurity">Security Architecture</a></li>
+                        <li><a href="lab.html">The Lab (Kaduna)</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="join.html">Join Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
