@@ -71,6 +71,102 @@
         .btn-primary { display: inline-flex; align-items: center; gap: 10px; background-color: var(--navy-creamy-dark); color: var(--text-light); padding: 1rem 2rem; border-radius: 4px; font-weight: 600; font-size: 1rem; transition: all 0.2s; }
         .btn-primary:hover { background-color: var(--blue-accent); transform: translateY(-2px); }
 
+        /* Course deck preview — ambient floating stack */
+        .deck-preview-wrap { margin-bottom: 3rem; }
+        .deck-preview-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700; margin-bottom: 1.2rem; }
+        .deck-stack {
+            position: relative; height: 280px; max-width: 480px; cursor: pointer; user-select: none;
+        }
+        .deck-card {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+            border: 1px solid #E2E8F0; background: #fff;
+            transition: transform 0.6s ease, opacity 0.6s ease;
+        }
+        .card-1 { z-index: 3; animation: deckFloat1 7s ease-in-out infinite; }
+        .card-2 { z-index: 2; transform: translate(14px, 10px) rotate(3deg); opacity: 0.85; animation: deckFloat2 7s ease-in-out infinite; }
+        .card-3 { z-index: 1; transform: translate(28px, 20px) rotate(6deg); opacity: 0.6; animation: deckFloat3 7s ease-in-out infinite; }
+        @keyframes deckFloat1 { 0%,100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-3px,-6px) rotate(-0.5deg); } }
+        @keyframes deckFloat2 { 0%,100% { transform: translate(14px,10px) rotate(3deg); } 50% { transform: translate(17px,4px) rotate(2.5deg); } }
+        @keyframes deckFloat3 { 0%,100% { transform: translate(28px,20px) rotate(6deg); } 50% { transform: translate(31px,14px) rotate(5.5deg); } }
+        .deck-stack:hover .card-1 { transform: translateY(-6px) scale(1.01); }
+        .deck-stack-hint {
+            position: absolute; bottom: -2.4rem; left: 0; font-size: 0.82rem; color: var(--text-muted);
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .deck-stack:hover .deck-stack-hint { color: var(--blue-accent); }
+
+        /* Full slide-deck lightbox */
+        .deck-lightbox {
+            position: fixed; inset: 0; background: rgba(14,23,38,0.97); z-index: 9999;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .deck-lightbox.active { opacity: 1; pointer-events: auto; }
+        .deck-lightbox-stage { position: relative; max-width: 88vw; max-height: 72vh; display: flex; align-items: center; justify-content: center; }
+        .deck-lightbox-stage img { max-width: 88vw; max-height: 72vh; border-radius: 6px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        .deck-nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 50%;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;
+        }
+        .deck-nav-btn:hover { background: var(--blue-accent); }
+        .deck-nav-prev { left: -70px; }
+        .deck-nav-next { right: -70px; }
+        .deck-lightbox-close { position: absolute; top: 2rem; right: 2.5rem; color: #fff; font-size: 2.2rem; cursor: pointer; }
+        .deck-lightbox-close:hover { color: var(--blue-accent); }
+        .deck-lightbox-footer { margin-top: 1.5rem; display: flex; align-items: center; gap: 1.5rem; color: #94A3B8; font-size: 0.88rem; }
+        .deck-lightbox-footer a { color: var(--text-light); border-bottom: 1px solid #94A3B8; }
+        .deck-lightbox-footer a:hover { color: var(--blue-accent); border-color: var(--blue-accent); }
+
+        @media (max-width: 768px) {
+            .deck-nav-prev { left: 0.5rem; }
+            .deck-nav-next { right: 0.5rem; }
+            .deck-nav-btn { width: 42px; height: 42px; font-size: 1rem; }
+        }
+
+        /* Floating slide strip */
+        .slide-strip-wrap {
+            margin-bottom: 2.5rem; border-radius: 10px; overflow: hidden;
+            background: var(--navy-creamy-dark); padding: 2rem 0;
+        }
+        .slide-strip-label {
+            font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: #94A3B8;
+            padding: 0 2rem 1.2rem; font-weight: 700;
+        }
+        .slide-strip-track { display: flex; gap: 1.2rem; width: max-content; animation: slide-drift 40s linear infinite; }
+        .slide-strip-wrap:hover .slide-strip-track { animation-play-state: paused; }
+        @keyframes slide-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .slide-thumb {
+            width: 240px; aspect-ratio: 16/9; border-radius: 6px; overflow: hidden; cursor: zoom-in;
+            border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; transition: transform 0.2s, border-color 0.2s;
+        }
+        .slide-thumb:hover { transform: translateY(-4px); border-color: var(--blue-accent); }
+        .slide-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .slide-strip-cta { padding: 1.2rem 2rem 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .slide-strip-cta p { color: #94A3B8; font-size: 0.88rem; }
+        .slide-strip-cta a { color: var(--blue-accent); font-size: 0.88rem; font-weight: 600; }
+
+        /* Slide lightbox */
+        .slide-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.96); z-index: 9999; display: none; align-items: center; justify-content: center; flex-direction: column; }
+        .slide-lightbox.active { display: flex; }
+        .slide-lightbox img { max-width: 85vw; max-height: 75vh; border-radius: 6px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .slide-lightbox-counter { color: #94A3B8; font-size: 0.85rem; margin-top: 1.2rem; font-family: var(--font-sans); }
+        .slide-nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px;
+            border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+            color: #fff; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .slide-nav-btn:hover { background: var(--blue-accent); }
+        .slide-nav-prev { left: 2rem; } .slide-nav-next { right: 2rem; }
+        .slide-lightbox-close { position: absolute; top: 2rem; right: 2rem; color: #fff; font-size: 2.4rem; cursor: pointer; }
+        .slide-lightbox-close:hover { color: var(--blue-accent); }
+        @media (max-width: 700px) {
+            .slide-nav-btn { width: 40px; height: 40px; font-size: 1rem; }
+            .slide-nav-prev { left: 0.8rem; } .slide-nav-next { right: 0.8rem; }
+        }
+
         .other-work-link { text-align: center; padding: 3rem 8%; }
         .other-work-link a { color: var(--text-muted); font-size: 0.9rem; border-bottom: 1px dotted var(--text-muted); }
         .other-work-link a:hover { color: var(--blue-accent); border-color: var(--blue-accent); }
@@ -221,10 +317,53 @@
             <p style="font-size: 0.92rem; color: var(--text-dark); line-height: 1.7;">Teams of 3–4 design and build a digital twin for a real asset over two weeks: problem definition document, technical architecture, working sensor-to-dashboard prototype with at least one ML or physics-based analytic component, a demo video, and a final presentation to an instructor panel and industry guest.</p>
         </div>
 
+        <!-- COURSE DECK PREVIEW — ambient floating stack, click to open full slide viewer -->
+        <div class="deck-preview-wrap">
+            <h4 class="deck-preview-label">Course Deck Preview</h4>
+            <div class="deck-stack" id="deck-stack" role="button" tabindex="0" aria-label="Open course deck preview">
+                <img class="deck-card card-3" src="../assets/course-deck/slide-03.jpg" alt="">
+                <img class="deck-card card-2" src="../assets/course-deck/slide-02.jpg" alt="">
+                <img class="deck-card card-1" src="../assets/course-deck/slide-01.jpg" alt="Course deck cover slide">
+                <div class="deck-stack-hint"><i class="fas fa-expand"></i> Click to view the full deck</div>
+            </div>
+        </div>
+
         <div class="pricing-tiers">
             <div class="tier-card"><h4>University Departments</h4><p>Full-cohort pricing, custom curriculum scope, delivered over our own screen-share platform.</p></div>
             <div class="tier-card"><h4>MRO / Enterprise Teams</h4><p>Professional-track pricing, applied case studies from real aircraft component data.</p></div>
             <div class="tier-card"><h4>Individuals</h4><p>Self-enrollment pricing, identical material to the professional track.</p></div>
+        </div>
+
+        <div class="slide-strip-wrap">
+            <div class="slide-strip-label">A GLIMPSE OF THE COURSE DECK — CLICK ANY SLIDE TO VIEW</div>
+            <div class="slide-strip-track" id="slide-strip-track">
+                <!-- 10 slides, duplicated once below for a seamless drift loop -->
+                <div class="slide-thumb" data-index="0"><img src="../assets/dt-course-slides/slide-01.jpg" alt="Course deck slide 1"></div>
+                <div class="slide-thumb" data-index="1"><img src="../assets/dt-course-slides/slide-02.jpg" alt="Course deck slide 2"></div>
+                <div class="slide-thumb" data-index="2"><img src="../assets/dt-course-slides/slide-03.jpg" alt="Course deck slide 3"></div>
+                <div class="slide-thumb" data-index="3"><img src="../assets/dt-course-slides/slide-04.jpg" alt="Course deck slide 4"></div>
+                <div class="slide-thumb" data-index="4"><img src="../assets/dt-course-slides/slide-05.jpg" alt="Course deck slide 5"></div>
+                <div class="slide-thumb" data-index="5"><img src="../assets/dt-course-slides/slide-06.jpg" alt="Course deck slide 6"></div>
+                <div class="slide-thumb" data-index="6"><img src="../assets/dt-course-slides/slide-07.jpg" alt="Course deck slide 7"></div>
+                <div class="slide-thumb" data-index="7"><img src="../assets/dt-course-slides/slide-08.jpg" alt="Course deck slide 8"></div>
+                <div class="slide-thumb" data-index="8"><img src="../assets/dt-course-slides/slide-09.jpg" alt="Course deck slide 9"></div>
+                <div class="slide-thumb" data-index="9"><img src="../assets/dt-course-slides/slide-10.jpg" alt="Course deck slide 10"></div>
+                <!-- duplicate set — required for the seamless CSS loop, keep in sync with the set above -->
+                <div class="slide-thumb" data-index="0"><img src="../assets/dt-course-slides/slide-01.jpg" alt=""></div>
+                <div class="slide-thumb" data-index="1"><img src="../assets/dt-course-slides/slide-02.jpg" alt=""></div>
+                <div class="slide-thumb" data-index="2"><img src="../assets/dt-course-slides/slide-03.jpg" alt=""></div>
+                <div class="slide-thumb" data-index="3"><img src="../assets/dt-course-slides/slide-04.jpg" alt=""></div>
+                <div class="slide-thumb" data-index="4"><img src="../assets/dt-course-slides/slide-05.jpg" alt=""></div>
+                <div class="slide-thumb" data-index="5"><img src="../assets/dt-course-slides/slide-06.jpg" alt=""></div>
+                <div class="slide-thumb" data-index="6"><img src="../assets/dt-course-slides/slide-07.jpg" alt=""></div>
+                <div class="slide-thumb" data-index="7"><img src="../assets/dt-course-slides/slide-08.jpg" alt=""></div>
+                <div class="slide-thumb" data-index="8"><img src="../assets/dt-course-slides/slide-09.jpg" alt=""></div>
+                <div class="slide-thumb" data-index="9"><img src="../assets/dt-course-slides/slide-10.jpg" alt=""></div>
+            </div>
+            <div class="slide-strip-cta">
+                <p>10-slide overview — full deck available on request.</p>
+                <a href="mailto:penelopeincorporated1@gmail.com?subject=Digital%20Twin%20Course%20Deck%20Request">Request the full deck &rarr;</a>
+            </div>
         </div>
 
         <a href="/join.html" class="btn-primary">Request Training &rarr;</a>
@@ -320,6 +459,20 @@
         <a href="/other-work.html">Looking for education or church systems? &rarr;</a>
     </div>
 
+    <!-- COURSE DECK LIGHTBOX -->
+    <div class="deck-lightbox" id="deck-lightbox">
+        <span class="deck-lightbox-close" onclick="closeDeck()">&times;</span>
+        <div class="deck-lightbox-stage">
+            <button class="deck-nav-btn deck-nav-prev" onclick="deckNav(-1)" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+            <img id="deck-lightbox-img" src="" alt="Course deck slide">
+            <button class="deck-nav-btn deck-nav-next" onclick="deckNav(1)" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="deck-lightbox-footer">
+            <span id="deck-slide-counter">1 / 10</span>
+            <a href="../assets/course-deck/PHI_Lab.pptx" download>Download the full deck</a>
+        </div>
+    </div>
+
     <footer>
         <div class="footer-top">
             <div class="footer-brand">Penelope Inc.</div>
@@ -358,6 +511,60 @@
         </div>
     </footer>
 
+    <script>
+        // Course deck: 10 slides, ambient floating stack -> click opens full navigable viewer
+        const DECK_SLIDE_COUNT = 10;
+        const deckSlides = Array.from({ length: DECK_SLIDE_COUNT }, (_, i) =>
+            `../assets/course-deck/slide-${String(i + 1).padStart(2, '0')}.jpg`
+        );
+        let deckIndex = 0;
+
+        const deckLightbox = document.getElementById('deck-lightbox');
+        const deckImg = document.getElementById('deck-lightbox-img');
+        const deckCounter = document.getElementById('deck-slide-counter');
+
+        function openDeck(startIndex = 0) {
+            deckIndex = startIndex;
+            renderDeckSlide();
+            deckLightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeDeck() {
+            deckLightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        function deckNav(delta) {
+            deckIndex = (deckIndex + delta + DECK_SLIDE_COUNT) % DECK_SLIDE_COUNT;
+            renderDeckSlide();
+        }
+        function renderDeckSlide() {
+            deckImg.src = deckSlides[deckIndex];
+            deckCounter.textContent = `${deckIndex + 1} / ${DECK_SLIDE_COUNT}`;
+        }
+
+        document.getElementById('deck-stack').addEventListener('click', () => openDeck(0));
+        document.getElementById('deck-stack').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDeck(0); }
+        });
+        deckLightbox.addEventListener('click', (e) => { if (e.target === deckLightbox) closeDeck(); });
+        document.addEventListener('keydown', (e) => {
+            if (!deckLightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeDeck();
+            if (e.key === 'ArrowLeft') deckNav(-1);
+            if (e.key === 'ArrowRight') deckNav(1);
+        });
+
+        // Ambient stack auto-cycles which slide sits on top every few seconds
+        // when idle (not open) — the "floating on its own" behavior
+        let ambientCycle = 0;
+        const ambientOrder = [1, 4, 7]; // slide indices shown ambiently, cycled
+        setInterval(() => {
+            if (deckLightbox.classList.contains('active')) return;
+            ambientCycle = (ambientCycle + 1) % ambientOrder.length;
+            const card1 = document.querySelector('.card-1');
+            if (card1) card1.src = deckSlides[ambientOrder[ambientCycle]];
+        }, 4000);
+    </script>
     <script src="../assets/nav.js" defer></script>
 </body>
 </html>
