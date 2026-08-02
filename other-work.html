@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Applications of the Same Engineering | Penelope Inc.</title>
+    <meta name="description" content="Education and community software projects from Penelope Inc. — not our core focus, but built to the same standard.">
+    <link rel="icon" href="assets/penelope-logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/nav.css">
+
+    <style>
+        :root {
+            --bg-milky-white: #FAF9F5; --bg-milky-card: #F3F0E8;
+            --navy-creamy-dark: #0E1726; --navy-creamy-mid: #1E293B;
+            --blue-accent: #2563EB; --text-dark: #1A1A1A;
+            --text-light: #F8FAFC; --text-muted: #64748B;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-milky-white); color: var(--text-dark); font-family: var(--font-sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        a { text-decoration: none; color: inherit; }
+
+        /* Deliberately quiet hero — no dark banner, no canvas, no fanfare */
+        .quiet-hero { padding: 10rem 8% 3rem; max-width: 780px; margin: 0 auto; }
+        .quiet-hero h1 { font-family: var(--font-serif); font-size: clamp(1.9rem, 3.5vw, 2.6rem); font-weight: 400; color: var(--navy-creamy-dark); margin-bottom: 1.2rem; }
+        .quiet-hero p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.75; }
+
+        .item-block { max-width: 780px; margin: 0 auto; padding: 3rem 8%; border-top: 1px solid #E2E8F0; }
+        .item-block h2 { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 0.8rem; color: var(--navy-creamy-dark); }
+        .item-block .tags { margin-bottom: 1rem; }
+        .item-block .tags span { display: inline-block; font-size: 0.72rem; color: var(--text-muted); border: 1px solid #E2E8F0; border-radius: 100px; padding: 3px 10px; margin-right: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .item-block p { color: #475569; font-size: 0.98rem; line-height: 1.75; margin-bottom: 1rem; }
+        .item-block ul { color: #475569; font-size: 0.95rem; line-height: 1.9; padding-left: 1.2rem; margin-bottom: 1rem; }
+        .item-block a.contact-link { color: var(--blue-accent); font-weight: 600; font-size: 0.92rem; }
+
+        footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; margin-top: 4rem; }
+        .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
+        .footer-brand { font-family: var(--font-serif); font-size: 1.8rem; color: var(--text-light); }
+        .footer-links { display: flex; gap: 3rem; flex-wrap: wrap; }
+        .footer-links div h4 { color: var(--text-light); margin-bottom: 1rem; font-size: 0.95rem; }
+        .footer-links div ul { list-style: none; }
+        .footer-links div ul li { margin-bottom: 0.6rem; }
+        .footer-links div ul li a:hover { color: var(--text-light); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="logo">Penelope Inc.</a>
+        <ul class="nav-links">
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger">PHI Suites <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="/suites/phi-twin.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-01</span><span class="nav-panel-copy"><h4>PHI-Twin</h4><p>Edge digital twins for landing gear &amp; structural health monitoring.</p></span></a>
+                        <a href="/suites/phi-chain.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-02</span><span class="nav-panel-copy"><h4>PHI-Chain</h4><p>Split-payload blockchain security for aviation communications.</p></span></a>
+                        <a href="/suites/phi-arc.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-03</span><span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Proprietary low-cost, high-standard engineering methodology.</p></span></a>
+                        <a href="/suites/phi-sense.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-04</span><span class="nav-panel-copy"><h4>PHI-Sense</h4><p>1,027-sensor HUMS fusion array.</p></span></a>
+                        <a href="/suites/phi-engine.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-05</span><span class="nav-panel-copy"><h4>PHI-Engine</h4><p>Rotating detonation &amp; gas turbine research.</p></span></a>
+                        <a href="/suites/phi-drone.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-06</span><span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span></a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="/lab.html" class="nav-trigger">The Lab</a></li>
+            <li class="nav-item"><a href="/about.html" class="nav-trigger">About</a></li>
+            <li class="nav-item"><a href="/join.html" class="nav-trigger">Join Us</a></li>
+            <li class="nav-item"><a href="/contact.html" class="nav-trigger">Contact</a></li>
+            <li class="nav-item"><a href="/services/" class="nav-trigger" style="color: var(--text-muted); font-size: 0.85rem;">Services</a></li>
+        </ul>
+        <button class="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </header>
+
+    <div class="mobile-drawer">
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger">PHI Suites <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="/suites/phi-twin.html"><span class="nav-panel-tag">PHI-01</span> PHI-Twin</a>
+                <a href="/suites/phi-chain.html"><span class="nav-panel-tag">PHI-02</span> PHI-Chain</a>
+                <a href="/suites/phi-arc.html"><span class="nav-panel-tag">PHI-03</span> PHI-Arc</a>
+                <a href="/suites/phi-sense.html"><span class="nav-panel-tag">PHI-04</span> PHI-Sense</a>
+                <a href="/suites/phi-engine.html"><span class="nav-panel-tag">PHI-05</span> PHI-Engine</a>
+                <a href="/suites/phi-drone.html"><span class="nav-panel-tag">PHI-06</span> PHI-Drone</a>
+            </div>
+        </div>
+        <a href="/lab.html" class="mobile-simple-link">The Lab</a>
+        <a href="/about.html" class="mobile-simple-link">About</a>
+        <a href="/join.html" class="mobile-simple-link">Join Us</a>
+        <a href="/contact.html" class="mobile-simple-link">Contact</a>
+        <a href="/services/" class="mobile-simple-link">Services</a>
+    </div>
+
+    <!-- QUIET HERO — no fanfare, no dark banner -->
+    <section class="quiet-hero">
+        <h1>Other applications of the same engineering</h1>
+        <p>We occasionally apply the same systems discipline behind PHI Suite to education and faith communities. These are not our core focus — Penelope Inc. is, and remains, an aerospace digital twin company — but the work is real, and built to the same standard.</p>
+    </section>
+
+    <!-- SCHOOL APPS -->
+    <div class="item-block">
+        <h2>School Apps</h2>
+        <div class="tags"><span>Desktop &amp; Mobile</span><span>Low Bandwidth</span><span>Screen Share</span></div>
+        <p>A screen-sharing platform for teachers and students, built to work on the kind of connection most schools actually have. Light on data, stable audio, clear video, no account-heavy onboarding. This is the same platform our own Digital Twin Training runs on.</p>
+        <a href="mailto:penelopeincorporated1@gmail.com?subject=School%20App%20Commission" class="contact-link">Commission a build &rarr;</a>
+    </div>
+
+    <!-- CHURCH APPS -->
+    <div class="item-block">
+        <h2>Church Digital Buildings</h2>
+        <div class="tags"><span>Sermons</span><span>Counseling</span><span>Live Meetings</span><span>Chat</span></div>
+        <p>A complete church app: home page with sermon archive, a private pastoral counseling channel kept separate from general chat, pastor-initiated live meetings, a member directory, general and group chat, and individual member profiles.</p>
+        <a href="mailto:penelopeincorporated1@gmail.com?subject=Church%20App%20Build" class="contact-link">Get a quote &rarr;</a>
+    </div>
+
+    <!-- LIFESTONES -->
+    <div class="item-block">
+        <h2>Lifestones — Autonomous Sermon Display</h2>
+        <div class="tags"><span>Tauri v2 / Rust</span><span>Offline Speech Recognition</span><span>Windows · macOS · Linux</span></div>
+        <p>Built because existing church presentation software requires routing through OBS and manually cueing every verse. Lifestones listens to the sermon locally, no cloud, no internet dependency, recognizes when a Bible verse is being referenced, and displays it automatically.</p>
+        <ul>
+            <li>Windows, macOS, and Linux builds (not yet released — watch our GitHub)</li>
+        </ul>
+    </div>
+
+    <!-- SOCIAL / MOBILE APPS -->
+    <div class="item-block">
+        <h2>Social &amp; Mobile Apps</h2>
+        <div class="tags"><span>iOS</span><span>Android</span><span>macOS</span><span>Linux</span><span>Windows</span></div>
+        <p>Full-stack app development, priced to be accessible for local businesses and community projects rather than enterprise-margin rates. Not our specialty; we do it because we can, and because it's a straightforward way to support people building something outside aerospace.</p>
+        <a href="mailto:penelopeincorporated1@gmail.com?subject=App%20Development%20Quote" class="contact-link">Request a quote &rarr;</a>
+    </div>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">Penelope Inc.</div>
+            <div class="footer-links">
+                <div>
+                    <h4>PHI Suites</h4>
+                    <ul>
+                        <li><a href="/suites/phi-twin.html">PHI-Twin</a></li>
+                        <li><a href="/suites/phi-chain.html">PHI-Chain</a></li>
+                        <li><a href="/suites/phi-arc.html">PHI-Arc</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Organization</h4>
+                    <ul>
+                        <li><a href="/lab.html">The Lab (Kaduna)</a></li>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Penelope Inc. All rights reserved.</p>
+            <p>PHI Lab Aerospace Technologies</p>
+        </div>
+    </footer>
+
+    <script src="assets/nav.js" defer></script>
+</body>
+</html>
