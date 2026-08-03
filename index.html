@@ -1,6 +1,4 @@
-
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -104,6 +102,7 @@
         .program-card { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem; }
         .program-card.reverse { direction: rtl; }
         .program-card.reverse .program-info, .program-card.reverse .video-card-frame { direction: ltr; }
+        .program-card.reverse .diagram-frame { direction: ltr; } /* Added for diagram */
         .program-info { padding: 1rem; }
         .program-tag { font-size: 0.85rem; color: var(--blue-accent); font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; }
         .program-info h3 { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 400; margin-bottom: 1rem; color: var(--navy-creamy-dark); }
@@ -123,7 +122,7 @@
         .quote-author { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
         .quote-role { font-size: 0.9rem; color: var(--text-muted); }
 
-        /* ─── FLEETTWIN SHOWCASE (REPLACES CTA BANNER) ─── */
+        /* ─── FLEETTWIN SHOWCASE ─── */
         .fleettwin-showcase {
             background: linear-gradient(135deg, #070B14 0%, var(--navy-creamy-dark) 100%);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -140,56 +139,33 @@
             overflow: hidden;
         }
 
-        /* Subtle grazing background artifact */
         .fleettwin-showcase::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: radial-gradient(circle at center, rgba(142, 116, 96, 0.03) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
+            pointer-events: none; z-index: 0;
         }
 
         .ft-content { position: relative; z-index: 2; }
-        .ft-tag {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: #38bdf8;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            display: inline-block;
-            background: rgba(56, 189, 248, 0.1);
-            padding: 4px 12px;
-            border-radius: 4px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-        }
+        .ft-tag { font-family: var(--font-mono); font-size: 0.75rem; color: #38bdf8; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; display: inline-block; background: rgba(56, 189, 248, 0.1); padding: 4px 12px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.2); }
         .ft-content h2 { font-family: var(--font-serif); font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 400; margin-bottom: 1.5rem; line-height: 1.1; }
         .ft-content p { color: #94A3B8; font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; max-width: 500px; }
-        
         .ft-tech-stack { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2.5rem; }
         .ft-tech-pill { font-family: var(--font-mono); font-size: 0.7rem; color: #CBD5E1; padding: 4px 10px; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; background: rgba(0,0,0,0.3); }
 
-        .btn-primary { background-color: var(--blue-accent); color: #fff; padding: 1rem 2rem; border-radius: 6px; font-weight: 600; font-size: 1rem; transition: all 0.3s; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; }
+        .btn-primary { background-color: var(--blue-accent); color: #fff; padding: 1rem 2rem; border-radius: 6px; font-weight: 600; font-size: 1rem; transition: all 0.3s; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; cursor: pointer; }
         .btn-primary:hover { background-color: transparent; border-color: var(--blue-accent); color: var(--blue-accent); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
 
-        /* FleetTwin Federated Learning Animation */
         .ft-visual { position: relative; height: 350px; display: flex; align-items: center; justify-content: center; z-index: 2; }
         .ft-core { width: 80px; height: 80px; background: rgba(37, 99, 235, 0.1); border: 2px solid var(--blue-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 0 30px rgba(37, 99, 235, 0.4); position: relative; }
         .ft-core i { font-size: 2rem; color: #fff; }
         .ft-core::after { content: ''; position: absolute; inset: -15px; border: 1px dashed rgba(56, 189, 248, 0.3); border-radius: 50%; animation: spin 10s linear infinite; }
-        
         .ft-orbit { position: absolute; width: 300px; height: 300px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.05); animation: spin 20s linear infinite; }
         .ft-orbit-2 { width: 200px; height: 200px; animation: spin-reverse 15s linear infinite; }
-        
         .ft-node { position: absolute; width: 36px; height: 36px; background: var(--navy-creamy-dark); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #94A3B8; }
         .ft-node-1 { top: -18px; left: 50%; transform: translateX(-50%); }
         .ft-node-2 { bottom: -18px; left: 50%; transform: translateX(-50%); }
         .ft-node-3 { top: 50%; left: -18px; transform: translateY(-50%); }
         .ft-node-4 { top: 50%; right: -18px; transform: translateY(-50%); }
-
-        /* Data Sync Particles */
         .ft-particle { position: absolute; width: 6px; height: 6px; background: #38bdf8; border-radius: 50%; box-shadow: 0 0 10px #38bdf8; opacity: 0; }
         .p-1 { top: 15%; left: 50%; animation: syncData 2s ease-in infinite; }
         .p-2 { bottom: 15%; left: 50%; animation: syncData 2s ease-in infinite 1s; }
@@ -198,11 +174,86 @@
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
-        @keyframes syncData {
-            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1.5) translate(0, 0); top: 50%; left: 50%; opacity: 0; }
+        @keyframes syncData { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.5) translate(0, 0); top: 50%; left: 50%; opacity: 0; } }
+
+        /* ─── CUSTOM EXPLAINER DIAGRAM (PHI-TWIN) ─── */
+        .diagram-frame { 
+            background: var(--navy-creamy-dark); 
+            border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            overflow: hidden; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            min-height: 380px; 
+            position: relative; 
+        }
+        .diagram-ui-header { 
+            padding: 12px 20px; 
+            background: rgba(0,0,0,0.5); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            font-family: var(--font-mono); 
+            font-size: 0.7rem; 
+            color: #10b981; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            letter-spacing: 1px; 
+            text-transform: uppercase;
+        }
+        .pulse-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse-green 2s infinite; }
+        
+        .diagram-split { display: flex; flex: 1; align-items: center; padding: 30px 20px; position: relative; }
+        .physical-side, .digital-side { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; height: 100%; justify-content: center; }
+        
+        .data-stream { width: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; position: relative; z-index: 2; }
+        .stream-line { width: 100%; height: 2px; background: rgba(37, 99, 235, 0.2); position: relative; overflow: hidden; border-radius: 2px; }
+        .stream-line::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, #38bdf8, transparent); animation: stream-flow 1.5s linear infinite; }
+        .stream-line:nth-child(2)::after { animation-delay: 0.5s; }
+        .stream-line:nth-child(3)::after { animation-delay: 1s; }
+        
+        .callout-label { font-family: var(--font-sans); font-size: 0.85rem; color: #fff; text-align: center; background: rgba(15,23,42,0.8); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; backdrop-filter: blur(4px); white-space: nowrap; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .callout-label span { color: #94A3B8; font-family: var(--font-mono); font-size: 0.65rem; display: block; margin-top: 4px; text-transform: uppercase; font-weight: 400; }
+        
+        .top-label { position: absolute; top: -10px; }
+        .stream-label { position: absolute; bottom: -40px; font-family: var(--font-mono); font-size: 0.65rem; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.05); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;}
+        
+        /* Physical Landing Gear Abstract */
+        .strut-graphic { width: 45px; height: 160px; background: linear-gradient(90deg, #64748B, #CBD5E1, #64748B); border-radius: 6px; position: relative; margin-top: 40px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        .strut-graphic::after { content:''; position:absolute; bottom: -25px; left: -18px; width: 81px; height: 50px; border: 6px solid #334155; border-radius: 50%; background: #0F172A; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        
+        .sensor-dot { position: absolute; width: 12px; height: 12px; background: #dd5a12; border-radius: 50%; box-shadow: 0 0 15px #dd5a12; animation: pulse-orange 1.5s infinite alternate; z-index: 2; border: 2px solid #fff; }
+        .s1 { top: 30px; left: -6px; } 
+        .s2 { bottom: 40px; right: -6px; } 
+        .s3 { bottom: -12px; left: 16px; }
+
+        /* Digital Twin Wireframe */
+        .wireframe { background: transparent; border: 2px dashed #0ea5e9; box-shadow: inset 0 0 25px rgba(14,165,233,0.15); }
+        .wireframe::after { border-color: #0ea5e9; background: rgba(14,165,233,0.05); border-style: dashed; border-width: 2px; box-shadow: none;}
+        
+        .scan-line { position: absolute; top: 0; left: -25px; width: 95px; height: 2px; background: #38bdf8; box-shadow: 0 0 15px #38bdf8; animation: scan-up-down 3s ease-in-out infinite; z-index: 5; }
+        
+        .status-overlay { position: absolute; bottom: -20px; display: flex; flex-direction: column; gap: 6px; align-items: center; width: 100%;}
+        .status-overlay span { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; background: rgba(16,185,129,0.1); color: #10b981; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(16,185,129,0.3); white-space: nowrap; }
+        .status-overlay span:last-child { color: #38bdf8; background: rgba(14,165,233,0.1); border-color: rgba(14,165,233,0.3); }
+
+        @keyframes stream-flow { 100% { left: 200%; } }
+        @keyframes scan-up-down { 0%, 100% { top: -15px; } 50% { top: 180px; } }
+        @keyframes pulse-green { 0%, 100% { opacity: 0.4; box-shadow: none; } 50% { opacity: 1; box-shadow: 0 0 10px #10b981; } }
+        @keyframes pulse-orange { 0% { transform: scale(0.8); opacity: 0.8; } 100% { transform: scale(1.2); opacity: 1; } }
+
+        @media (max-width: 500px) {
+            .diagram-split { flex-direction: column; gap: 40px; }
+            .data-stream { width: 100%; height: 40px; flex-direction: row; }
+            .stream-line { width: 2px; height: 100%; }
+            .stream-line::after { top: -100%; left: 0; width: 100%; height: 50%; background: linear-gradient(180deg, transparent, #38bdf8, transparent); animation: stream-flow-v 1.5s linear infinite; }
+            @keyframes stream-flow-v { 100% { top: 200%; } }
+            .stream-label { bottom: auto; right: -80px; top: 50%; transform: translateY(-50%); }
+            .top-label { top: -30px; }
+            .status-overlay { bottom: -30px; }
+            .strut-graphic { margin-top: 20px; }
+            .diagram-frame { min-height: 550px; }
         }
 
         footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; }
@@ -342,10 +393,40 @@
         <div class="section-label">THE PHI LAB ECOSYSTEM</div>
 
         <div class="program-card" id="twin">
-            <div class="video-card-frame">
-                <video class="scroll-video" muted loop playsinline poster="assets/poster-twin.jpg">
-                    <source src="assets/phi-twin.mp4" type="video/mp4">
-                </video>
+            <div class="diagram-frame">
+                <div class="diagram-ui-header">
+                    <span class="pulse-dot"></span> LIVE TELEMETRY SYNC
+                </div>
+                <div class="diagram-split">
+                    
+                    <div class="physical-side">
+                        <div class="callout-label top-label">Physical Asset<br><span>Strain & Pressure Sensors</span></div>
+                        <div class="strut-graphic">
+                            <div class="sensor-dot s1" title="Strain Gauge Active"></div>
+                            <div class="sensor-dot s2" title="Pressure Sensor Active"></div>
+                            <div class="sensor-dot s3" title="Accelerometer Active"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="data-stream">
+                        <div class="stream-line"></div>
+                        <div class="stream-line"></div>
+                        <div class="stream-line"></div>
+                        <div class="callout-label stream-label">&lt; 5ms Edge Sync</div>
+                    </div>
+
+                    <div class="digital-side">
+                        <div class="callout-label top-label">Digital Twin<br><span>CNN-BiLSTM Inference</span></div>
+                        <div class="strut-graphic wireframe">
+                            <div class="scan-line"></div>
+                        </div>
+                        <div class="status-overlay">
+                            <span>STATE: NOMINAL</span>
+                            <span>RUL: 20.4k CYC</span>
+                        </div>
+                    </div>
+
+                </div>
             </div>
             <div class="program-info">
                 <div class="program-tag">Edge Prognostics — PHI-01</div>
