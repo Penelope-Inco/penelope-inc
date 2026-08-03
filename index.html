@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/nav.css">
+    <link rel="stylesheet" href="assets/design-system.css">
 
     <style>
         :root {
@@ -102,7 +103,7 @@
         .program-card { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem; }
         .program-card.reverse { direction: rtl; }
         .program-card.reverse .program-info, .program-card.reverse .video-card-frame { direction: ltr; }
-        .program-card.reverse .diagram-frame { direction: ltr; } /* Added for diagram */
+        .program-card.reverse .diagram-frame { direction: ltr; }
         .program-info { padding: 1rem; }
         .program-tag { font-size: 0.85rem; color: var(--blue-accent); font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; }
         .program-info h3 { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 400; margin-bottom: 1rem; color: var(--navy-creamy-dark); }
@@ -193,7 +194,7 @@
             padding: 12px 20px; 
             background: rgba(0,0,0,0.5); 
             border-bottom: 1px solid rgba(255,255,255,0.05); 
-            font-family: var(--font-mono); 
+            font-family: 'JetBrains Mono', monospace; 
             font-size: 0.7rem; 
             color: #10b981; 
             display: flex; 
@@ -213,11 +214,11 @@
         .stream-line:nth-child(2)::after { animation-delay: 0.5s; }
         .stream-line:nth-child(3)::after { animation-delay: 1s; }
         
-        .callout-label { font-family: var(--font-sans); font-size: 0.85rem; color: #fff; text-align: center; background: rgba(15,23,42,0.8); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; backdrop-filter: blur(4px); white-space: nowrap; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .callout-label span { color: #94A3B8; font-family: var(--font-mono); font-size: 0.65rem; display: block; margin-top: 4px; text-transform: uppercase; font-weight: 400; }
+        .callout-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; color: #fff; text-align: center; background: rgba(15,23,42,0.8); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; backdrop-filter: blur(4px); white-space: nowrap; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .callout-label span { color: #94A3B8; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; display: block; margin-top: 4px; text-transform: uppercase; font-weight: 400; }
         
         .top-label { position: absolute; top: -10px; }
-        .stream-label { position: absolute; bottom: -40px; font-family: var(--font-mono); font-size: 0.65rem; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.05); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;}
+        .stream-label { position: absolute; bottom: -40px; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.05); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;}
         
         /* Physical Landing Gear Abstract */
         .strut-graphic { width: 45px; height: 160px; background: linear-gradient(90deg, #64748B, #CBD5E1, #64748B); border-radius: 6px; position: relative; margin-top: 40px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
@@ -235,13 +236,71 @@
         .scan-line { position: absolute; top: 0; left: -25px; width: 95px; height: 2px; background: #38bdf8; box-shadow: 0 0 15px #38bdf8; animation: scan-up-down 3s ease-in-out infinite; z-index: 5; }
         
         .status-overlay { position: absolute; bottom: -20px; display: flex; flex-direction: column; gap: 6px; align-items: center; width: 100%;}
-        .status-overlay span { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; background: rgba(16,185,129,0.1); color: #10b981; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(16,185,129,0.3); white-space: nowrap; }
+        .status-overlay span { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 700; background: rgba(16,185,129,0.1); color: #10b981; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(16,185,129,0.3); white-space: nowrap; }
         .status-overlay span:last-child { color: #38bdf8; background: rgba(14,165,233,0.1); border-color: rgba(14,165,233,0.3); }
 
         @keyframes stream-flow { 100% { left: 200%; } }
         @keyframes scan-up-down { 0%, 100% { top: -15px; } 50% { top: 180px; } }
         @keyframes pulse-green { 0%, 100% { opacity: 0.4; box-shadow: none; } 50% { opacity: 1; box-shadow: 0 0 10px #10b981; } }
         @keyframes pulse-orange { 0% { transform: scale(0.8); opacity: 0.8; } 100% { transform: scale(1.2); opacity: 1; } }
+
+        /* ─── LIVE LANDSCAPE (Lens.org patent dashboard embed) ─── */
+        .phi-landscape {
+            background-color: var(--bg-milky-card);
+            padding: 4rem 8%;
+            margin: 0;
+            border-radius: 0;
+        }
+        .phi-landscape-inner { max-width: 720px; margin: 0 auto; text-align: center; }
+
+        .phi-landscape-badge {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--blue-accent);
+            font-family: var(--font-sans);
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+            padding: 0.4rem 0.9rem; border-radius: 999px; margin-bottom: 1rem;
+        }
+
+        .phi-landscape-inner h2 {
+            font-family: var(--font-serif); font-size: 1.9rem; font-weight: 400;
+            color: var(--navy-creamy-dark); margin: 0 0 0.7rem;
+        }
+        .phi-landscape-inner > p {
+            color: var(--text-muted); font-size: 1.02rem; line-height: 1.7; margin: 0 0 2rem;
+        }
+
+        .phi-landscape-card {
+            display: block; background-color: var(--bg-milky-white);
+            border: 1px solid #E2E8F0; border-radius: 10px; padding: 1.6rem 1.8rem;
+            text-decoration: none; color: inherit; transition: all 0.25s ease; text-align: left;
+        }
+        .phi-landscape-card:hover {
+            border-color: var(--blue-accent); box-shadow: 0 10px 25px rgba(37,99,235,0.12);
+            transform: translateY(-2px);
+        }
+        .phi-landscape-card-content { display: flex; align-items: flex-start; gap: 1.1rem; margin-bottom: 1.1rem; }
+        .phi-landscape-icon {
+            flex-shrink: 0; width: 46px; height: 46px; border-radius: 8px;
+            background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center;
+            color: var(--blue-accent);
+        }
+        .phi-landscape-card h3 { font-family: var(--font-sans); margin: 0 0 0.3rem; font-size: 1.1rem; font-weight: 600; color: var(--navy-creamy-dark); }
+        .phi-landscape-card p { margin: 0; font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; }
+        .phi-landscape-cta { display: inline-block; font-size: 0.88rem; font-weight: 600; color: var(--blue-accent); }
+
+        .phi-landscape-attribution { margin-top: 1.6rem; font-size: 0.8rem; color: var(--text-muted); }
+        .phi-landscape-attribution a { color: var(--text-muted); text-decoration: underline; }
+        .phi-landscape-attribution a:hover { color: var(--blue-accent); }
+
+        @media (max-width: 900px) {
+            .vision-grid, .program-card, .program-card.reverse { grid-template-columns: 1fr; direction: ltr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .metric-item:not(:last-child)::after { display: none; }
+            .fleettwin-showcase { grid-template-columns: 1fr; text-align: center; gap: 2rem; padding: 4rem 2rem; }
+            .ft-content p { margin: 0 auto 2rem auto; }
+            .ft-tech-stack { justify-content: center; }
+        }
 
         @media (max-width: 500px) {
             .diagram-split { flex-direction: column; gap: 40px; }
@@ -265,15 +324,6 @@
         .footer-links div ul li { margin-bottom: 0.6rem; }
         .footer-links div ul li a:hover { color: var(--text-light); }
         .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-
-        @media (max-width: 900px) {
-            .vision-grid, .program-card, .program-card.reverse { grid-template-columns: 1fr; direction: ltr; }
-            .metrics-grid { grid-template-columns: 1fr; }
-            .metric-item:not(:last-child)::after { display: none; }
-            .fleettwin-showcase { grid-template-columns: 1fr; text-align: center; gap: 2rem; padding: 4rem 2rem; }
-            .ft-content p { margin: 0 auto 2rem auto; }
-            .ft-tech-stack { justify-content: center; }
-        }
     </style>
 </head>
 <body>
@@ -542,6 +592,24 @@
         </div>
     </div>
 
+    <section class="phi-landscape">
+      <div class="phi-landscape-inner">
+        <span class="phi-landscape-badge">Live Intelligence</span>
+        <h2>FleetTwin Technology Landscape</h2>
+        <p>The real-time patent and research landscape behind fleet-level federated digital twin learning, updated continuously via Lens.org.</p>
+        <a href="https://link.lens.org/YOXSz8xlTw" target="_blank" rel="noopener noreferrer" class="phi-landscape-card">
+          <div class="phi-landscape-card-content">
+            <div class="phi-landscape-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg>
+            </div>
+            <div><h3>Landing Gear Fleet Twin Landscape</h3><p>Fleet-level federated learning for predictive maintenance — patents, trends &amp; white space</p></div>
+          </div>
+          <span class="phi-landscape-cta">Explore live dashboard &rarr;</span>
+        </a>
+        <p class="phi-landscape-attribution">Powered by <a href="https://www.lens.org" target="_blank" rel="noopener">Lens.org</a></p>
+      </div>
+    </section>
+
     <footer>
         <div class="footer-top">
             <div class="footer-brand">Penelope Inc.</div>
@@ -558,7 +626,7 @@
                 <div>
                     <h4>Services</h4>
                     <ul>
-                        <li><a href="services/#digital-twin-training">Digital Twin Training</a></li>
+                        <li><a href="services/#dt-education">Digital Twin Training</a></li>
                         <li><a href="services/#church-hubs">Church Apps</a></li>
                         <li><a href="services/#cybersecurity">Security Architecture</a></li>
                     </ul>
