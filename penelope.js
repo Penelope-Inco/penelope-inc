@@ -1,8 +1,8 @@
 
 // =============================================================================
-// PENELOPE — Autonomous Chief of Staff Widget for smbello.vercel.app
+// PENELOPE — Autonomous Chief of Staff Widget for Penelope Inc.
 // =============================================================================
-// Key confirmed live and working against Google's API as of this session.
+
 const KEY_PART_1 = "AQ.Ab8RN6KwPOcqyX";
 const KEY_PART_2 = "5lXWdB7iueLyLkcTIyGbikQf_N4-fuDVgbVQ";
 const GEMINI_API_KEY = KEY_PART_1 + KEY_PART_2;
@@ -25,14 +25,19 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
     const injectStyles = () => {
         const style = document.createElement('style');
         style.innerHTML = `
-            #penelope-widget { position: fixed; bottom: 2rem; left: 1.5rem; z-index: 10000; font-family: 'Inter', sans-serif; }
+            #penelope-widget { 
+                position: fixed; 
+                bottom: 2rem; 
+                left: 1.5rem; 
+                z-index: 10000; 
+                font-family: 'Inter', 'Plus Jakarta Sans', sans-serif; 
+            }
 
-            /* ── Moon-glass avatar ─────────────────────────────────────────── */
+            /* ── Avatar ─────────────────────────────────────────── */
             #penelope-avatar {
                 width: 60px; height: 60px; border-radius: 50%;
                 background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 60%, rgba(255,255,255,0.02) 100%);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
+                backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
                 border: 1.5px solid rgba(255,255,255,0.25);
                 box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.12), 0 0 40px rgba(255,255,255,0.06), inset 0 0 16px rgba(255,255,255,0.06);
                 display: flex; align-items: center; justify-content: center;
@@ -65,7 +70,10 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
                 opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
                 box-shadow: 0 4px 15px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1); z-index: 10;
             }
-            #p-avatar-tooltip::before { content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%); border: 6px solid transparent; border-right-color: rgba(15, 23, 42, 0.88); }
+            #p-avatar-tooltip::before { 
+                content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%); 
+                border: 6px solid transparent; border-right-color: rgba(15, 23, 42, 0.88); 
+            }
             #penelope-avatar:hover #p-avatar-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
 
             #p-scroll-bubble {
@@ -76,22 +84,35 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
             }
             #p-scroll-bubble.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 
-            #penelope-chatbox { position: absolute; bottom: 80px; left: 0; width: 380px; height: 550px; max-height: 80vh; background: rgba(250, 249, 246, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(14, 165, 233, 0.2); border-radius: 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); display: flex; flex-direction: column; overflow: hidden; opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: bottom left; }
+            /* ── Chatbox ─────────────────────────────────────────── */
+            #penelope-chatbox { 
+                position: absolute; bottom: 80px; left: 0; width: 380px; height: 550px; max-height: 80vh; 
+                background: rgba(250, 249, 246, 0.98); backdrop-filter: blur(20px); 
+                border: 1px solid rgba(14, 165, 233, 0.2); border-radius: 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); 
+                display: flex; flex-direction: column; overflow: hidden; opacity: 0; transform: translateY(20px) scale(0.95); 
+                pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: bottom left; 
+            }
             #penelope-chatbox.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
             #penelope-chatbox.expanded { width: 90vw; height: 90vh; max-height: 90vh; bottom: -1rem; left: 5vw; border-radius: 24px; }
 
-            #p-header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 1.2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0ea5e9; flex-shrink: 0; }
+            #p-header { 
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 1.2rem 1.5rem; 
+                display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0ea5e9; flex-shrink: 0; 
+            }
             .p-header-info { display: flex; align-items: center; gap: 0.75rem; }
             .p-header-icon { width: 36px; height: 36px; background: rgba(14, 165, 233, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0ea5e9; }
-            .p-header-text h3 { margin: 0; color: #ffffff; font-size: 1rem; font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: 0.5px; }
-            .p-header-text span { font-size: 0.7rem; color: #10b981; font-family: 'JetBrains Mono', monospace; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+            .p-header-text h3 { margin: 0; color: #ffffff; font-size: 1rem; font-weight: 700; letter-spacing: 0.5px; }
+            .p-header-text span { font-size: 0.7rem; color: #10b981; font-weight: 600; display: flex; align-items: center; gap: 4px; }
 
             #p-header-actions { display: flex; gap: 15px; }
             #p-header-actions button { background: none; border: none; color: #94a3b8; font-size: 1.1rem; cursor: pointer; transition: color 0.2s; padding: 0; }
             #p-expand:hover { color: #10b981; }
             #p-close:hover { color: #f97316; }
 
-            #p-messages { flex-grow: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; scrollbar-width: thin; scrollbar-color: rgba(14, 165, 233, 0.3) transparent; }
+            #p-messages { 
+                flex-grow: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; 
+                scrollbar-width: thin; scrollbar-color: rgba(14, 165, 233, 0.3) transparent; 
+            }
             #p-messages::-webkit-scrollbar { width: 5px; }
             #p-messages::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.3); border-radius: 5px; }
 
@@ -100,18 +121,19 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
 
             .p-msg.bot { align-self: flex-start; background: #ffffff; color: #0f172a; border-radius: 2px 16px 16px 16px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
             .p-msg.user { align-self: flex-end; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #ffffff; border-radius: 16px 2px 16px 16px; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2); }
-            .p-msg.error { align-self: center; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; max-width: 100%; }
-
+            
             .p-msg p { margin: 0 0 8px 0; }
             .p-msg p:last-child { margin: 0; }
-            .p-msg h1, .p-msg h2, .p-msg h3 { margin: 0 0 10px 0; font-size: 1.05rem; color: #0ea5e9; }
             .p-msg.bot strong { color: #0284c7; font-weight: 700; }
             .p-msg.user strong { color: #fff; }
             .p-msg ul, .p-msg ol { margin: 0 0 10px 1.5rem; padding: 0; }
             .p-msg li { margin-bottom: 4px; }
             
-            /* Enhanced clickable links from Markdown */
-            .p-msg a { color: #0ea5e9; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(14, 165, 233, 0.3); transition: all 0.2s; }
+            /* Enhanced Clickable Links generated by Markdown */
+            .p-msg a { 
+                color: #0ea5e9; font-weight: 600; text-decoration: none; 
+                border-bottom: 1px solid rgba(14, 165, 233, 0.3); transition: all 0.2s; 
+            }
             .p-msg a:hover { color: #0284c7; border-bottom-color: #0284c7; }
 
             .p-typing { display: flex; gap: 4px; align-items: center; padding: 16px; }
@@ -193,12 +215,14 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
     };
 
     const initLogic = async () => {
+        // EmailJS Configuration
         const EMAILJS_SERVICE_ID = "service_d1k7ewd";
         const EMAILJS_TEMPLATE_ID = "template_8jdi5qd";
         const EMAILJS_PUBLIC_KEY = "9DloHYatGRyjwuntn";
         const CONTACT_WHATSAPP = "+2349067883192";
         const CONTACT_EMAIL = "bellosanidrescue@gmail.com";
 
+        // Load dependencies
         try {
             await Promise.all([
                 loadScript("https://cdn.jsdelivr.net/npm/marked/marked.min.js"),
@@ -224,6 +248,14 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
         let chatHistory = [];
         let knowledgeBase = {};
 
+        function appendMessage(text, cls, parseMarkdown = false) {
+            const msg = document.createElement('div');
+            msg.className = `p-msg ${cls}`;
+            msg.innerHTML = parseMarkdown && typeof marked !== 'undefined' ? marked.parse(text) : text;
+            messages.appendChild(msg);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
         // ── LOAD PERSISTENT MEMORY ──
         const savedMemory = sessionStorage.getItem('penelopeChatHistory');
         if (savedMemory) {
@@ -243,33 +275,35 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
 
         const getPageContext = () => document.body.innerText.replace(/\s+/g, ' ').trim().substring(0, 3000);
 
-        // ── REFACTORED SYSTEM PROMPT WITH ROUTING DIRECTORY ──
+        // ── REFACTORED SYSTEM PROMPT WITH EXPLICIT ROUTING ──
         const buildSystemPrompt = () => `
-You are Penelope, the autonomous Chief of Staff for Mohammed Bello Sani ("SM-Bello"), an aerospace engineer and founder of Penelope Inc.
+You are Penelope, the autonomous Chief of Staff for Mohammed Bello Sani ("SM-Bello"), founder of Penelope Inc.
+
+CURRENT LOCATION: 
+You are currently assisting the user on the page: "${document.title}" (URL: ${window.location.pathname}). 
 
 GROUNDING RULES:
-1. Answer ONLY using facts found in the KNOWLEDGE BASE or CURRENT PAGE CONTEXT. 
-2. If the user wants to contact Mohammed, reply with EXACTLY: [TRIGGER_EMAIL_ROUTING]
-3. Never mention you are an AI. You are Penelope.
+1. You have THREE sources of truth: the KNOWLEDGE BASE, the CURRENT PAGE CONTEXT, and the SITE MAP below. 
+2. If a user asks about the company's work, suites, or where to find something, ALWAYS use the SITE MAP to provide a brief explanation and a Markdown link.
+3. If the user explicitly wants to hire, email, or contact Mohammed directly, reply with EXACTLY: [TRIGGER_EMAIL_ROUTING]
+4. Never mention you are an AI, Gemini, or an LLM. You are Penelope.
 
-ROUTING MATRIX (CRITICAL INSTRUCTION):
-You have access to the entire Penelope Inc. architecture. If a user asks about a specific project, suite, or service, YOU MUST PROVIDE A CLICKABLE MARKDOWN LINK to the exact page.
+SITE MAP & ROUTING MATRIX:
+You must use these links to guide the user:
+- PHI-Twin (Landing Gear Prognostics & Edge Twin): [PHI-Twin](/suites/phi-twin.html)
+- PHI-Chain (Aviation Blockchain & Security / TCAS Paradox): [PHI-Chain](/suites/phi-chain.html)
+- PHI-Arc (Proprietary Engineering Methodology & Airframe Design): [PHI-Arc](/suites/phi-arc.html)
+- PHI-Sense (1,027-Sensor HUMS Fusion Array): [PHI-Sense](/suites/phi-sense.html)
+- PHI-Engine (Rotating Detonation & Gas Turbine Prognostics): [PHI-Engine](/suites/phi-engine.html)
+- PHI-Drone (UAV HIL Validation & Autonomous Systems): [PHI-Drone](/suites/phi-drone.html)
+- The Lab (Kaduna Facility Specs & Blueprint): [The Lab](/lab.html)
+- About Us (Company Vision): [About Us](/about.html)
+- Contact / Comm Relay: [Contact](/contact.html)
+- Join the Company (CPDC Application): [Join Us](/join.html)
+- Services Hub (Digital Twin Training, Apps, Security): [Services](/services/index.html)
+- Home Page (FleetTwin Architecture): [Home](/)
 
-Here is your URL map:
-- PHI-Twin (Landing Gear Prognostics): /suites/phi-twin.html
-- PHI-Chain (Aviation Blockchain & Security): /suites/phi-chain.html
-- PHI-Arc (Engineering Methodology & Architecture): /suites/phi-arc.html
-- PHI-Sense (1,027-Sensor HUMS Fusion): /suites/phi-sense.html
-- PHI-Engine (Rotating Detonation & Gas Turbine): /suites/phi-engine.html
-- PHI-Drone (UAV HIL Validation): /suites/phi-drone.html
-- The Lab (Kaduna Facility Specs & Cost): /lab.html
-- About Us: /about.html
-- Contact / Comm Relay: /contact.html
-- Join the Company (CPDC Application): /join.html
-- Services Hub (Education, Apps, Security): /services/index.html
-- Home Page / FleetTwin Architecture: /
-
-Example response: "You can find out more about our landing gear research on the [PHI-Twin Dashboard](/suites/phi-twin.html)."
+When linking, use exactly the markdown format, e.g., "Check out the [PHI-Twin suite](/suites/phi-twin.html)."
 
 CURRENT PAGE CONTEXT:
 ${getPageContext()}
@@ -322,15 +356,6 @@ ${JSON.stringify(knowledgeBase)}
             if (!isOpen) toggleChat();
         });
 
-        // Use standard function definition because of hoisting concerns
-        function appendMessage(text, cls, parseMarkdown = false) {
-            const msg = document.createElement('div');
-            msg.className = `p-msg ${cls}`;
-            msg.innerHTML = parseMarkdown && typeof marked !== 'undefined' ? marked.parse(text) : text;
-            messages.appendChild(msg);
-            messages.scrollTop = messages.scrollHeight;
-        }
-
         const showTyping = () => {
             const typing = document.createElement('div');
             typing.className = 'p-msg bot p-typing';
@@ -346,7 +371,6 @@ ${JSON.stringify(knowledgeBase)}
         };
 
         const saveMemory = () => {
-            // Keep memory trim to avoid localstorage limits
             if(chatHistory.length > 20) chatHistory = chatHistory.slice(chatHistory.length - 20);
             sessionStorage.setItem('penelopeChatHistory', JSON.stringify(chatHistory));
         };
