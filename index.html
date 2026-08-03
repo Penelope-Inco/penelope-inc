@@ -1,6 +1,4 @@
-  
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -123,7 +121,7 @@
         .quote-author { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
         .quote-role { font-size: 0.9rem; color: var(--text-muted); }
 
-        /* ─── FLEETTWIN SHOWCASE (REPLACES CTA BANNER) ─── */
+        /* ─── FLEETTWIN SHOWCASE ─── */
         .fleettwin-showcase {
             background: linear-gradient(135deg, #070B14 0%, var(--navy-creamy-dark) 100%);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -133,63 +131,38 @@
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
             align-items: center;
-            max-width: 1300px; margin: 0 auto 6rem auto; border-radius: 16px;
+            max-width: 1300px; margin: 0 auto; border-radius: 16px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 0 40px rgba(37, 99, 235, 0.05);
             color: var(--text-light);
             position: relative;
             overflow: hidden;
         }
-
-        /* Subtle grazing background artifact */
         .fleettwin-showcase::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: radial-gradient(circle at center, rgba(142, 116, 96, 0.03) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
+            pointer-events: none; z-index: 0;
         }
-
         .ft-content { position: relative; z-index: 2; }
-        .ft-tag {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: #38bdf8;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            display: inline-block;
-            background: rgba(56, 189, 248, 0.1);
-            padding: 4px 12px;
-            border-radius: 4px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-        }
+        .ft-tag { font-family: var(--font-mono); font-size: 0.75rem; color: #38bdf8; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; display: inline-block; background: rgba(56, 189, 248, 0.1); padding: 4px 12px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.2); }
         .ft-content h2 { font-family: var(--font-serif); font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 400; margin-bottom: 1.5rem; line-height: 1.1; }
         .ft-content p { color: #94A3B8; font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; max-width: 500px; }
-        
         .ft-tech-stack { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2.5rem; }
         .ft-tech-pill { font-family: var(--font-mono); font-size: 0.7rem; color: #CBD5E1; padding: 4px 10px; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; background: rgba(0,0,0,0.3); }
 
-        .btn-primary { background-color: var(--blue-accent); color: #fff; padding: 1rem 2rem; border-radius: 6px; font-weight: 600; font-size: 1rem; transition: all 0.3s; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; }
+        .btn-primary { background-color: var(--blue-accent); color: #fff; padding: 1rem 2rem; border-radius: 6px; font-weight: 600; font-size: 1rem; transition: all 0.3s; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; cursor: pointer;}
         .btn-primary:hover { background-color: transparent; border-color: var(--blue-accent); color: var(--blue-accent); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
 
-        /* FleetTwin Federated Learning Animation */
         .ft-visual { position: relative; height: 350px; display: flex; align-items: center; justify-content: center; z-index: 2; }
         .ft-core { width: 80px; height: 80px; background: rgba(37, 99, 235, 0.1); border: 2px solid var(--blue-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 0 30px rgba(37, 99, 235, 0.4); position: relative; }
         .ft-core i { font-size: 2rem; color: #fff; }
         .ft-core::after { content: ''; position: absolute; inset: -15px; border: 1px dashed rgba(56, 189, 248, 0.3); border-radius: 50%; animation: spin 10s linear infinite; }
-        
         .ft-orbit { position: absolute; width: 300px; height: 300px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.05); animation: spin 20s linear infinite; }
         .ft-orbit-2 { width: 200px; height: 200px; animation: spin-reverse 15s linear infinite; }
-        
         .ft-node { position: absolute; width: 36px; height: 36px; background: var(--navy-creamy-dark); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #94A3B8; }
         .ft-node-1 { top: -18px; left: 50%; transform: translateX(-50%); }
         .ft-node-2 { bottom: -18px; left: 50%; transform: translateX(-50%); }
         .ft-node-3 { top: 50%; left: -18px; transform: translateY(-50%); }
         .ft-node-4 { top: 50%; right: -18px; transform: translateY(-50%); }
-
-        /* Data Sync Particles */
         .ft-particle { position: absolute; width: 6px; height: 6px; background: #38bdf8; border-radius: 50%; box-shadow: 0 0 10px #38bdf8; opacity: 0; }
         .p-1 { top: 15%; left: 50%; animation: syncData 2s ease-in infinite; }
         .p-2 { bottom: 15%; left: 50%; animation: syncData 2s ease-in infinite 1s; }
@@ -198,12 +171,56 @@
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
-        @keyframes syncData {
-            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1.5) translate(0, 0); top: 50%; left: 50%; opacity: 0; }
+        @keyframes syncData { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.5) translate(0, 0); top: 50%; left: 50%; opacity: 0; } }
+
+        /* ─── LIVE LANDSCAPE (Lens.org patent dashboard embed) ─── */
+        .phi-landscape {
+            background-color: var(--bg-milky-card);
+            padding: 4rem 8%;
+            margin: 0 0 6rem 0;
+            border-radius: 0;
         }
+        .phi-landscape-inner { max-width: 720px; margin: 0 auto; text-align: center; }
+
+        .phi-landscape-badge {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--blue-accent);
+            font-family: var(--font-sans);
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+            padding: 0.4rem 0.9rem; border-radius: 999px; margin-bottom: 1rem;
+        }
+
+        .phi-landscape-inner h2 {
+            font-family: var(--font-serif); font-size: 1.9rem; font-weight: 400;
+            color: var(--navy-creamy-dark); margin: 0 0 0.7rem;
+        }
+        .phi-landscape-inner > p {
+            color: var(--text-muted); font-size: 1.02rem; line-height: 1.7; margin: 0 0 2rem;
+        }
+
+        .phi-landscape-card {
+            display: block; background-color: var(--bg-milky-white);
+            border: 1px solid #E2E8F0; border-radius: 10px; padding: 1.6rem 1.8rem;
+            text-decoration: none; color: inherit; transition: all 0.25s ease; text-align: left;
+        }
+        .phi-landscape-card:hover {
+            border-color: var(--blue-accent); box-shadow: 0 10px 25px rgba(37,99,235,0.12);
+            transform: translateY(-2px);
+        }
+        .phi-landscape-card-content { display: flex; align-items: flex-start; gap: 1.1rem; margin-bottom: 1.1rem; }
+        .phi-landscape-icon {
+            flex-shrink: 0; width: 46px; height: 46px; border-radius: 8px;
+            background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center;
+            color: var(--blue-accent);
+        }
+        .phi-landscape-card h3 { font-family: var(--font-sans); margin: 0 0 0.3rem; font-size: 1.1rem; font-weight: 600; color: var(--navy-creamy-dark); }
+        .phi-landscape-card p { margin: 0; font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; }
+        .phi-landscape-cta { display: inline-block; font-size: 0.88rem; font-weight: 600; color: var(--blue-accent); }
+
+        .phi-landscape-attribution { margin-top: 1.6rem; font-size: 0.8rem; color: var(--text-muted); }
+        .phi-landscape-attribution a { color: var(--text-muted); text-decoration: underline; }
+        .phi-landscape-attribution a:hover { color: var(--blue-accent); }
 
         footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; }
         .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
@@ -223,63 +240,6 @@
             .ft-content p { margin: 0 auto 2rem auto; }
             .ft-tech-stack { justify-content: center; }
         }
-
-        /* ─── LANDING GEAR DIGITAL TWIN DIAGRAM (replaces generic video for PHI-Twin card) ─── */
-        .twin-diagram-frame {
-            width: 100%; border-radius: 8px; overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            background-color: var(--navy-creamy-mid);
-            position: relative; padding: 2rem 1.5rem 1.5rem;
-        }
-        .twin-diagram-frame svg { width: 100%; height: auto; display: block; }
-
-        .td-sensor { fill: #38bdf8; }
-        .td-sensor-ring {
-            fill: none; stroke: #38bdf8; stroke-width: 1.5; opacity: 0;
-            transform-origin: center; transform-box: fill-box;
-            animation: tdPulse 2.4s ease-out infinite;
-        }
-        .td-sensor-2 .td-sensor-ring { animation-delay: 0.5s; }
-        .td-sensor-3 .td-sensor-ring { animation-delay: 1s; }
-
-        @keyframes tdPulse {
-            0% { transform: scale(0.4); opacity: 0.9; }
-            100% { transform: scale(2.6); opacity: 0; }
-        }
-
-        .td-signal {
-            fill: #38bdf8; opacity: 0;
-            animation: tdSignal 2.4s ease-in-out infinite;
-        }
-        .td-signal-2 { animation-delay: 0.5s; }
-        .td-signal-3 { animation-delay: 1s; }
-        @keyframes tdSignal {
-            0% { offset-distance: 0%; opacity: 0; }
-            15% { opacity: 1; }
-            85% { opacity: 1; }
-            100% { offset-distance: 100%; opacity: 0; }
-        }
-        .td-signal-path-1 { offset-path: path('M 108 90 C 160 90, 190 130, 230 150'); }
-        .td-signal-path-2 { offset-path: path('M 108 165 C 160 165, 190 165, 230 165'); }
-        .td-signal-path-3 { offset-path: path('M 108 240 C 160 240, 190 200, 230 180'); }
-
-        .td-twin-outline { fill: none; stroke: #38bdf8; stroke-width: 1.5; stroke-dasharray: 4 3; opacity: 0.55; }
-        .td-twin-glow { fill: none; stroke: #38bdf8; stroke-width: 6; opacity: 0.08; filter: blur(2px); }
-
-        .td-readout-bar-fill {
-            transform-origin: left center; transform-box: fill-box;
-            animation: tdReadout 6s ease-in-out infinite;
-        }
-        @keyframes tdReadout {
-            0%, 100% { transform: scaleX(0.91); }
-            50% { transform: scaleX(0.87); }
-        }
-
-        .twin-diagram-caption {
-            font-size: 0.85rem; color: #94A3B8; text-align: center; line-height: 1.6;
-            margin-top: 1.2rem; padding: 0 0.5rem;
-        }
-        .twin-diagram-caption strong { color: #CBD5E1; }
     </style>
 </head>
 <body>
@@ -399,49 +359,10 @@
         <div class="section-label">THE PHI LAB ECOSYSTEM</div>
 
         <div class="program-card" id="twin">
-            <div class="twin-diagram-frame">
-                <svg viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Labels -->
-                    <text x="70" y="18" fill="#64748B" font-family="Plus Jakarta Sans, sans-serif" font-size="10" letter-spacing="1.5" text-anchor="middle">PHYSICAL GEAR</text>
-                    <text x="330" y="18" fill="#38bdf8" font-family="Plus Jakarta Sans, sans-serif" font-size="10" letter-spacing="1.5" text-anchor="middle">DIGITAL TWIN</text>
-
-                    <!-- ── PHYSICAL LANDING GEAR (left, solid) ── -->
-                    <rect x="55" y="24" width="30" height="14" rx="2" fill="none" stroke="#CBD5E1" stroke-width="2"/>
-                    <line x1="70" y1="38" x2="70" y2="178" stroke="#F8FAFC" stroke-width="5" stroke-linecap="round"/>
-                    <line x1="70" y1="108" x2="34" y2="196" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round"/>
-                    <rect x="60" y="150" width="20" height="30" rx="3" fill="#1E293B" stroke="#CBD5E1" stroke-width="1.5"/>
-                    <circle cx="70" cy="228" r="34" fill="none" stroke="#F8FAFC" stroke-width="4"/>
-                    <circle cx="70" cy="228" r="7" fill="#F8FAFC"/>
-
-                    <!-- Sensors on physical gear -->
-                    <g class="td-sensor-1"><circle class="td-sensor" cx="70" cy="40" r="4"/><circle class="td-sensor-ring" cx="70" cy="40" r="4"/></g>
-                    <g class="td-sensor-2"><circle class="td-sensor" cx="70" cy="165" r="4"/><circle class="td-sensor-ring" cx="70" cy="165" r="4"/></g>
-                    <g class="td-sensor-3"><circle class="td-sensor" cx="70" cy="228" r="4"/><circle class="td-sensor-ring" cx="70" cy="228" r="4"/></g>
-
-                    <!-- Signal flow: sensors -> twin -->
-                    <path class="td-signal-path-1" d="M 108 40 C 160 60, 200 90, 240 100" fill="none" stroke="none"/>
-                    <path class="td-signal-path-2" d="M 108 165 C 160 165, 200 165, 240 165" fill="none" stroke="none"/>
-                    <path class="td-signal-path-3" d="M 108 228 C 160 220, 200 200, 240 190" fill="none" stroke="none"/>
-                    <circle class="td-signal td-signal-1" r="3.5" style="offset-path: path('M 108 40 C 160 60, 200 90, 240 100');"/>
-                    <circle class="td-signal td-signal-2" r="3.5" style="offset-path: path('M 108 165 C 160 165, 200 165, 240 165');"/>
-                    <circle class="td-signal td-signal-3" r="3.5" style="offset-path: path('M 108 228 C 160 220, 200 200, 240 190');"/>
-
-                    <!-- ── DIGITAL TWIN (right, dashed ghost) ── -->
-                    <rect x="315" y="24" width="30" height="14" rx="2" class="td-twin-glow"/>
-                    <rect x="315" y="24" width="30" height="14" rx="2" class="td-twin-outline"/>
-                    <line x1="330" y1="38" x2="330" y2="178" class="td-twin-glow"/>
-                    <line x1="330" y1="38" x2="330" y2="178" class="td-twin-outline" stroke-width="3"/>
-                    <line x1="330" y1="108" x2="294" y2="196" class="td-twin-outline"/>
-                    <circle cx="330" cy="228" r="34" class="td-twin-glow"/>
-                    <circle cx="330" cy="228" r="34" class="td-twin-outline"/>
-                    <circle cx="330" cy="228" r="7" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.6"/>
-
-                    <!-- Health readout panel -->
-                    <rect x="248" y="268" width="164" height="22" rx="4" fill="rgba(0,0,0,0.25)" stroke="rgba(255,255,255,0.1)"/>
-                    <rect x="256" y="275" width="148" height="7" rx="3.5" fill="rgba(255,255,255,0.1)"/>
-                    <rect class="td-readout-bar-fill" x="256" y="275" width="148" height="7" rx="3.5" fill="#38bdf8"/>
-                </svg>
-                <p class="twin-diagram-caption">Sensors on the physical landing gear stream real-time strain and vibration data to its <strong>digital twin</strong> — a live virtual model that predicts wear before it becomes a failure.</p>
+            <div class="video-card-frame">
+                <video class="scroll-video" muted loop playsinline poster="assets/poster-twin.jpg">
+                    <source src="assets/phi-twin.mp4" type="video/mp4">
+                </video>
             </div>
             <div class="program-info">
                 <div class="program-tag">Edge Prognostics — PHI-01</div>
@@ -557,6 +478,24 @@
         </div>
     </div>
 
+    <section class="phi-landscape">
+      <div class="phi-landscape-inner">
+        <span class="phi-landscape-badge">Live Intelligence</span>
+        <h2>FleetTwin Technology Landscape</h2>
+        <p>The real-time patent and research landscape behind fleet-level federated digital twin learning, updated continuously via Lens.org.</p>
+        <a href="https://link.lens.org/YOXSz8xlTw" target="_blank" rel="noopener noreferrer" class="phi-landscape-card">
+          <div class="phi-landscape-card-content">
+            <div class="phi-landscape-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg>
+            </div>
+            <div><h3>Landing Gear Fleet Twin Landscape</h3><p>Fleet-level federated learning for predictive maintenance — patents, trends &amp; white space</p></div>
+          </div>
+          <span class="phi-landscape-cta">Explore live dashboard &rarr;</span>
+        </a>
+        <p class="phi-landscape-attribution">Powered by <a href="https://www.lens.org" target="_blank" rel="noopener">Lens.org</a></p>
+      </div>
+    </section>
+
     <footer>
         <div class="footer-top">
             <div class="footer-brand">Penelope Inc.</div>
@@ -573,7 +512,7 @@
                 <div>
                     <h4>Services</h4>
                     <ul>
-                        <li><a href="services/#digital-twin-training">Digital Twin Training</a></li>
+                        <li><a href="services/#dt-education">Digital Twin Training</a></li>
                         <li><a href="services/#church-hubs">Church Apps</a></li>
                         <li><a href="services/#cybersecurity">Security Architecture</a></li>
                     </ul>
