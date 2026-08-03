@@ -1,16 +1,12 @@
+
 // =============================================================================
 // PENELOPE — Autonomous Chief of Staff Widget for smbello.vercel.app
 // =============================================================================
 // Key confirmed live and working against Google's API as of this session.
-// Split purely to avoid a single contiguous string showing up in a casual
-// "view source" — this does NOT hide it from anyone opening devtools/Network
-// tab, so still set an HTTP referrer restriction on this key in Google Cloud
-// Console > APIs & Services > Credentials, locked to smbello.vercel.app.
 const KEY_PART_1 = "AQ.Ab8RN6KwPOcqyX";
 const KEY_PART_2 = "5lXWdB7iueLyLkcTIyGbikQf_N4-fuDVgbVQ";
 const GEMINI_API_KEY = KEY_PART_1 + KEY_PART_2;
 
-// Primary model + fallback if the primary 404s (model names get deprecated).
 const PRIMARY_MODEL = "gemini-3.5-flash";
 const FALLBACK_MODEL = "gemini-2.5-flash";
 
@@ -38,104 +34,45 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
                 border: 1.5px solid rgba(255,255,255,0.25);
-                box-shadow:
-                    0 0 0 1px rgba(255,255,255,0.08),
-                    0 8px 32px rgba(0,0,0,0.12),
-                    0 0 40px rgba(255,255,255,0.06),
-                    inset 0 0 16px rgba(255,255,255,0.06);
+                box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.12), 0 0 40px rgba(255,255,255,0.06), inset 0 0 16px rgba(255,255,255,0.06);
                 display: flex; align-items: center; justify-content: center;
-                cursor: pointer;
-                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+                cursor: pointer; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
                 position: relative; overflow: hidden;
             }
             #penelope-avatar:hover {
                 transform: scale(1.08);
-                box-shadow:
-                    0 0 0 1px rgba(255,255,255,0.15),
-                    0 12px 40px rgba(0,0,0,0.18),
-                    0 0 50px rgba(255,255,255,0.1),
-                    inset 0 0 24px rgba(255,255,255,0.1);
+                box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 12px 40px rgba(0,0,0,0.18), 0 0 50px rgba(255,255,255,0.1), inset 0 0 24px rgba(255,255,255,0.1);
             }
 
-            /* Circular logo — CSS crops the image into the orb */
             #p-avatar-logo {
                 width: 44px; height: 44px; border-radius: 50%;
-                object-fit: cover;
-                object-position: center 25%;
+                object-fit: cover; object-position: center 25%;
                 display: block; position: relative; z-index: 2;
-                border: 1.5px solid rgba(255,255,255,0.25);
-                background: #fff;
+                border: 1.5px solid rgba(255,255,255,0.25); background: #fff;
             }
+            #p-avatar-close { display: none; position: relative; z-index: 2; font-size: 1.5rem; color: #fff; }
 
-            #p-avatar-close {
-                display: none; position: relative; z-index: 2;
-                font-size: 1.5rem; color: #fff;
-            }
-
-            /* Silver-white pulse instead of blue */
             .penelope-pulse {
-                position: absolute; inset: 0; border-radius: 50%;
-                background: rgba(255,255,255,0.12);
-                box-shadow: 0 0 20px rgba(255,255,255,0.08);
-                z-index: -1;
-                animation: pPing 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+                position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,0.12);
+                box-shadow: 0 0 20px rgba(255,255,255,0.08); z-index: -1; animation: pPing 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
             }
             @keyframes pPing { 75%, 100% { transform: scale(1.8); opacity: 0; } }
 
-            /* Custom horizontal tooltip (left-to-right) */
             #p-avatar-tooltip {
-                position: absolute;
-                left: 72px; top: 50%;
-                transform: translateY(-50%) translateX(-8px);
-                background: rgba(15, 23, 42, 0.88);
-                backdrop-filter: blur(10px);
-                color: #fff;
-                padding: 8px 14px;
-                border-radius: 10px;
-                font-size: 0.8rem;
-                font-weight: 500;
-                white-space: nowrap;
-                opacity: 0;
-                pointer-events: none;
-                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-                box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-                border: 1px solid rgba(255,255,255,0.1);
-                z-index: 10;
+                position: absolute; left: 72px; top: 50%; transform: translateY(-50%) translateX(-8px);
+                background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(10px); color: #fff;
+                padding: 8px 14px; border-radius: 10px; font-size: 0.8rem; font-weight: 500; white-space: nowrap;
+                opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1); z-index: 10;
             }
-            #p-avatar-tooltip::before {
-                content: '';
-                position: absolute;
-                right: 100%; top: 50%;
-                transform: translateY(-50%);
-                border: 6px solid transparent;
-                border-right-color: rgba(15, 23, 42, 0.88);
-            }
-            #penelope-avatar:hover #p-avatar-tooltip {
-                opacity: 1;
-                transform: translateY(-50%) translateX(0);
-            }
+            #p-avatar-tooltip::before { content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%); border: 6px solid transparent; border-right-color: rgba(15, 23, 42, 0.88); }
+            #penelope-avatar:hover #p-avatar-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
 
-            /* Scroll bubble — glassy to match */
             #p-scroll-bubble {
-                position: absolute;
-                bottom: 72px; left: 72px;
-                background: rgba(15, 23, 42, 0.85);
-                backdrop-filter: blur(12px);
-                color: #fff;
-                padding: 10px 16px;
-                border-radius: 16px 16px 16px 4px;
-                font-size: 0.85rem;
-                font-weight: 500;
-                line-height: 1.4;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-                border: 1px solid rgba(255,255,255,0.12);
-                max-width: 220px;
-                opacity: 0;
-                transform: translateY(10px) scale(0.9);
-                pointer-events: none;
-                transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-                z-index: 9999;
-                cursor: pointer;
+                position: absolute; bottom: 72px; left: 72px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); color: #fff;
+                padding: 10px 16px; border-radius: 16px 16px 16px 4px; font-size: 0.85rem; font-weight: 500; line-height: 1.4;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.12); max-width: 220px;
+                opacity: 0; transform: translateY(10px) scale(0.9); pointer-events: none; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999; cursor: pointer;
             }
             #p-scroll-bubble.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 
@@ -172,7 +109,10 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
             .p-msg.user strong { color: #fff; }
             .p-msg ul, .p-msg ol { margin: 0 0 10px 1.5rem; padding: 0; }
             .p-msg li { margin-bottom: 4px; }
-            .p-msg a { color: #0ea5e9; }
+            
+            /* Enhanced clickable links from Markdown */
+            .p-msg a { color: #0ea5e9; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(14, 165, 233, 0.3); transition: all 0.2s; }
+            .p-msg a:hover { color: #0284c7; border-bottom-color: #0284c7; }
 
             .p-typing { display: flex; gap: 4px; align-items: center; padding: 16px; }
             .p-dot { width: 6px; height: 6px; background: #94a3b8; border-radius: 50%; animation: pType 1.4s infinite ease-in-out both; }
@@ -230,11 +170,9 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
                         <button id="p-close" title="Close"><i class="fas fa-times"></i></button>
                     </div>
                 </div>
-                <div id="p-messages">
-                    <div class="p-msg bot"><strong>Hello!</strong> I'm Penelope, Mohammed Bello Sani's Chief of Staff. I know his research pipeline, resume, and technical stack, and I can see what's on this page. How can I help?</div>
-                </div>
+                <div id="p-messages"></div>
                 <div id="p-input-area">
-                    <input type="text" id="p-input" placeholder="Ask me about his work..." autocomplete="off">
+                    <input type="text" id="p-input" placeholder="Ask me to guide you..." autocomplete="off">
                     <button id="p-send">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F8FAFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateX(-1px) translateY(1px);">
                           <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -243,7 +181,7 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
                     </button>
                 </div>
             </div>
-            <div id="p-scroll-bubble">What do you want to know? I'll help you! 👋</div>
+            <div id="p-scroll-bubble">Need help finding a project? Ask me! 👋</div>
             <div id="penelope-avatar">
                 <div class="penelope-pulse"></div>
                 <img id="p-avatar-logo" src="/assets/penelope-logo.png" alt="Penelope">
@@ -255,14 +193,9 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
     };
 
     const initLogic = async () => {
-        // =====================================================================
-        // 🛑 STEP 2: PASTE YOUR THREE EMAILJS IDS 🛑
-        // From https://dashboard.emailjs.com/admin
-        // =====================================================================
         const EMAILJS_SERVICE_ID = "service_d1k7ewd";
         const EMAILJS_TEMPLATE_ID = "template_8jdi5qd";
         const EMAILJS_PUBLIC_KEY = "9DloHYatGRyjwuntn";
-
         const CONTACT_WHATSAPP = "+2349067883192";
         const CONTACT_EMAIL = "bellosanidrescue@gmail.com";
 
@@ -291,40 +224,54 @@ const FALLBACK_MODEL = "gemini-2.5-flash";
         let chatHistory = [];
         let knowledgeBase = {};
 
-        // Use an absolute path so this works identically whether the widget
-        // is loaded from index.html, /about.html, or /stratos-14e/index.html.
+        // ── LOAD PERSISTENT MEMORY ──
+        const savedMemory = sessionStorage.getItem('penelopeChatHistory');
+        if (savedMemory) {
+            chatHistory = JSON.parse(savedMemory);
+            chatHistory.forEach(msg => {
+                if(msg.role === 'model') appendMessage(msg.parts[0].text, 'bot', true);
+                else appendMessage(msg.parts[0].text, 'user', false);
+            });
+        } else {
+            appendMessage("<strong>Hello!</strong> I'm Penelope, Mohammed Bello Sani's Chief of Staff. I know his research pipeline and can guide you through the Penelope Inc. architecture. How can I help?", 'bot', true);
+        }
+
         try {
             const res = await fetch('/assets/me.json');
             if (res.ok) knowledgeBase = await res.json();
-            else console.warn("Penelope: /assets/me.json returned", res.status);
-        } catch (e) {
-            console.error("Penelope: could not load /assets/me.json", e);
-        }
+        } catch (e) { console.error("Penelope: could not load /assets/me.json", e); }
 
-        // Read whatever page she's currently mounted on, every time she's asked
-        // something — not just once at boot — so multi-page navigation stays current.
         const getPageContext = () => document.body.innerText.replace(/\s+/g, ' ').trim().substring(0, 3000);
 
+        // ── REFACTORED SYSTEM PROMPT WITH ROUTING DIRECTORY ──
         const buildSystemPrompt = () => `
 You are Penelope, the autonomous Chief of Staff for Mohammed Bello Sani ("SM-Bello"), an aerospace engineer and founder of Penelope Inc.
 
-GROUNDING RULES — follow these exactly:
-1. Answer ONLY using facts found in the KNOWLEDGE BASE or the CURRENT PAGE CONTEXT below. Never invent, guess, or infer details about Mohammed that aren't present in that data — no fabricated dates, numbers, schools, or claims.
-2. If the answer isn't in either source, say plainly that you don't have that information, then immediately give both contact options: WhatsApp ${CONTACT_WHATSAPP} and email ${CONTACT_EMAIL}. Do not attempt to guess an answer to fill the gap.
-3. Never break character or mention that you are Gemini, an AI model, or a language model. You are Penelope.
-4. If the user clearly expresses intent to contact, hire, or speak with Mohammed directly, reply with EXACTLY this and nothing else: [TRIGGER_EMAIL_ROUTING]
+GROUNDING RULES:
+1. Answer ONLY using facts found in the KNOWLEDGE BASE or CURRENT PAGE CONTEXT. 
+2. If the user wants to contact Mohammed, reply with EXACTLY: [TRIGGER_EMAIL_ROUTING]
+3. Never mention you are an AI. You are Penelope.
 
-SCOPE RULE — do not overshoot:
-- Answer exactly what was asked, nothing more. If asked for "2 skills," give 2, not a full list. If asked one narrow question about one project, don't append his entire biography or every other project underneath it.
-- Only expand beyond the literal question if the user asks something open-ended like "tell me about him" or "give me an overview" — that's the signal for a fuller answer, not a default.
-- A short, precise answer to the actual question is always preferred over a comprehensive one nobody asked for.
+ROUTING MATRIX (CRITICAL INSTRUCTION):
+You have access to the entire Penelope Inc. architecture. If a user asks about a specific project, suite, or service, YOU MUST PROVIDE A CLICKABLE MARKDOWN LINK to the exact page.
 
-FORMATTING RULES:
-- Always respond in Markdown: use **bold**, bullet points, and headings (##) where useful.
-- Never output raw literal "#" symbols as filler or emphasis — only use them as real Markdown heading syntax, which will be rendered, not shown as text.
-- Keep answers well-structured and skimmable, not one dense paragraph.
+Here is your URL map:
+- PHI-Twin (Landing Gear Prognostics): /suites/phi-twin.html
+- PHI-Chain (Aviation Blockchain & Security): /suites/phi-chain.html
+- PHI-Arc (Engineering Methodology & Architecture): /suites/phi-arc.html
+- PHI-Sense (1,027-Sensor HUMS Fusion): /suites/phi-sense.html
+- PHI-Engine (Rotating Detonation & Gas Turbine): /suites/phi-engine.html
+- PHI-Drone (UAV HIL Validation): /suites/phi-drone.html
+- The Lab (Kaduna Facility Specs & Cost): /lab.html
+- About Us: /about.html
+- Contact / Comm Relay: /contact.html
+- Join the Company (CPDC Application): /join.html
+- Services Hub (Education, Apps, Security): /services/index.html
+- Home Page / FleetTwin Architecture: /
 
-CURRENT PAGE CONTEXT (what the user is currently looking at):
+Example response: "You can find out more about our landing gear research on the [PHI-Twin Dashboard](/suites/phi-twin.html)."
+
+CURRENT PAGE CONTEXT:
 ${getPageContext()}
 
 KNOWLEDGE BASE:
@@ -355,43 +302,34 @@ ${JSON.stringify(knowledgeBase)}
         closeBtn.addEventListener('click', toggleChat);
         expandBtn.addEventListener('click', toggleExpand);
 
-        // ── Scroll-triggered greeting bubble ─────────────────────────────────
-        let scrollEvents = 0;
-        let bubbleShown = false;
-        let scrollCooldown = false;
-
+        let scrollEvents = 0; let bubbleShown = false; let scrollCooldown = false;
         const showScrollBubble = () => {
             if (bubbleShown || isOpen) return;
             bubbleShown = true;
             scrollBubble.classList.add('show');
-            setTimeout(() => {
-                scrollBubble.classList.remove('show');
-            }, 5500);
+            setTimeout(() => { scrollBubble.classList.remove('show'); }, 5500);
         };
 
         window.addEventListener('scroll', () => {
             if (scrollCooldown || bubbleShown || isOpen) return;
-            scrollCooldown = true;
-            scrollEvents++;
+            scrollCooldown = true; scrollEvents++;
             setTimeout(() => { scrollCooldown = false; }, 700);
-            if (scrollEvents >= 2) {
-                showScrollBubble();
-            }
+            if (scrollEvents >= 2) showScrollBubble();
         }, { passive: true });
 
         scrollBubble.addEventListener('click', () => {
             scrollBubble.classList.remove('show');
             if (!isOpen) toggleChat();
         });
-        // ────────────────────────────────────────────────────────────────────
 
-        const appendMessage = (text, cls, parseMarkdown = false) => {
+        // Use standard function definition because of hoisting concerns
+        function appendMessage(text, cls, parseMarkdown = false) {
             const msg = document.createElement('div');
             msg.className = `p-msg ${cls}`;
             msg.innerHTML = parseMarkdown && typeof marked !== 'undefined' ? marked.parse(text) : text;
             messages.appendChild(msg);
             messages.scrollTop = messages.scrollHeight;
-        };
+        }
 
         const showTyping = () => {
             const typing = document.createElement('div');
@@ -407,9 +345,11 @@ ${JSON.stringify(knowledgeBase)}
             if (typing) typing.remove();
         };
 
-        // Set DEBUG_MODE = true only if you need to see a raw Google error
-        // inline in the chat again. Off by default now that the key is confirmed working.
-        const DEBUG_MODE = false;
+        const saveMemory = () => {
+            // Keep memory trim to avoid localstorage limits
+            if(chatHistory.length > 20) chatHistory = chatHistory.slice(chatHistory.length - 20);
+            sessionStorage.setItem('penelopeChatHistory', JSON.stringify(chatHistory));
+        };
 
         const callGemini = async (model, payload) => {
             const response = await fetch(
@@ -417,18 +357,14 @@ ${JSON.stringify(knowledgeBase)}
                 { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }
             );
             const data = await response.json();
-            if (data.error) {
-                const err = new Error(data.error.message || 'Unknown API error');
-                err.code = data.error.code;
-                err.status = data.error.status;
-                err.model = model;
-                throw err;
-            }
+            if (data.error) throw new Error(data.error.message || 'Unknown API error');
             return data.candidates[0].content.parts[0].text;
         };
 
         const fetchGeminiResponse = async (userText) => {
             chatHistory.push({ role: "user", parts: [{ text: userText }] });
+            saveMemory();
+
             const payload = {
                 systemInstruction: { parts: [{ text: buildSystemPrompt() }] },
                 contents: chatHistory
@@ -437,25 +373,18 @@ ${JSON.stringify(knowledgeBase)}
             try {
                 const reply = await callGemini(PRIMARY_MODEL, payload);
                 chatHistory.push({ role: "model", parts: [{ text: reply }] });
+                saveMemory();
                 return reply;
             } catch (primaryErr) {
                 console.error(`Penelope: ${PRIMARY_MODEL} failed`, primaryErr);
-                // Only retry the fallback model on a "model not found" style error.
-                if (primaryErr.code === 404 || primaryErr.status === 'NOT_FOUND') {
-                    try {
-                        const reply = await callGemini(FALLBACK_MODEL, payload);
-                        chatHistory.push({ role: "model", parts: [{ text: reply }] });
-                        return reply;
-                    } catch (fallbackErr) {
-                        console.error(`Penelope: ${FALLBACK_MODEL} also failed`, fallbackErr);
-                        if (DEBUG_MODE) {
-                            appendMessage(`DEBUG — ${PRIMARY_MODEL}: ${primaryErr.message}<br>DEBUG — ${FALLBACK_MODEL}: ${fallbackErr.message}`, 'error');
-                        }
-                    }
-                } else if (DEBUG_MODE) {
-                    appendMessage(`DEBUG [${primaryErr.status || primaryErr.code || 'ERROR'}]: ${primaryErr.message}`, 'error');
+                try {
+                    const reply = await callGemini(FALLBACK_MODEL, payload);
+                    chatHistory.push({ role: "model", parts: [{ text: reply }] });
+                    saveMemory();
+                    return reply;
+                } catch (fallbackErr) {
+                    return `I don't have a working connection right now. Please reach Mohammed directly — WhatsApp **${CONTACT_WHATSAPP}** or email **${CONTACT_EMAIL}**.`;
                 }
-                return `I don't have a working connection right now. Please reach Mohammed directly — WhatsApp **${CONTACT_WHATSAPP}** or email **${CONTACT_EMAIL}**.`;
             }
         };
 
@@ -470,16 +399,12 @@ ${JSON.stringify(knowledgeBase)}
             if (isContactMode) {
                 const chatLog = chatHistory.map(m => `${m.role.toUpperCase()}: ${m.parts[0].text}`).join('\n\n');
                 try {
-                    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                        user_email: text,
-                        chat_log: chatLog
-                    });
+                    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { user_email: text, chat_log: chatLog });
                     removeTyping();
                     appendMessage(`**Message sent!** Mohammed will reach out to you at ${text} shortly.`, 'bot', true);
                 } catch (error) {
-                    console.error("Penelope: EmailJS send failed", error);
                     removeTyping();
-                    appendMessage(`I couldn't send that through automatically. Please email him directly at **${CONTACT_EMAIL}** or WhatsApp **${CONTACT_WHATSAPP}**.`, 'bot', true);
+                    appendMessage(`I couldn't send that through automatically. Please email him directly at **${CONTACT_EMAIL}**.`, 'bot', true);
                 }
                 isContactMode = false;
                 return;
@@ -500,34 +425,24 @@ ${JSON.stringify(knowledgeBase)}
         sendBtn.addEventListener('click', handleSend);
         input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
 
-        // =====================================================================
-        // Network Connection Status Handler
-        // =====================================================================
         function updateNetworkStatus() {
             const globe = document.getElementById('connection-globe');
             const statusText = document.getElementById('connection-text');
-            
             if (!globe || !statusText) return; 
 
             if (navigator.onLine) {
-                // User is connected: Bright Green with glowing shadow
                 globe.style.stroke = '#10B981';
                 globe.style.filter = 'drop-shadow(0 0 4px rgba(16, 185, 129, 0.5))';
                 statusText.style.color = '#10B981';
                 statusText.innerText = 'LIVE';
             } else {
-                // User lost connection: Dim Slate/Gray with no glow
                 globe.style.stroke = '#475569';
                 globe.style.filter = 'none';
                 statusText.style.color = '#475569';
                 statusText.innerText = 'OFFLINE';
             }
         }
-
-        // Run once on load to set initial state
         updateNetworkStatus();
-
-        // Listen for network changes dynamically
         window.addEventListener('online', updateNetworkStatus);
         window.addEventListener('offline', updateNetworkStatus);
     };
