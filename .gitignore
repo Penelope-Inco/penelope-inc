@@ -1,2 +1,12 @@
 .vercel
 .env*
+
+# Local workstation and raw asset sources
+penelope-walls/
+PHI-LAB/
+The Lab photos/
+DT-Slides/
+phi=*/
+*.pptx
+*.txt
+PENELOPE INC..md

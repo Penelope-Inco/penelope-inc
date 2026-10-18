@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="512" height="512" role="img" aria-label="PHI Lab mark, reversed">
+  <title>PHI Lab mark, reversed</title>
+  <path d="M100 38 A62 62 0 0 0 100 162" fill="none" stroke="#F3F5F7" stroke-width="10"/>
+  <circle cx="119.2" cy="41.0" r="5.5" fill="#F3F5F7"/>
+  <circle cx="141.5" cy="53.9" r="5.5" fill="#F3F5F7"/>
+  <circle cx="156.6" cy="74.8" r="5.5" fill="#F3F5F7"/>
+  <circle cx="162.0" cy="100.0" r="5.5" fill="#F3F5F7"/>
+  <circle cx="156.6" cy="125.2" r="5.5" fill="#F3F5F7"/>
+  <circle cx="141.5" cy="146.1" r="5.5" fill="#F3F5F7"/>
+  <circle cx="119.2" cy="159.0" r="5.5" fill="#F3F5F7"/>
+  <line x1="100" y1="16" x2="100" y2="184" stroke="#E8A33D" stroke-width="10" stroke-linecap="round"/>
+</svg>

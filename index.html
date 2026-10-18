@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penelope Inc. | PHI Lab</title>
-    <link rel="icon" href="assets/penelope-logo.png" type="image/png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
-    <link rel="apple-touch-icon" href="assets/favicon.png">
+    <title>PHI Lab | Physics Hybrid Integrity Lab — DIMASA</title>
+    <meta name="description" content="PHI Lab (Physics Hybrid Integrity Lab) — Pioneering DIMASA: Digital Intelligent Maintenance for Aircraft Systems in Africa through physics-informed digital twins and zero-leakage neural telemetry.">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="PHI Lab | Physics Hybrid Integrity Lab — DIMASA">
+    <meta property="og:description" content="Pioneering DIMASA (Digital Intelligent Maintenance for Aircraft Systems in Africa) with physics-informed digital twins and edge telemetry.">
+    <meta property="og:image" content="/assets/phi-lab-social-1200x630.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PHI Lab | Physics Hybrid Integrity Lab — DIMASA">
+    <meta name="twitter:description" content="Pioneering DIMASA (Digital Intelligent Maintenance for Aircraft Systems in Africa) with physics-informed digital twins and edge telemetry.">
+    <meta name="twitter:image" content="/assets/phi-lab-social-1200x630.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/nav.css">
@@ -108,6 +119,16 @@
         .program-info p { font-size: 1.05rem; color: #475569; margin-bottom: 1.8rem; line-height: 1.7; }
         .btn-link { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--blue-accent); border-bottom: 2px solid transparent; padding-bottom: 2px; transition: all 0.2s; }
         .btn-link:hover { border-bottom-color: var(--blue-accent); }
+
+        /* ─── ALL DIVISIONS OVERVIEW GRID ─── */
+        .divisions-overview { margin-top: 5rem; padding-top: 4rem; border-top: 1px solid #E2E8F0; }
+        .divisions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+        .division-card { display: flex; flex-direction: column; background: var(--bg-milky-card); border: 1px solid #E2E8F0; border-radius: 10px; padding: 1.8rem; transition: all 0.25s ease; text-decoration: none; color: inherit; }
+        .division-card:hover { transform: translateY(-3px); border-color: var(--blue-accent); box-shadow: 0 12px 28px rgba(37,99,235,0.08); }
+        .div-tag { font-family: var(--font-mono, monospace); font-size: 0.72rem; font-weight: 700; color: #E8A33D; letter-spacing: 1.5px; margin-bottom: 0.6rem; display: inline-block; }
+        .division-card h4 { font-family: var(--font-serif); font-size: 1.4rem; color: var(--navy-creamy-dark); margin-bottom: 0.5rem; }
+        .division-card p { font-size: 0.92rem; color: #475569; line-height: 1.6; margin-bottom: 1.2rem; flex-grow: 1; }
+        .div-link { font-size: 0.85rem; font-weight: 600; color: var(--blue-accent); }
 
         .metrics-section { background-color: var(--bg-milky-card); border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; padding: 5rem 8%; }
         .metrics-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center; }
@@ -245,7 +266,10 @@
 <body>
 
     <header>
-        <a href="/" class="logo">Penelope Inc.</a>
+        <a href="/" class="logo">
+            <img src="/assets/phi-lab-mark-reverse.svg" alt="PHI Lab Mark" class="logo-mark">
+            <span>PHI Lab</span>
+        </a>
 
         <ul class="nav-links">
             <li class="nav-item" data-has-panel>
@@ -275,6 +299,18 @@
                         <a href="suites/phi-drone.html" class="nav-panel-link">
                             <span class="nav-panel-tag">PHI-06</span>
                             <span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span>
+                        </a>
+                        <a href="suites/phi-swarm.html" class="nav-panel-link">
+                            <span class="nav-panel-tag">PHI-07</span>
+                            <span class="nav-panel-copy"><h4>PHI-Swarm</h4><p>Autonomous collaborative UAV flocking &amp; distributed routing.</p></span>
+                        </a>
+                        <a href="suites/phi-ctrl.html" class="nav-panel-link">
+                            <span class="nav-panel-tag">PHI-08</span>
+                            <span class="nav-panel-copy"><h4>PHI-Ctrl</h4><p>Physics-hybrid fault-tolerant flight control, validated in JSBSim.</p></span>
+                        </a>
+                        <a href="suites/phi-spike.html" class="nav-panel-link">
+                            <span class="nav-panel-tag">PHI-09</span>
+                            <span class="nav-panel-copy"><h4>PHI-Spike</h4><p>Neuromorphic event-driven sensing &amp; ultra-low-power SNN processing.</p></span>
                         </a>
                     </div>
                 </div>
@@ -310,6 +346,9 @@
                 <a href="suites/phi-sense.html"><span class="nav-panel-tag">PHI-04</span> PHI-Sense</a>
                 <a href="suites/phi-engine.html"><span class="nav-panel-tag">PHI-05</span> PHI-Engine</a>
                 <a href="suites/phi-drone.html"><span class="nav-panel-tag">PHI-06</span> PHI-Drone</a>
+                <a href="suites/phi-swarm.html"><span class="nav-panel-tag">PHI-07</span> PHI-Swarm</a>
+                <a href="suites/phi-ctrl.html"><span class="nav-panel-tag">PHI-08</span> PHI-Ctrl</a>
+                <a href="suites/phi-spike.html"><span class="nav-panel-tag">PHI-09</span> PHI-Spike</a>
             </div>
         </div>
         <a href="lab.html" class="mobile-simple-link">The Lab</a>
@@ -334,8 +373,9 @@
         </video>
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1>Engineered Intelligence for Aerospace Validation</h1>
-            <p>Deploying physics-informed digital twins and zero-leakage neural networks to secure flight-critical infrastructure.</p>
+            <div class="hero-mission-tag" style="display:inline-block; font-size:0.82rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#E8A33D; background:rgba(232,163,61,0.12); border:1px solid rgba(232,163,61,0.3); padding:6px 16px; border-radius:999px; margin-bottom:1.4rem;">HEADLINE MISSION &bull; DIMASA</div>
+            <h1>Digital Intelligent Maintenance for Aircraft Systems in Africa</h1>
+            <p>PHI Lab pioneers physics-informed edge digital twins, zero-leakage neural telemetry, and verifiable aerospace validation for next-generation fleet integrity.</p>
         </div>
     </section>
 
@@ -344,7 +384,7 @@
             <h2>What happens when component-specific physics fusion meets real-time edge execution?</h2>
             <div class="vision-grid">
                 <div>
-                    <p>At PHI Lab, we bridge high-fidelity aerospace structural modeling with deployment-ready AI frameworks. From landing gear prognostics to gas turbine fault injection, our platform empowers aerospace engineers with trustworthy, certification-compliant digital twins.</p>
+                    <p>At PHI Lab (Physics Hybrid Integrity Lab), we bridge high-fidelity aerospace structural modeling with deployment-ready AI frameworks. From landing gear prognostics to gas turbine fault injection, our platform empowers aerospace engineers and African fleet operators with trustworthy, certification-compliant digital twins under the DIMASA initiative.</p>
                 </div>
                 <div class="video-card-frame">
                     <video class="scroll-video" muted loop playsinline poster="assets/poster-vision.jpg">
@@ -407,10 +447,46 @@
                 </video>
             </div>
             <div class="program-info">
-                <div class="program-tag">Autonomous Systems — PHI-04</div>
+                <div class="program-tag">Autonomous Systems — PHI-06</div>
                 <h3>PHI-Drone Suite</h3>
                 <p>Hardware-in-the-loop (HIL) validation environments for autonomous UAV trajectory planning, adaptive flight control, and dynamic failure mitigation.</p>
                 <a href="suites/phi-drone.html" class="btn-link">Explore PHI-Drone &rarr;</a>
+            </div>
+        </div>
+
+        <div class="divisions-overview">
+            <div class="section-label" style="text-align: center; margin-bottom: 2rem;">RESEARCH &amp; APPLIED DIVISIONS</div>
+            <div class="divisions-grid">
+                <a href="suites/phi-sense.html" class="division-card">
+                    <span class="div-tag">PHI-04</span>
+                    <h4>PHI-Sense</h4>
+                    <p>1,027-sensor HUMS fusion array for real-time vibration, strain, and aerodynamic surface load monitoring.</p>
+                    <span class="div-link">Inspect Suite &rarr;</span>
+                </a>
+                <a href="suites/phi-engine.html" class="division-card">
+                    <span class="div-tag">PHI-05</span>
+                    <h4>PHI-Engine</h4>
+                    <p>Rotating detonation wave modeling &amp; gas turbine combustion acoustics with physics-informed neural solvers.</p>
+                    <span class="div-link">Inspect Suite &rarr;</span>
+                </a>
+                <a href="suites/phi-swarm.html" class="division-card">
+                    <span class="div-tag">PHI-07</span>
+                    <h4>PHI-Swarm</h4>
+                    <p>Autonomous collaborative UAV flocking, resilient distributed telemetry, and adaptive multi-agent formation control.</p>
+                    <span class="div-link">Inspect Suite &rarr;</span>
+                </a>
+                <a href="suites/phi-ctrl.html" class="division-card">
+                    <span class="div-tag">PHI-08</span>
+                    <h4>PHI-Ctrl</h4>
+                    <p>Physics-hybrid fault-tolerant flight control, validated in JSBSim 6-DOF dynamic simulation.</p>
+                    <span class="div-link">Inspect Suite &rarr;</span>
+                </a>
+                <a href="suites/phi-spike.html" class="division-card">
+                    <span class="div-tag">PHI-09</span>
+                    <h4>PHI-Spike</h4>
+                    <p>Neuromorphic event-driven sensing and ultra-low-power spiking neural networks for edge avionics.</p>
+                    <span class="div-link">Inspect Suite &rarr;</span>
+                </a>
             </div>
         </div>
     </section>
@@ -438,7 +514,7 @@
             "PHI Lab's zero-leakage framework bridges the critical gap between computational flight dynamics and onboard real-time diagnostic execution."
         </blockquote>
         <div class="quote-author">Aerospace Systems Engineering Lead</div>
-        <div class="quote-role">Penelope Inc. Research Division</div>
+        <div class="quote-role">PHI Lab Research Division</div>
     </section>
 
     <div class="fleettwin-showcase">
@@ -498,7 +574,10 @@
 
     <footer>
         <div class="footer-top">
-            <div class="footer-brand">Penelope Inc.</div>
+            <div class="footer-brand" style="display:flex; align-items:center; gap:0.6rem;">
+                <img src="/assets/phi-lab-mark-reverse.svg" alt="PHI Lab Mark" style="width:28px; height:28px;">
+                <span>PHI Lab</span>
+            </div>
             <div class="footer-links">
                 <div>
                     <h4>PHI Suites</h4>
@@ -506,7 +585,12 @@
                         <li><a href="suites/phi-twin.html">PHI-Twin</a></li>
                         <li><a href="suites/phi-chain.html">PHI-Chain</a></li>
                         <li><a href="suites/phi-arc.html">PHI-Arc</a></li>
+                        <li><a href="suites/phi-sense.html">PHI-Sense</a></li>
+                        <li><a href="suites/phi-engine.html">PHI-Engine</a></li>
                         <li><a href="suites/phi-drone.html">PHI-Drone</a></li>
+                        <li><a href="suites/phi-swarm.html">PHI-Swarm</a></li>
+                        <li><a href="suites/phi-ctrl.html">PHI-Ctrl</a></li>
+                        <li><a href="suites/phi-spike.html">PHI-Spike</a></li>
                     </ul>
                 </div>
                 <div>
@@ -529,8 +613,8 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Penelope Inc. All rights reserved.</p>
-            <p>PHI Lab Aerospace Technologies</p>
+            <p>&copy; 2026 PHI Lab (Physics Hybrid Integrity Lab). All rights reserved.</p>
+            <p>Kaduna Aerospace Technologies Facility &bull; DIMASA Initiative</p>
         </div>
     </footer>
 

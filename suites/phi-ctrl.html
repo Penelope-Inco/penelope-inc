@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHI-Ctrl | PHI Lab</title>
+    <meta name="description" content="PHI-Ctrl — physics-hybrid fault-tolerant flight control, validated in JSBSim 6-DOF flight simulation.">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="PHI-Ctrl | PHI Lab">
+    <meta property="og:description" content="Physics-hybrid fault-tolerant flight control, validated in JSBSim.">
+    <meta property="og:image" content="/assets/phi-lab-social-1200x630.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PHI-Ctrl | PHI Lab">
+    <meta name="twitter:description" content="Physics-hybrid fault-tolerant flight control, validated in JSBSim.">
+    <meta name="twitter:image" content="/assets/phi-lab-social-1200x630.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/nav.css">
+    <link rel="stylesheet" href="../assets/design-system.css">
+
+    <style>
+        :root {
+            --bg-milky-white: #FAF9F5; --bg-milky-card: #F3F0E8;
+            --navy-creamy-dark: #0E1726; --navy-creamy-mid: #1E293B;
+            --blue-accent: #2563EB; --text-dark: #1A1A1A;
+            --text-light: #F8FAFC; --text-muted: #64748B;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-milky-white); color: var(--text-dark); font-family: var(--font-sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        a { text-decoration: none; color: inherit; }
+        .section-label { text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 1rem; }
+
+        .page-hero { background-color: var(--navy-creamy-dark); color: var(--text-light); padding: 11rem 8% 5rem; }
+        .page-hero .section-label { color: #94A3B8; }
+        .page-hero h1 { font-family: var(--font-serif); font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 400; line-height: 1.2; margin: 1rem 0 1.2rem; max-width: 820px; }
+        .page-hero p.lede { font-size: 1.1rem; color: #CBD5E1; max-width: 660px; }
+
+        .suite-story { max-width: 820px; margin: 0 auto; padding: 5rem 8% 2rem; }
+        .suite-story p { color: #475569; font-size: 1.05rem; line-height: 1.8; margin-bottom: 1.3rem; }
+        .suite-story .note { font-size: 0.9rem; color: var(--text-muted); border-left: 3px solid var(--blue-accent); padding-left: 1.2rem; margin-top: 1.5rem; }
+
+        /* ─── AMBIENT FLOATING STACK GALLERY ─── */
+        .suite-gallery { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 8% 5rem; max-width: 1300px; margin: 0 auto; }
+        .stack-label { font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700; margin-bottom: 1.5rem; }
+        .deck-stack { position: relative; width: 100%; max-width: 600px; aspect-ratio: 16/9; cursor: zoom-in; user-select: none; }
+        .deck-card {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border: 1px solid #E2E8F0; background: var(--bg-milky-card);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+        }
+        
+        .card-1 { z-index: 3; animation: deckFloat1 7s ease-in-out infinite; }
+        .card-2 { z-index: 2; transform: translate(18px, 15px) rotate(4deg); opacity: 0.85; animation: deckFloat2 7s ease-in-out infinite; }
+        .card-3 { z-index: 1; transform: translate(36px, 30px) rotate(8deg); opacity: 0.6; animation: deckFloat3 7s ease-in-out infinite; }
+        
+        @keyframes deckFloat1 { 0%,100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-4px,-8px) rotate(-1deg); } }
+        @keyframes deckFloat2 { 0%,100% { transform: translate(18px,15px) rotate(4deg); } 50% { transform: translate(22px,6px) rotate(3deg); } }
+        @keyframes deckFloat3 { 0%,100% { transform: translate(36px,30px) rotate(8deg); } 50% { transform: translate(40px,20px) rotate(7deg); } }
+        
+        .deck-stack:hover .card-1 { transform: translateY(-8px) scale(1.02); box-shadow: 0 30px 50px rgba(0,0,0,0.25); }
+        .deck-stack:hover .card-2 { transform: translate(24px, 12px) rotate(5deg); }
+        .deck-stack:hover .card-3 { transform: translate(48px, 24px) rotate(10deg); }
+
+        .suite-video { max-width: 900px; margin: 0 auto; padding: 0 8% 5rem; }
+        .suite-video .embed-frame {
+            position: relative; padding-top: 56.25%; border-radius: 8px; overflow: hidden;
+            background: var(--navy-creamy-mid); box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .suite-video .embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+        .video-placeholder-inner {
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+            padding: 2rem; color: #CBD5E1; background: linear-gradient(135deg, #0E1726 0%, #1E293B 100%);
+        }
+        .video-placeholder-inner i { font-size: 2.8rem; color: #E8A33D; margin-bottom: 1rem; }
+        .video-placeholder-inner h3 { font-family: var(--font-sans); font-size: 1.25rem; font-weight: 600; color: #F8FAFC; margin-bottom: 0.4rem; }
+        .video-placeholder-inner p { font-size: 0.9rem; color: #94A3B8; max-width: 480px; }
+
+        .validation-cta { background: linear-gradient(135deg, #1E3A8A 0%, var(--navy-creamy-dark) 100%); color: var(--text-light); text-align: center; padding: 4.5rem 8%; max-width: 1200px; margin: 0 auto 6rem; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(14,23,38,0.25); }
+        .validation-cta .section-label { color: #FCA5A5; }
+        .validation-cta h2 { font-family: var(--font-serif); font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 400; max-width: 780px; margin: 0 auto 1.2rem; }
+        .validation-cta p { color: #CBD5E1; max-width: 620px; margin: 0 auto 2rem; }
+        .btn-light { display: inline-block; background-color: var(--text-light); color: var(--navy-creamy-dark); padding: 1rem 2rem; border-radius: 4px; font-weight: 600; font-size: 1rem; transition: all 0.2s; }
+        .btn-light:hover { transform: translateY(-2px); }
+
+        /* ─── LIVE LANDSCAPE EMBED ─── */
+        .phi-landscape { background-color: var(--bg-milky-card); padding: 4rem 8%; margin: 0 0 6rem 0; border-radius: 0; }
+        .phi-landscape-inner { max-width: 720px; margin: 0 auto; text-align: center; }
+        .phi-landscape-badge { display: inline-block; background: rgba(37, 99, 235, 0.1); color: var(--blue-accent); font-family: var(--font-sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 0.4rem 0.9rem; border-radius: 999px; margin-bottom: 1rem; }
+        .phi-landscape-inner h2 { font-family: var(--font-serif); font-size: 1.9rem; font-weight: 400; color: var(--navy-creamy-dark); margin: 0 0 0.7rem; }
+        .phi-landscape-inner > p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.7; margin: 0 0 2rem; }
+        .phi-landscape-card { display: block; background-color: var(--bg-milky-white); border: 1px solid #E2E8F0; border-radius: 10px; padding: 1.6rem 1.8rem; text-decoration: none; color: inherit; transition: all 0.25s ease; text-align: left; }
+        .phi-landscape-card:hover { border-color: var(--blue-accent); box-shadow: 0 10px 25px rgba(37,99,235,0.12); transform: translateY(-2px); }
+        .phi-landscape-card-content { display: flex; align-items: flex-start; gap: 1.1rem; margin-bottom: 1.1rem; }
+        .phi-landscape-icon { flex-shrink: 0; width: 46px; height: 46px; border-radius: 8px; background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center; color: var(--blue-accent); }
+        .phi-landscape-card h3 { font-family: var(--font-sans); margin: 0 0 0.3rem; font-size: 1.1rem; font-weight: 600; color: var(--navy-creamy-dark); }
+        .phi-landscape-card p { margin: 0; font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; }
+        .phi-landscape-cta { display: inline-block; font-size: 0.88rem; font-weight: 600; color: var(--blue-accent); }
+        .phi-landscape-attribution { margin-top: 1.6rem; font-size: 0.8rem; color: var(--text-muted); }
+        .phi-landscape-attribution a { color: var(--text-muted); text-decoration: underline; }
+        .phi-landscape-attribution a:hover { color: var(--blue-accent); }
+
+        .ongoing-project { max-width: 820px; margin: 0 auto; padding: 0 8% 6rem; }
+        .ongoing-project h2 { font-family: var(--font-serif); font-size: 1.7rem; font-weight: 400; color: var(--navy-creamy-dark); margin-bottom: 0.6rem; }
+        .ongoing-project > p { color: var(--text-muted); margin-bottom: 2rem; }
+        .telemetry-strip { background: var(--navy-creamy-dark); border-radius: 10px; padding: 1.6rem 1.8rem; color: var(--text-light); }
+        .ongoing-project .btn-link { display: inline-block; margin-top: 1.6rem; color: var(--blue-accent); font-weight: 600; }
+
+        .lightbox { position: fixed; inset: 0; background: rgba(14,23,38,0.97); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .lightbox.active { opacity: 1; pointer-events: auto; }
+        .lightbox-stage { position: relative; max-width: 88vw; max-height: 72vh; display: flex; align-items: center; justify-content: center; }
+        .lightbox-stage img { max-width: 88vw; max-height: 72vh; border-radius: 6px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+        .nav-btn:hover { background: var(--blue-accent); }
+        .nav-prev { left: -70px; } .nav-next { right: -70px; }
+        .lightbox-close { position: absolute; top: 2rem; right: 2.5rem; color: #fff; font-size: 2.2rem; cursor: pointer; }
+        .lightbox-close:hover { color: var(--blue-accent); }
+        .lightbox-footer { margin-top: 1.5rem; color: #94A3B8; font-size: 0.88rem; }
+        @media (max-width: 768px) { .nav-prev { left: 0.5rem; } .nav-next { right: 0.5rem; } .nav-btn { width: 42px; height: 42px; font-size: 1rem; } }
+
+        footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; }
+        .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
+        .footer-brand { font-family: var(--font-serif); font-size: 1.8rem; color: var(--text-light); }
+        .footer-links { display: flex; gap: 3rem; flex-wrap: wrap; }
+        .footer-links div h4 { color: var(--text-light); margin-bottom: 1rem; font-size: 0.95rem; }
+        .footer-links div ul { list-style: none; }
+        .footer-links div ul li { margin-bottom: 0.6rem; }
+        .footer-links div ul li a:hover { color: var(--text-light); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="logo">
+            <img src="/assets/phi-lab-mark-reverse.svg" alt="PHI Lab Mark" class="logo-mark">
+            <span>PHI Lab</span>
+        </a>
+        <ul class="nav-links">
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger">PHI Suites <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="phi-twin.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-01</span><span class="nav-panel-copy"><h4>PHI-Twin</h4><p>Edge digital twins for landing gear &amp; structural health monitoring.</p></span></a>
+                        <a href="phi-chain.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-02</span><span class="nav-panel-copy"><h4>PHI-Chain</h4><p>Split-payload blockchain security for aviation communications.</p></span></a>
+                        <a href="phi-arc.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-03</span><span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Proprietary low-cost, high-standard engineering methodology.</p></span></a>
+                        <a href="phi-sense.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-04</span><span class="nav-panel-copy"><h4>PHI-Sense</h4><p>1,027-sensor HUMS fusion array.</p></span></a>
+                        <a href="phi-engine.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-05</span><span class="nav-panel-copy"><h4>PHI-Engine</h4><p>Rotating detonation &amp; gas turbine research.</p></span></a>
+                        <a href="phi-drone.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-06</span><span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span></a>
+                        <a href="phi-swarm.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-07</span><span class="nav-panel-copy"><h4>PHI-Swarm</h4><p>Autonomous collaborative UAV flocking &amp; distributed routing.</p></span></a>
+                        <a href="phi-ctrl.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-08</span><span class="nav-panel-copy"><h4>PHI-Ctrl</h4><p>Physics-hybrid fault-tolerant flight control, validated in JSBSim.</p></span></a>
+                        <a href="phi-spike.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-09</span><span class="nav-panel-copy"><h4>PHI-Spike</h4><p>Neuromorphic event-driven sensing &amp; ultra-low-power SNN processing.</p></span></a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="/lab.html" class="nav-trigger">The Lab</a></li>
+            <li class="nav-item"><a href="/about.html" class="nav-trigger">About</a></li>
+            <li class="nav-item"><a href="/join.html" class="nav-trigger">Join Us</a></li>
+            <li class="nav-item"><a href="/contact.html" class="nav-trigger">Contact</a></li>
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger" style="color: var(--text-muted); font-size: 0.85rem;">Services <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="/services/#dt-education" class="nav-panel-link"><span class="nav-panel-tag">01</span><span class="nav-panel-copy"><h4>Digital Twin Training</h4><p>For universities, MRO teams &amp; individuals.</p></span></a>
+                        <a href="/services/#school-apps" class="nav-panel-link"><span class="nav-panel-tag">02</span><span class="nav-panel-copy"><h4>School Apps</h4><p>Lightweight screen-share learning platforms.</p></span></a>
+                        <a href="/services/#church-hubs" class="nav-panel-link"><span class="nav-panel-tag">03</span><span class="nav-panel-copy"><h4>Church Apps</h4><p>Full digital building for your congregation.</p></span></a>
+                        <a href="/services/#lifestones" class="nav-panel-link"><span class="nav-panel-tag">04</span><span class="nav-panel-copy"><h4>Lifestones</h4><p>Autonomous sermon-intelligence &amp; verse display.</p></span></a>
+                        <a href="/services/#penelope-agents" class="nav-panel-link"><span class="nav-panel-tag">05</span><span class="nav-panel-copy"><h4>Penelope AI Agent</h4><p>Hardware-locked, private autonomous agents.</p></span></a>
+                        <a href="/services/#social-apps" class="nav-panel-link"><span class="nav-panel-tag">06</span><span class="nav-panel-copy"><h4>Social &amp; Mobile Apps</h4><p>Windows, Android, macOS, Linux — built affordably.</p></span></a>
+                        <a href="/services/#cybersecurity" class="nav-panel-link"><span class="nav-panel-tag">07</span><span class="nav-panel-copy"><h4>Security Architecture</h4><p>Predictive digital &amp; physical threat systems.</p></span></a>
+                        <a href="/services/#cryptography" class="nav-panel-link"><span class="nav-panel-tag">08</span><span class="nav-panel-copy"><h4>Financial Cryptography</h4><p>Networks that secure people's finances.</p></span></a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <button class="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </header>
+
+    <div class="mobile-drawer">
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger">PHI Suites <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="phi-twin.html"><span class="nav-panel-tag">PHI-01</span> PHI-Twin</a>
+                <a href="phi-chain.html"><span class="nav-panel-tag">PHI-02</span> PHI-Chain</a>
+                <a href="phi-arc.html"><span class="nav-panel-tag">PHI-03</span> PHI-Arc</a>
+                <a href="phi-sense.html"><span class="nav-panel-tag">PHI-04</span> PHI-Sense</a>
+                <a href="phi-engine.html"><span class="nav-panel-tag">PHI-05</span> PHI-Engine</a>
+                <a href="phi-drone.html"><span class="nav-panel-tag">PHI-06</span> PHI-Drone</a>
+                <a href="phi-swarm.html"><span class="nav-panel-tag">PHI-07</span> PHI-Swarm</a>
+                <a href="phi-ctrl.html"><span class="nav-panel-tag">PHI-08</span> PHI-Ctrl</a>
+                <a href="phi-spike.html"><span class="nav-panel-tag">PHI-09</span> PHI-Spike</a>
+            </div>
+        </div>
+        <a href="/lab.html" class="mobile-simple-link">The Lab</a>
+        <a href="/about.html" class="mobile-simple-link">About</a>
+        <a href="/join.html" class="mobile-simple-link">Join Us</a>
+        <a href="/contact.html" class="mobile-simple-link">Contact</a>
+        <div class="mobile-accordion-item">
+            <button class="mobile-accordion-trigger" style="font-size: 1rem; color: var(--text-muted);">Services <span class="caret"></span></button>
+            <div class="mobile-accordion-panel">
+                <a href="/services/#dt-education">Digital Twin Training</a>
+                <a href="/services/#school-apps">School Apps</a>
+                <a href="/services/#church-hubs">Church Apps</a>
+                <a href="/services/#lifestones">Lifestones</a>
+                <a href="/services/#penelope-agents">Penelope AI Agent</a>
+                <a href="/services/#social-apps">Social &amp; Mobile Apps</a>
+                <a href="/services/#cybersecurity">Security Architecture</a>
+                <a href="/services/#cryptography">Financial Cryptography</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="page-hero">
+        <div class="section-label">PHI-08 — FAULT-TOLERANT FLIGHT CONTROL</div>
+        <h1>Physics-hybrid fault-tolerant flight control, validated in JSBSim.</h1>
+        <p class="lede">Continuous aerodynamic physics fusion and dynamic control allocation that preserves airframe stability during severe control surface impairment or engine-out anomalies.</p>
+    </section>
+
+    <section class="suite-story">
+        <p>Traditional flight control systems rely on static lookup tables and gain-scheduled PID loops tuned for nominal flight envelopes. When an actuator jams, an aerodynamic surface shears, or asymmetric thrust occurs, conventional autopilot logic often fails to redistribute control effort fast enough to prevent departure from controlled flight.</p>
+        <p>PHI-Ctrl bridges high-fidelity rigid-body flight dynamics with rapid physics-hybrid control allocation. By coupling online parameter identification with six-degree-of-freedom aerodynamic equations of motion in the open-source <strong>JSBSim</strong> flight dynamics engine, PHI-Ctrl recalculates control authority in under 5 milliseconds and dynamically reallocates trimming and maneuvering loads to surviving surfaces.</p>
+        <p class="note">Validation benchmarks conducted across simulated high-dynamic turbulence, runaway rudder deflections, and sudden trim loss. Full simulation scripts and hardware-in-the-loop (HIL) telemetry logs available for OEM integration review.</p>
+    </section>
+
+    <section class="suite-gallery">
+        <div class="stack-label">PROTOTYPE VALIDATION IMAGERY — CLICK TO EXPAND</div>
+        <div class="deck-stack" id="deck-stack" role="button" tabindex="0" aria-label="Open prototype gallery">
+            <img class="deck-card card-3" src="../assets/placeholder-prototype.svg" alt="[MEDIA PLACEHOLDER: JSBSim 6-DOF dynamic injection telemetry]">
+            <img class="deck-card card-2" src="../assets/placeholder-prototype.svg" alt="[MEDIA PLACEHOLDER: Dynamic control surface reallocation matrix]">
+            <img class="deck-card card-1" src="../assets/placeholder-prototype.svg" alt="[MEDIA PLACEHOLDER: Actuator impairment accommodation benchmark]">
+        </div>
+    </section>
+
+    <section class="suite-video">
+        <div class="embed-frame">
+            <div class="video-placeholder-inner">
+                <i class="fas fa-play-circle"></i>
+                <h3>Simulation Telemetry Run Pending</h3>
+                <p>[VIDEO DEMO: JSBSim Hardware-In-The-Loop Flight Run Recording to be linked upon flight lab ingestion]</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="validation-cta">
+        <div class="section-label">AIRFRAME INTEGRATION</div>
+        <h2>Ready to stress-test PHI-Ctrl against your airframe flight dynamics models or simulated actuator casualty scenarios?</h2>
+        <p>Our team works directly with aerospace defense contractors and UAV manufacturers to co-simulate and validate fault-tolerant control firmware under certified flight conditions.</p>
+        <a href="/contact.html" class="btn-light">Talk to us about validation</a>
+    </section>
+
+    <section class="phi-landscape">
+      <div class="phi-landscape-inner">
+        <span class="phi-landscape-badge">Live Intelligence</span>
+        <h2>Technology Landscape</h2>
+        <p>The real-time patent and research landscape in fault-tolerant flight control and physics-informed control systems, updated continuously via Lens.org.</p>
+        <a href="https://link.lens.org/uTF21wTTLec" target="_blank" rel="noopener noreferrer" class="phi-landscape-card">
+          <div class="phi-landscape-card-content">
+            <div class="phi-landscape-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg>
+            </div>
+            <div><h3>PHI-Ctrl Technology Landscape</h3><p>Fault-tolerant flight control, dynamic control reallocation &amp; adaptive physics avionics</p></div>
+          </div>
+          <span class="phi-landscape-cta">Explore live dashboard &rarr;</span>
+        </a>
+        <p class="phi-landscape-attribution">Powered by <a href="https://www.lens.org" target="_blank" rel="noopener">Lens.org</a></p>
+      </div>
+    </section>
+
+    <section class="ongoing-project">
+        <h2>On-going: PHI-Ctrl</h2>
+        <p>This is being built in the open. The strip below reflects real progress, pulled live.</p>
+        <div class="telemetry-strip" id="phi-ctrl-telemetry"></div>
+        <a href="/join.html?project=phi-ctrl" class="btn-link">Want to help build this? Join the project &rarr;</a>
+    </section>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand" style="display:flex; align-items:center; gap:0.6rem;">
+                <img src="/assets/phi-lab-mark-reverse.svg" alt="PHI Lab Mark" style="width:28px; height:28px;">
+                <span>PHI Lab</span>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h4>PHI Suites</h4>
+                    <ul>
+                        <li><a href="phi-twin.html">PHI-Twin</a></li>
+                        <li><a href="phi-chain.html">PHI-Chain</a></li>
+                        <li><a href="phi-arc.html">PHI-Arc</a></li>
+                        <li><a href="phi-sense.html">PHI-Sense</a></li>
+                        <li><a href="phi-engine.html">PHI-Engine</a></li>
+                        <li><a href="phi-drone.html">PHI-Drone</a></li>
+                        <li><a href="phi-swarm.html">PHI-Swarm</a></li>
+                        <li><a href="phi-ctrl.html">PHI-Ctrl</a></li>
+                        <li><a href="phi-spike.html">PHI-Spike</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Organization</h4>
+                    <ul>
+                        <li><a href="/lab.html">The Lab (Kaduna)</a></li>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/join.html">Join Us</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:#94A3B8; font-size:0.85rem;">Community Services</h4>
+                    <ul>
+                        <li><a href="/services/#dt-education">Digital Twin Training</a></li>
+                        <li><a href="/services/#church-hubs">Church Apps</a></li>
+                        <li><a href="/services/#cybersecurity">Security Architecture</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 PHI Lab (Physics Hybrid Integrity Lab). All rights reserved.</p>
+            <p>Kaduna Aerospace Technologies Facility &bull; DIMASA Initiative</p>
+        </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-stage">
+            <button class="nav-btn nav-prev" onclick="galleryNav(-1)" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+            <img id="lightbox-img" src="" alt="Expanded View">
+            <button class="nav-btn nav-next" onclick="galleryNav(1)" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="lightbox-footer" id="gallery-counter">1 / 3</div>
+    </div>
+
+    <script>
+        const galleryImages = [
+            "../assets/placeholder-prototype.svg",
+            "../assets/placeholder-prototype.svg",
+            "../assets/placeholder-prototype.svg"
+        ];
+        let currentIndex = 0;
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const counter = document.getElementById('gallery-counter');
+
+        function openLightbox(index) {
+            currentIndex = index;
+            updateLightbox();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        function galleryNav(delta) {
+            currentIndex = (currentIndex + delta + galleryImages.length) % galleryImages.length;
+            updateLightbox();
+        }
+        function updateLightbox() {
+            lightboxImg.src = galleryImages[currentIndex];
+            counter.textContent = `${currentIndex + 1} / ${galleryImages.length}`;
+        }
+
+        document.getElementById('deck-stack').addEventListener('click', () => openLightbox(0));
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+        let ambientCycle = 0;
+        setInterval(() => {
+            if (lightbox.classList.contains('active')) return;
+            ambientCycle = (ambientCycle + 1) % galleryImages.length;
+            const card1 = document.querySelector('.card-1');
+            if (card1) card1.src = galleryImages[ambientCycle];
+        }, 4000);
+    </script>
+    <script src="../assets/pb-realtime.js"></script>
+    <script src="../assets/nav.js" defer></script>
+    <script src="../penelope.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof PenelopeTelemetry !== 'undefined') {
+                PenelopeTelemetry.initProjectProgress('phi-ctrl', '#phi-ctrl-telemetry');
+            }
+        });
+    </script>
+</body>
+</html>

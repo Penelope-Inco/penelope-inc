@@ -3,9 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHI-Twin | Penelope Inc.</title>
+    <title>PHI-Twin | PHI Lab</title>
     <meta name="description" content="PHI-Twin — physics-informed edge digital twin for landing gear structural health monitoring.">
-    <link rel="icon" href="../assets/penelope-logo.png" type="image/png">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="PHI-Twin | PHI Lab">
+    <meta property="og:description" content="PHI-Twin — physics-informed edge digital twin for landing gear structural health monitoring.">
+    <meta property="og:image" content="/assets/phi-lab-social-1200x630.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PHI-Twin | PHI Lab">
+    <meta name="twitter:description" content="PHI-Twin — physics-informed edge digital twin for landing gear structural health monitoring.">
+    <meta name="twitter:image" content="/assets/phi-lab-social-1200x630.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -129,7 +141,10 @@
 <body>
 
     <header>
-        <a href="/" class="logo">Penelope Inc.</a>
+        <a href="/" class="logo">
+            <img src="/assets/phi-lab-mark-reverse.svg" alt="PHI Lab Mark" class="logo-mark">
+            <span>PHI Lab</span>
+        </a>
         <ul class="nav-links">
             <li class="nav-item" data-has-panel>
                 <button class="nav-trigger">PHI Suites <span class="caret"></span></button>
@@ -141,6 +156,9 @@
                         <a href="phi-sense.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-04</span><span class="nav-panel-copy"><h4>PHI-Sense</h4><p>1,027-sensor HUMS fusion array.</p></span></a>
                         <a href="phi-engine.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-05</span><span class="nav-panel-copy"><h4>PHI-Engine</h4><p>Rotating detonation &amp; gas turbine research.</p></span></a>
                         <a href="phi-drone.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-06</span><span class="nav-panel-copy"><h4>PHI-Drone</h4><p>HIL validation for autonomous UAV trajectory &amp; failure mitigation.</p></span></a>
+                        <a href="phi-swarm.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-07</span><span class="nav-panel-copy"><h4>PHI-Swarm</h4><p>Autonomous collaborative UAV flocking &amp; distributed routing.</p></span></a>
+                        <a href="phi-ctrl.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-08</span><span class="nav-panel-copy"><h4>PHI-Ctrl</h4><p>Physics-hybrid fault-tolerant flight control, validated in JSBSim.</p></span></a>
+                        <a href="phi-spike.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-09</span><span class="nav-panel-copy"><h4>PHI-Spike</h4><p>Neuromorphic event-driven sensing &amp; ultra-low-power SNN processing.</p></span></a>
                     </div>
                 </div>
             </li>
@@ -177,6 +195,9 @@
                 <a href="phi-sense.html"><span class="nav-panel-tag">PHI-04</span> PHI-Sense</a>
                 <a href="phi-engine.html"><span class="nav-panel-tag">PHI-05</span> PHI-Engine</a>
                 <a href="phi-drone.html"><span class="nav-panel-tag">PHI-06</span> PHI-Drone</a>
+                <a href="phi-swarm.html"><span class="nav-panel-tag">PHI-07</span> PHI-Swarm</a>
+                <a href="phi-ctrl.html"><span class="nav-panel-tag">PHI-08</span> PHI-Ctrl</a>
+                <a href="phi-spike.html"><span class="nav-panel-tag">PHI-09</span> PHI-Spike</a>
             </div>
         </div>
         <a href="/lab.html" class="mobile-simple-link">The Lab</a>
@@ -259,7 +280,10 @@
 
     <footer>
         <div class="footer-top">
-            <div class="footer-brand">Penelope Inc.</div>
+            <div class="footer-brand" style="display:flex; align-items:center; gap:0.6rem;">
+                <img src="/assets/phi-lab-mark-reverse.svg" alt="PHI Lab Mark" style="width:28px; height:28px;">
+                <span>PHI Lab</span>
+            </div>
             <div class="footer-links">
                 <div>
                     <h4>PHI Suites</h4>
@@ -270,6 +294,9 @@
                         <li><a href="phi-sense.html">PHI-Sense</a></li>
                         <li><a href="phi-engine.html">PHI-Engine</a></li>
                         <li><a href="phi-drone.html">PHI-Drone</a></li>
+                        <li><a href="phi-swarm.html">PHI-Swarm</a></li>
+                        <li><a href="phi-ctrl.html">PHI-Ctrl</a></li>
+                        <li><a href="phi-spike.html">PHI-Spike</a></li>
                     </ul>
                 </div>
                 <div>
@@ -292,8 +319,8 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Penelope Inc. All rights reserved.</p>
-            <p>PHI Lab Aerospace Technologies</p>
+            <p>&copy; 2026 PHI Lab (Physics Hybrid Integrity Lab). All rights reserved.</p>
+            <p>Kaduna Aerospace Technologies Facility &bull; DIMASA Initiative</p>
         </div>
     </footer>
 
@@ -354,7 +381,7 @@
             if (card1) card1.src = galleryImages[ambientCycle];
         }, 4000);
     </script>
-    <script src="../pb-realtime.js"></script>
+    <script src="../assets/pb-realtime.js"></script>
     <script src="../assets/nav.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -363,6 +390,6 @@
             }
         });
     </script>
-    <script src="penelope.js"></script>
+    <script src="../penelope.js"></script>
 </body>
 </html>

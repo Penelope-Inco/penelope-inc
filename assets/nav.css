@@ -19,11 +19,22 @@ header {
 }
 
 .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
     font-family: var(--font-serif);
     font-size: 1.8rem;
     color: var(--text-light);
     font-weight: 400;
     letter-spacing: -0.5px;
+    text-decoration: none;
+}
+
+.logo-mark {
+    width: 32px;
+    height: 32px;
+    display: block;
+    flex-shrink: 0;
 }
 
 /* --- Top-level nav --- */
