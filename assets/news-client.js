@@ -76,11 +76,12 @@
             latestSection.style.display = 'block';
             const featured = published.find(i => i.featured) || published[0];
             const others = published.filter(i => i !== featured).slice(0, 2);
+            const hasOthers = others.length > 0;
 
             const container = latestSection.querySelector('.latest-news-dynamic-container');
             if (container) {
               container.innerHTML = `
-                <div class="latest-news-layout">
+                <div class="latest-news-layout ${hasOthers ? 'has-compact' : 'featured-only'}">
                   <a href="${featured.link}" class="latest-featured-card">
                     <div class="latest-featured-img">
                       <img src="${featured.image}" alt="${escapeHtml(featured.title)}">

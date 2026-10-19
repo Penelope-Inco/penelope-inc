@@ -114,6 +114,47 @@ body.has-announcement-bar .nav-panel {
     top: 110px;
 }
 
+@media (max-width: 768px) {
+    .phi-announcement-bar {
+        height: 36px;
+        font-size: 0.78rem;
+    }
+    body.has-announcement-bar header {
+        top: 36px;
+    }
+    body.has-announcement-bar .mobile-drawer {
+        padding-top: calc(6rem + 36px);
+    }
+    .announcement-container {
+        padding: 0 4%;
+        gap: 0.5rem;
+    }
+    .announcement-left {
+        gap: 0.5rem;
+        min-width: 0;
+    }
+    .announcement-title {
+        max-width: 200px;
+        font-size: 0.76rem;
+    }
+    .announcement-action {
+        font-size: 0.76rem;
+        white-space: nowrap;
+    }
+    .announcement-right {
+        gap: 0.7rem;
+    }
+}
+@media (max-width: 480px) {
+    .announcement-badge {
+        font-size: 0.6rem;
+        padding: 1px 5px;
+    }
+    .announcement-title {
+        max-width: 120px;
+    }
+}
+
 .logo {
     display: inline-flex;
     align-items: center;

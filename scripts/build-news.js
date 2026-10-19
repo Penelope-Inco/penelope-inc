@@ -22,6 +22,7 @@ const newsData = JSON.parse(fs.readFileSync(NEWS_FILE, 'utf8'));
 
 function renderHeader(activePage = 'news') {
   return `
+    <div id="phi-announcement-bar" class="phi-announcement-bar"></div>
     <header>
         <a href="/" class="logo">
             <img src="/assets/phi-lab-mark-reverse.svg" alt="PHI Lab Mark" class="logo-mark">
@@ -225,6 +226,9 @@ publishedItems.forEach(item => {
     <link rel="stylesheet" href="/assets/nav.css">
 
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { overflow-x: hidden; }
+        img { max-width: 100%; height: auto; }
         .news-article-wrap {
             max-width: 840px;
             margin: 0 auto;
@@ -389,6 +393,7 @@ publishedItems.forEach(item => {
     ${renderFooter()}
 
     <script src="/assets/nav.js" defer></script>
+    <script src="/assets/news-client.js" defer></script>
 </body>
 </html>`;
 
@@ -432,6 +437,10 @@ const newsIndexHtml = `<!DOCTYPE html>
     <link rel="stylesheet" href="/assets/nav.css">
 
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { overflow-x: hidden; }
+        img { max-width: 100%; height: auto; }
+        a { text-decoration: none; color: inherit; }
         .news-hero {
             padding: 8.5rem 5% 4rem;
             background: var(--navy);
@@ -527,7 +536,7 @@ const newsIndexHtml = `<!DOCTYPE html>
         }
         .news-compact-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.8rem;
             margin-top: 1.5rem;
         }
@@ -577,12 +586,60 @@ const newsIndexHtml = `<!DOCTYPE html>
             max-width: 500px;
             margin: 0 auto;
         }
-        @media (max-width: 800px) {
+        footer { font-size: 0.9rem; }
+        .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
+        .footer-links { display: flex; gap: 3rem; flex-wrap: wrap; }
+        .footer-links div h4 { color: var(--text-light); margin-bottom: 1rem; font-size: 0.95rem; }
+        .footer-links div ul { list-style: none; }
+        .footer-links div ul li { margin-bottom: 0.6rem; }
+        .footer-links div ul li a:hover { color: var(--text-light); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        @media (max-width: 960px) {
             .news-featured-card {
                 grid-template-columns: 1fr;
             }
+            .news-featured-img {
+                height: 260px;
+                min-height: auto;
+            }
             .news-featured-content {
                 padding: 1.8rem;
+            }
+            .news-featured-content h3 {
+                font-size: 1.4rem;
+            }
+            .news-compact-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            .news-hero {
+                padding: 7rem 5% 3rem;
+            }
+            .news-hero h1 {
+                font-size: clamp(1.6rem, 5vw, 2.2rem);
+            }
+            .news-feed-wrap {
+                padding: 2.5rem 5% 4rem;
+            }
+            .news-featured-img {
+                height: 190px;
+            }
+            .news-featured-content {
+                padding: 1.3rem;
+            }
+            .news-compact-card {
+                padding: 1.3rem;
+            }
+            .news-empty-state {
+                padding: 3rem 1.5rem;
+            }
+            .footer-top {
+                flex-direction: column;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 2rem;
             }
         }
     </style>
@@ -652,6 +709,7 @@ const newsIndexHtml = `<!DOCTYPE html>
     ${renderFooter()}
 
     <script src="/assets/nav.js" defer></script>
+    <script src="/assets/news-client.js" defer></script>
 </body>
 </html>`;
 

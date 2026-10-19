@@ -70,21 +70,22 @@
         }
 
         .hero-content h1 {
-            font-family: var(--font-serif);
+            font-family: var(--font-heading);
             font-size: clamp(2.5rem, 6vw, 4.8rem);
-            font-weight: 400; line-height: 1.1; margin-bottom: 1.5rem;
+            font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem;
         }
 
         .hero-content p {
-            font-size: 1.25rem; font-weight: 300; opacity: 0.9;
-            max-width: 700px; margin: 0 auto;
+            font-size: 1.25rem; font-weight: 400; opacity: 1;
+            color: #F8FAFC; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+            max-width: 720px; margin: 0 auto;
         }
 
-        .vision-strip { background-color: var(--navy-creamy-dark); color: var(--text-light); padding: 6rem 8%; }
+        .vision-strip { background-color: var(--paper); color: var(--navy); padding: 6rem 8%; }
         .vision-container { max-width: 1100px; margin: 0 auto; text-align: center; }
-        .vision-container h2 { font-family: var(--font-serif); font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 400; line-height: 1.3; margin-bottom: 3rem; }
+        .vision-container h2 { font-family: var(--font-heading); font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; line-height: 1.3; margin-bottom: 3rem; color: var(--navy); }
         .vision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; text-align: left; }
-        .vision-grid p { font-size: 1.1rem; color: #CBD5E1; line-height: 1.8; }
+        .vision-grid p { font-size: 1.1rem; color: var(--slate); line-height: 1.8; }
 
         .video-card-frame {
             width: 100%; border-radius: 8px; overflow: hidden;
@@ -112,20 +113,40 @@
         /* ─── LATEST FROM PHI LAB SECTION ─── */
         .latest-news-section { padding: 5rem 8% 4rem; max-width: 1300px; margin: 0 auto; }
         .latest-news-inner { margin: 0 auto; }
-        .latest-news-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; margin-top: 2rem; }
-        .latest-featured-card { background: #ffffff; border: 1px solid var(--border-light); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: inherit; transition: all 0.2s ease; }
+        .latest-news-layout { display: grid; grid-template-columns: 1.15fr 1fr; gap: 2rem; margin-top: 2rem; align-items: stretch; }
+        
+        /* Single Featured Card Layout (When only 1 article is published) */
+        .latest-news-layout.featured-only { grid-template-columns: 1fr; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .latest-news-layout.featured-only .latest-featured-card { display: grid; grid-template-columns: 1.1fr 1fr; }
+        .latest-news-layout.featured-only .latest-featured-img { height: 100%; min-height: 280px; }
+        
+        .latest-featured-card { background: #ffffff; border: 1px solid var(--border-light); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: inherit; transition: all 0.2s ease; height: 100%; }
         .latest-featured-card:hover { transform: translateY(-3px); border-color: var(--amber); box-shadow: 0 15px 35px rgba(15, 29, 46, 0.08); }
-        .latest-featured-img { width: 100%; height: 240px; background: var(--paper-card); overflow: hidden; }
+        .latest-featured-img { width: 100%; height: 240px; background: var(--paper-card); overflow: hidden; flex-shrink: 0; }
         .latest-featured-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .latest-featured-body { padding: 2rem; display: flex; flex-direction: column; flex-grow: 1; }
-        .latest-featured-body h3 { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.8rem; line-height: 1.25; font-family: var(--font-heading); font-weight: 800; }
+        .latest-featured-body { padding: clamp(1.4rem, 2.5vw, 2rem); display: flex; flex-direction: column; flex-grow: 1; }
+        .latest-featured-body h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); color: var(--navy); margin-bottom: 0.8rem; line-height: 1.3; font-family: var(--font-heading); font-weight: 800; }
         .latest-featured-body p { color: var(--slate); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.2rem; flex-grow: 1; }
-        .latest-compact-column { display: flex; flex-direction: column; gap: 1.5rem; }
-        .latest-compact-row { background: #ffffff; border: 1px solid var(--border-light); border-radius: 8px; padding: 1.6rem; display: flex; flex-direction: column; text-decoration: none; color: inherit; transition: all 0.2s ease; }
+        
+        .latest-compact-column { display: flex; flex-direction: column; gap: 1.4rem; justify-content: space-between; height: 100%; }
+        .latest-compact-row { background: #ffffff; border: 1px solid var(--border-light); border-radius: 8px; padding: clamp(1.2rem, 2vw, 1.6rem); display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: inherit; transition: all 0.2s ease; flex: 1; }
         .latest-compact-row:hover { transform: translateY(-2px); border-color: var(--amber); box-shadow: 0 10px 25px rgba(15, 29, 46, 0.06); }
-        .latest-compact-row h4 { font-size: 1.15rem; color: var(--navy); margin: 0.4rem 0 0.6rem; font-family: var(--font-heading); font-weight: 800; }
+        .latest-compact-row h4 { font-size: 1.15rem; color: var(--navy); margin: 0.4rem 0 0.6rem; font-family: var(--font-heading); font-weight: 800; line-height: 1.35; }
         .latest-compact-row p { color: var(--slate); font-size: 0.9rem; line-height: 1.55; margin-bottom: 0.8rem; }
-        @media (max-width: 900px) { .latest-news-layout { grid-template-columns: 1fr; } }
+        
+        /* Responsive Breakpoints: Compact Desktop, Tablet, and Mobile */
+        @media (max-width: 960px) {
+            .latest-news-layout { grid-template-columns: 1fr; gap: 1.8rem; }
+            .latest-news-layout.featured-only .latest-featured-card { display: flex; flex-direction: column; }
+            .latest-news-layout.featured-only .latest-featured-img { height: 220px; min-height: auto; }
+            .latest-featured-img { height: 220px; }
+            .latest-compact-column { gap: 1.2rem; }
+        }
+        @media (max-width: 600px) {
+            .latest-news-section { padding: 4rem 5% 3rem; }
+            .latest-featured-img { height: 180px; }
+            .latest-compact-row { padding: 1.2rem; }
+        }
 
         /* ─── ALL DIVISIONS OVERVIEW GRID ─── */
         .divisions-overview { margin-top: 5rem; padding-top: 4rem; border-top: 1px solid #E2E8F0; }
@@ -173,7 +194,7 @@
         }
         .ft-content { position: relative; z-index: 2; }
         .ft-tag { font-family: var(--font-mono); font-size: 0.75rem; color: #38bdf8; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; display: inline-block; background: rgba(56, 189, 248, 0.1); padding: 4px 12px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.2); }
-        .ft-content h2 { font-family: var(--font-serif); font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 400; margin-bottom: 1.5rem; line-height: 1.1; }
+        .ft-content h2 { font-family: var(--font-heading); font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 800; margin-bottom: 1.5rem; line-height: 1.1; }
         .ft-content p { color: #94A3B8; font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; max-width: 500px; }
         .ft-tech-stack { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2.5rem; }
         .ft-tech-pill { font-family: var(--font-mono); font-size: 0.7rem; color: #CBD5E1; padding: 4px 10px; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; background: rgba(0,0,0,0.3); }
@@ -254,7 +275,7 @@
 
         footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; }
         .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
-        .footer-brand { font-family: var(--font-serif); font-size: 1.8rem; color: var(--text-light); }
+        .footer-brand { font-family: var(--font-heading); font-size: 1.8rem; color: var(--text-light); }
         .footer-links { display: flex; gap: 3rem; flex-wrap: wrap; }
         .footer-links div h4 { color: var(--text-light); margin-bottom: 1rem; font-size: 0.95rem; }
         .footer-links div ul { list-style: none; }

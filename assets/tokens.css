@@ -64,7 +64,6 @@ h1 .light, h2 .light, h3 .light {
 .section-label,
 .program-tag,
 .nav-panel-tag,
-.metric-label,
 .div-tag,
 .hero-mission-tag,
 .meta-label,
@@ -76,6 +75,15 @@ h1 .light, h2 .light, h3 .light {
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.12em !important;
+}
+
+.metric-label {
+    font-family: var(--font-mono) !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: var(--slate) !important;
 }
 
 /* ─── Heading Accent: Amber vertical line ─── */
