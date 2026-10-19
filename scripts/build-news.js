@@ -162,8 +162,21 @@ function renderFooter() {
   `;
 }
 
-// 1. Generate Detail Pages for each item in news.json
-newsData.forEach(item => {
+// 1. Filter only published items
+const publishedItems = newsData.filter(i => i && i.published === true);
+
+// Clean up any stale/unpublished detail pages in news/
+const validHtmlFiles = new Set(publishedItems.map(i => `${i.id}.html`));
+validHtmlFiles.add('index.html');
+fs.readdirSync(NEWS_OUTPUT_DIR).forEach(file => {
+  if (file.endsWith('.html') && !validHtmlFiles.has(file)) {
+    fs.unlinkSync(path.join(NEWS_OUTPUT_DIR, file));
+    console.log(`Cleaned up unpublished page: news/${file}`);
+  }
+});
+
+// Generate Detail Pages for each published item
+publishedItems.forEach(item => {
   const partnerStripHtml = (item.partnerApproved && item.partners && item.partners.length > 0) ? `
     <div class="partner-strip">
       <div class="partner-strip-label">APPROVED COLLABORATING PARTNER</div>
@@ -385,7 +398,6 @@ newsData.forEach(item => {
 });
 
 // 2. Generate /news/index.html (News Index Page)
-const publishedItems = newsData.filter(i => i.published);
 const featuredItem = publishedItems.find(i => i.featured) || publishedItems[0];
 const otherItems = publishedItems.filter(i => i !== featuredItem);
 
