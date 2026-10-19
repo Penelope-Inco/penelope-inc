@@ -18,30 +18,19 @@
     <meta name="twitter:title" content="PHI Lab | Physics Hybrid Integrity Lab — DIMASA">
     <meta name="twitter:description" content="Pioneering DIMASA (Digital Intelligent Maintenance for Aircraft Systems in Africa) with physics-informed digital twins and edge telemetry.">
     <meta name="twitter:image" content="/assets/phi-lab-social-1200x630.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/tokens.css">
     <link rel="stylesheet" href="assets/nav.css">
 
     <style>
-        :root {
-            --bg-milky-white: #FAF9F5;
-            --bg-milky-card: #F3F0E8;
-            --navy-creamy-dark: #0E1726;
-            --navy-creamy-mid: #1E293B;
-            --blue-accent: #2563EB;
-            --text-dark: #1A1A1A;
-            --text-light: #F8FAFC;
-            --text-muted: #64748B;
-            --font-serif: 'Instrument Serif', Georgia, serif;
-            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
-        }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--bg-milky-white);
-            color: var(--text-dark);
-            font-family: var(--font-sans);
+            background-color: var(--paper);
+            color: var(--navy);
+            font-family: var(--font-body);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
@@ -114,39 +103,58 @@
         .program-card.reverse { direction: rtl; }
         .program-card.reverse .program-info, .program-card.reverse .video-card-frame { direction: ltr; }
         .program-info { padding: 1rem; }
-        .program-tag { font-size: 0.85rem; color: var(--blue-accent); font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; }
-        .program-info h3 { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 400; margin-bottom: 1rem; color: var(--navy-creamy-dark); }
-        .program-info p { font-size: 1.05rem; color: #475569; margin-bottom: 1.8rem; line-height: 1.7; }
-        .btn-link { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--blue-accent); border-bottom: 2px solid transparent; padding-bottom: 2px; transition: all 0.2s; }
-        .btn-link:hover { border-bottom-color: var(--blue-accent); }
+        .program-tag { font-family: var(--font-mono); font-size: 0.8rem; color: var(--amber); font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        .program-info h3 { font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; color: var(--navy); }
+        .program-info p { font-size: 1.05rem; color: var(--slate); margin-bottom: 1.8rem; line-height: 1.7; }
+        .btn-link { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; color: var(--navy); border-bottom: 2px solid transparent; padding-bottom: 2px; transition: all 0.2s; }
+        .btn-link:hover { border-bottom-color: var(--amber); color: var(--amber); }
+
+        /* ─── LATEST FROM PHI LAB SECTION ─── */
+        .latest-news-section { padding: 5rem 8% 4rem; max-width: 1300px; margin: 0 auto; }
+        .latest-news-inner { margin: 0 auto; }
+        .latest-news-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; margin-top: 2rem; }
+        .latest-featured-card { background: #ffffff; border: 1px solid var(--border-light); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: inherit; transition: all 0.2s ease; }
+        .latest-featured-card:hover { transform: translateY(-3px); border-color: var(--amber); box-shadow: 0 15px 35px rgba(15, 29, 46, 0.08); }
+        .latest-featured-img { width: 100%; height: 240px; background: var(--paper-card); overflow: hidden; }
+        .latest-featured-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .latest-featured-body { padding: 2rem; display: flex; flex-direction: column; flex-grow: 1; }
+        .latest-featured-body h3 { font-size: 1.5rem; color: var(--navy); margin-bottom: 0.8rem; line-height: 1.25; font-family: var(--font-heading); font-weight: 800; }
+        .latest-featured-body p { color: var(--slate); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.2rem; flex-grow: 1; }
+        .latest-compact-column { display: flex; flex-direction: column; gap: 1.5rem; }
+        .latest-compact-row { background: #ffffff; border: 1px solid var(--border-light); border-radius: 8px; padding: 1.6rem; display: flex; flex-direction: column; text-decoration: none; color: inherit; transition: all 0.2s ease; }
+        .latest-compact-row:hover { transform: translateY(-2px); border-color: var(--amber); box-shadow: 0 10px 25px rgba(15, 29, 46, 0.06); }
+        .latest-compact-row h4 { font-size: 1.15rem; color: var(--navy); margin: 0.4rem 0 0.6rem; font-family: var(--font-heading); font-weight: 800; }
+        .latest-compact-row p { color: var(--slate); font-size: 0.9rem; line-height: 1.55; margin-bottom: 0.8rem; }
+        @media (max-width: 900px) { .latest-news-layout { grid-template-columns: 1fr; } }
 
         /* ─── ALL DIVISIONS OVERVIEW GRID ─── */
         .divisions-overview { margin-top: 5rem; padding-top: 4rem; border-top: 1px solid #E2E8F0; }
         .divisions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
-        .division-card { display: flex; flex-direction: column; background: var(--bg-milky-card); border: 1px solid #E2E8F0; border-radius: 10px; padding: 1.8rem; transition: all 0.25s ease; text-decoration: none; color: inherit; }
-        .division-card:hover { transform: translateY(-3px); border-color: var(--blue-accent); box-shadow: 0 12px 28px rgba(37,99,235,0.08); }
-        .div-tag { font-family: var(--font-mono, monospace); font-size: 0.72rem; font-weight: 700; color: #E8A33D; letter-spacing: 1.5px; margin-bottom: 0.6rem; display: inline-block; }
-        .division-card h4 { font-family: var(--font-serif); font-size: 1.4rem; color: var(--navy-creamy-dark); margin-bottom: 0.5rem; }
-        .division-card p { font-size: 0.92rem; color: #475569; line-height: 1.6; margin-bottom: 1.2rem; flex-grow: 1; }
-        .div-link { font-size: 0.85rem; font-weight: 600; color: var(--blue-accent); }
+        .division-card { display: flex; flex-direction: column; background: var(--paper-card); border: 1px solid #E2E8F0; border-radius: 10px; padding: 1.8rem; transition: all 0.25s ease; text-decoration: none; color: inherit; }
+        .division-card:hover { transform: translateY(-3px); border-color: var(--amber); box-shadow: 0 12px 28px rgba(15,29,46,0.08); }
+        .div-tag { font-family: var(--font-mono, monospace); font-size: 0.72rem; font-weight: 700; color: var(--amber); letter-spacing: 1.5px; margin-bottom: 0.6rem; display: inline-block; }
+        .division-card h4 { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: var(--navy); margin-bottom: 0.5rem; }
+        .division-card p { font-size: 0.92rem; color: var(--slate); line-height: 1.6; margin-bottom: 1.2rem; flex-grow: 1; }
+        .div-link { font-size: 0.85rem; font-weight: 700; color: var(--navy); }
+        .division-card:hover .div-link { color: var(--amber); }
 
-        .metrics-section { background-color: var(--bg-milky-card); border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; padding: 5rem 8%; }
+        .metrics-section { background-color: var(--paper-card); border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; padding: 5rem 8%; }
         .metrics-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center; }
         .metric-item { position: relative; padding: 0 1rem; }
         .metric-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 15%; height: 70%; width: 1px; background-color: #CBD5E1; }
-        .metric-number { font-family: var(--font-serif); font-size: clamp(3rem, 5vw, 4.5rem); color: var(--blue-accent); line-height: 1; margin-bottom: 0.8rem; }
-        .metric-label { font-size: 0.95rem; color: var(--text-muted); max-width: 220px; margin: 0 auto; }
+        .metric-number { font-family: var(--font-heading); font-weight: 800; font-size: clamp(3rem, 5vw, 4.5rem); color: var(--navy); line-height: 1; margin-bottom: 0.8rem; }
+        .metric-label { font-size: 0.95rem; color: var(--slate); max-width: 220px; margin: 0 auto; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; }
 
         .quote-section { padding: 6rem 8%; max-width: 1000px; margin: 0 auto; text-align: center; }
-        .quote-section blockquote { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.5rem); color: var(--navy-creamy-dark); line-height: 1.3; margin-bottom: 2rem; }
-        .quote-author { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
-        .quote-role { font-size: 0.9rem; color: var(--text-muted); }
+        .quote-section blockquote { font-family: var(--font-heading); font-weight: 600; font-size: clamp(1.8rem, 3vw, 2.5rem); color: var(--navy); line-height: 1.3; margin-bottom: 2rem; }
+        .quote-author { font-weight: 700; font-size: 1rem; color: var(--navy); }
+        .quote-role { font-size: 0.9rem; color: var(--slate); }
 
         /* ─── FLEETTWIN SHOWCASE ─── */
         .fleettwin-showcase {
-            background: linear-gradient(135deg, #070B14 0%, var(--navy-creamy-dark) 100%);
+            background: linear-gradient(135deg, #070B14 0%, var(--navy) 100%);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-top: 2px solid var(--blue-accent);
+            border-top: 2px solid var(--amber);
             padding: 5rem 8%;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -196,7 +204,7 @@
 
         /* ─── LIVE LANDSCAPE (Lens.org patent dashboard embed) ─── */
         .phi-landscape {
-            background-color: var(--bg-milky-card);
+            background-color: var(--paper-card);
             padding: 4rem 8%;
             margin: 0 0 6rem 0;
             border-radius: 0;
@@ -205,43 +213,44 @@
 
         .phi-landscape-badge {
             display: inline-block;
-            background: rgba(37, 99, 235, 0.1);
-            color: var(--blue-accent);
-            font-family: var(--font-sans);
+            background: var(--navy);
+            color: var(--amber);
+            font-family: var(--font-mono);
             font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
             padding: 0.4rem 0.9rem; border-radius: 999px; margin-bottom: 1rem;
         }
 
         .phi-landscape-inner h2 {
-            font-family: var(--font-serif); font-size: 1.9rem; font-weight: 400;
-            color: var(--navy-creamy-dark); margin: 0 0 0.7rem;
+            font-family: var(--font-heading); font-size: 1.9rem; font-weight: 800;
+            color: var(--navy); margin: 0 0 0.7rem;
         }
         .phi-landscape-inner > p {
-            color: var(--text-muted); font-size: 1.02rem; line-height: 1.7; margin: 0 0 2rem;
+            color: var(--slate); font-size: 1.02rem; line-height: 1.7; margin: 0 0 2rem;
         }
 
         .phi-landscape-card {
-            display: block; background-color: var(--bg-milky-white);
+            display: block; background-color: #ffffff;
             border: 1px solid #E2E8F0; border-radius: 10px; padding: 1.6rem 1.8rem;
             text-decoration: none; color: inherit; transition: all 0.25s ease; text-align: left;
         }
         .phi-landscape-card:hover {
-            border-color: var(--blue-accent); box-shadow: 0 10px 25px rgba(37,99,235,0.12);
+            border-color: var(--amber); box-shadow: 0 10px 25px rgba(15,29,46,0.08);
             transform: translateY(-2px);
         }
         .phi-landscape-card-content { display: flex; align-items: flex-start; gap: 1.1rem; margin-bottom: 1.1rem; }
         .phi-landscape-icon {
             flex-shrink: 0; width: 46px; height: 46px; border-radius: 8px;
-            background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center;
-            color: var(--blue-accent);
+            background: var(--navy); display: flex; align-items: center; justify-content: center;
+            color: var(--amber);
         }
-        .phi-landscape-card h3 { font-family: var(--font-sans); margin: 0 0 0.3rem; font-size: 1.1rem; font-weight: 600; color: var(--navy-creamy-dark); }
-        .phi-landscape-card p { margin: 0; font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; }
-        .phi-landscape-cta { display: inline-block; font-size: 0.88rem; font-weight: 600; color: var(--blue-accent); }
+        .phi-landscape-card h3 { font-family: var(--font-heading); margin: 0 0 0.3rem; font-size: 1.1rem; font-weight: 700; color: var(--navy); }
+        .phi-landscape-card p { margin: 0; font-size: 0.92rem; color: var(--slate); line-height: 1.5; }
+        .phi-landscape-cta { display: inline-block; font-size: 0.88rem; font-weight: 700; color: var(--navy); }
+        .phi-landscape-card:hover .phi-landscape-cta { color: var(--amber); }
 
-        .phi-landscape-attribution { margin-top: 1.6rem; font-size: 0.8rem; color: var(--text-muted); }
-        .phi-landscape-attribution a { color: var(--text-muted); text-decoration: underline; }
-        .phi-landscape-attribution a:hover { color: var(--blue-accent); }
+        .phi-landscape-attribution { margin-top: 1.6rem; font-size: 0.8rem; color: var(--slate); }
+        .phi-landscape-attribution a { color: var(--slate); text-decoration: underline; }
+        .phi-landscape-attribution a:hover { color: var(--amber); }
 
         footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; }
         .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
@@ -264,6 +273,8 @@
     </style>
 </head>
 <body>
+
+    <div id="phi-announcement-bar" class="phi-announcement-bar"></div>
 
     <header>
         <a href="/" class="logo">
@@ -316,6 +327,7 @@
                 </div>
             </li>
             <li class="nav-item"><a href="lab.html" class="nav-trigger">The Lab</a></li>
+            <li class="nav-item"><a href="news/index.html" class="nav-trigger">News</a></li>
             <li class="nav-item"><a href="about.html" class="nav-trigger">About</a></li>
             <li class="nav-item"><a href="join.html" class="nav-trigger">Join Us</a></li>
             <li class="nav-item"><a href="contact.html" class="nav-trigger">Contact</a></li>
@@ -352,6 +364,7 @@
             </div>
         </div>
         <a href="lab.html" class="mobile-simple-link">The Lab</a>
+        <a href="news/index.html" class="mobile-simple-link">News</a>
         <a href="about.html" class="mobile-simple-link">About</a>
         <a href="join.html" class="mobile-simple-link">Join Us</a>
         <a href="contact.html" class="mobile-simple-link">Contact</a>
@@ -394,6 +407,29 @@
             </div>
         </div>
     </section>
+
+    <!-- ─── LATEST FROM PHI LAB (Hidden if no published items exist) ─── -->
+    <section class="latest-news-section" id="latest-news-section" style="display: none;">
+        <div class="latest-news-inner">
+            <div class="section-label">LATEST FROM PHI LAB</div>
+            <h2 class="section-title heading-accent">Dispatches, Field Trials &amp; Milestones</h2>
+            <div class="latest-news-dynamic-container">
+                <!-- Dynamically populated via assets/news-client.js -->
+            </div>
+        </div>
+    </section>
+
+    <div class="phi-arc-divider">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 28" width="160" height="28" fill="none" role="presentation" aria-hidden="true">
+          <circle cx="16" cy="18" r="3.5" fill="#5B6B7D" opacity="0.35"/>
+          <circle cx="38" cy="12" r="3.8" fill="#5B6B7D" opacity="0.55"/>
+          <circle cx="60" cy="8" r="4.2" fill="#5B6B7D" opacity="0.8"/>
+          <circle cx="80" cy="6" r="4.8" fill="#E8A33D"/>
+          <circle cx="100" cy="8" r="4.2" fill="#5B6B7D" opacity="0.8"/>
+          <circle cx="122" cy="12" r="3.8" fill="#5B6B7D" opacity="0.55"/>
+          <circle cx="144" cy="18" r="3.5" fill="#5B6B7D" opacity="0.35"/>
+        </svg>
+    </div>
 
     <section class="programs-section">
         <div class="section-label">THE PHI LAB ECOSYSTEM</div>
@@ -639,6 +675,7 @@
         });
     </script>
     <script src="assets/nav.js" defer></script>
+    <script src="assets/news-client.js" defer></script>
     <script src="penelope.js"></script>
 </body>
 </html>

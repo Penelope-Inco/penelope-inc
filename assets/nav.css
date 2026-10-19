@@ -1,31 +1,127 @@
 /* ==========================================================================
-   NAV: Mega-menu ("manifest board") reveal system
-   Desktop: hover top-level nav item -> panel drops from header
-   Mobile:  hamburger -> full-screen accordion drawer
+   NAV: Mega-menu ("manifest board") reveal system & Announcement Bar
+   PHI Lab Design Token Alignment
    ========================================================================== */
+
+/* --- Announcement Bar --- */
+.phi-announcement-bar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 38px;
+    z-index: 1005;
+    background: #0B1522;
+    border-bottom: 1px solid rgba(232, 163, 61, 0.25);
+    color: #F8FAFC;
+    font-size: 0.82rem;
+}
+.announcement-container {
+    max-width: 1300px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.announcement-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.announcement-badge {
+    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--amber, #E8A33D);
+    color: #0F1D2E;
+    padding: 2px 7px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+.announcement-title {
+    font-weight: 500;
+    color: #E2E8F0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.announcement-right {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    flex-shrink: 0;
+}
+.announcement-action {
+    font-weight: 600;
+    color: var(--amber, #E8A33D);
+    text-decoration: none;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: opacity 0.2s;
+}
+.announcement-action:hover {
+    opacity: 0.85;
+    text-decoration: underline;
+}
+.announcement-dismiss {
+    background: none;
+    border: none;
+    color: #94A3B8;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+.announcement-dismiss:hover {
+    color: #FFFFFF;
+}
 
 header {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(14, 23, 38, 0.92);
+    background: rgba(15, 29, 46, 0.94);
     backdrop-filter: blur(12px);
-    padding: 1.2rem 5%;
+    padding: 1.1rem 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: top 0.2s ease;
+}
+
+body.has-announcement-bar header {
+    top: 38px;
+}
+body.has-announcement-bar .mobile-drawer {
+    padding-top: calc(6rem + 38px);
+}
+body.has-announcement-bar .nav-panel {
+    top: 110px;
 }
 
 .logo {
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
-    font-family: var(--font-serif);
-    font-size: 1.8rem;
-    color: var(--text-light);
-    font-weight: 400;
+    font-family: var(--font-heading, 'Manrope', sans-serif);
+    font-size: 1.6rem;
+    color: var(--text-light, #F8FAFC);
+    font-weight: 800;
     letter-spacing: -0.5px;
     text-decoration: none;
 }
@@ -42,6 +138,7 @@ header {
     display: flex;
     gap: 0.5rem;
     list-style: none;
+    align-items: center;
 }
 
 .nav-item {
@@ -51,8 +148,8 @@ header {
 .nav-item > button.nav-trigger {
     background: none;
     border: none;
-    font-family: var(--font-sans);
-    color: var(--text-light);
+    font-family: var(--font-body, 'Manrope', sans-serif);
+    color: var(--text-light, #F8FAFC);
     font-size: 0.95rem;
     font-weight: 500;
     padding: 0.6rem 1rem;
@@ -61,12 +158,13 @@ header {
     align-items: center;
     gap: 0.4rem;
     border-radius: 4px;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s;
 }
 
 .nav-item > button.nav-trigger:hover,
 .nav-item.panel-open > button.nav-trigger {
     background: rgba(255, 255, 255, 0.08);
+    color: var(--amber, #E8A33D);
 }
 
 .nav-item > button.nav-trigger .caret {
@@ -85,11 +183,17 @@ header {
 }
 
 .nav-item > a.nav-trigger {
-    color: var(--text-light);
+    color: var(--text-light, #F8FAFC);
+    font-family: var(--font-body, 'Manrope', sans-serif);
     font-size: 0.95rem;
     font-weight: 500;
     padding: 0.6rem 1rem;
     display: inline-block;
+    transition: color 0.2s;
+}
+
+.nav-item > a.nav-trigger:hover {
+    color: var(--amber, #E8A33D);
 }
 
 /* --- Mega panel --- */
@@ -98,7 +202,7 @@ header {
     top: 72px;
     left: 0;
     width: 100%;
-    background: var(--navy-creamy-dark);
+    background: var(--navy, #0F1D2E);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     background-image:
         linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
@@ -140,22 +244,24 @@ header {
 }
 
 .nav-panel-tag {
-    font-family: 'Courier New', monospace;
+    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
     font-size: 0.72rem;
-    letter-spacing: 0.5px;
-    color: var(--blue-accent);
-    border: 1px solid rgba(37, 99, 235, 0.4);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--amber, #E8A33D);
+    border: 1px solid rgba(232, 163, 61, 0.35);
+    background: rgba(232, 163, 61, 0.08);
     border-radius: 3px;
-    padding: 0.15rem 0.4rem;
+    padding: 0.15rem 0.45rem;
     white-space: nowrap;
     margin-top: 0.15rem;
 }
 
 .nav-panel-copy h4 {
-    color: var(--text-light);
-    font-family: var(--font-sans);
+    color: var(--text-light, #F8FAFC);
+    font-family: var(--font-heading, 'Manrope', sans-serif);
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 0.25rem;
 }
 
@@ -182,7 +288,7 @@ header {
     left: 0;
     width: 100%;
     height: 2px;
-    background: var(--text-light);
+    background: var(--text-light, #F8FAFC);
     transition: all 0.25s ease;
 }
 
@@ -197,7 +303,7 @@ header {
 .mobile-drawer {
     position: fixed;
     inset: 0;
-    background: var(--navy-creamy-dark);
+    background: var(--navy, #0F1D2E);
     z-index: 1001;
     padding: 6rem 6% 3rem;
     overflow-y: auto;
@@ -217,10 +323,10 @@ header {
     width: 100%;
     background: none;
     border: none;
-    color: var(--text-light);
-    font-family: var(--font-sans);
+    color: var(--text-light, #F8FAFC);
+    font-family: var(--font-heading, 'Manrope', sans-serif);
     font-size: 1.15rem;
-    font-weight: 500;
+    font-weight: 600;
     padding: 1.2rem 0;
     display: flex;
     justify-content: space-between;
@@ -253,10 +359,14 @@ header {
 .mobile-simple-link {
     display: block;
     padding: 1.2rem 0;
-    color: var(--text-light);
+    color: var(--text-light, #F8FAFC);
     font-size: 1.15rem;
     font-weight: 500;
     border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: color 0.2s;
+}
+.mobile-simple-link:hover {
+    color: var(--amber, #E8A33D);
 }
 
 @media (max-width: 900px) {

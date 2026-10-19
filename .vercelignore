@@ -1,0 +1,12 @@
+# Vercel deployment ignore rules
+content/drafts/
+penelope-walls/
+PHI-LAB/
+The Lab photos/
+DT-Slides/
+phi=*/
+*.pptx
+*.txt
+*.docx
+*.pdf
+scratch/
