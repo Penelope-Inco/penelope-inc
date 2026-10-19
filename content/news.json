@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": "phi-lab-terastine",
+    "date": "2026-10-19",
+    "title": "PHI Lab and TerAstine Technology Ltd Join Forces to Advance Aircraft Maintenance AI in Africa",
+    "summary": "PHI Lab and TerAstine Technology Ltd are collaborating to scale DIMASA, bringing physics-informed digital twin research closer to Africa's maintenance hangars.",
+    "content": "<p>PHI Lab (Physics Hybrid Integrity Lab) and TerAstine Technology Ltd today announced a bilateral collaboration to advance aerospace AI research in Africa.</p><p>At the centre of the work is DIMASA, Digital Intelligent Maintenance for Aircraft Systems in Africa: PHI Lab's mission to help African maintenance, repair and overhaul (MRO) operations move from scheduled to condition-based maintenance, using physics-informed digital twins that monitor the health of aircraft components.</p><p>TerAstine Technology Ltd brings technical capability in edge compute architectures and sovereign systems engineering, complementing PHI Lab's core aerospace testbeds and fault-tolerant flight systems.</p><p>Working together under the DIMASA initiative, the two organisations will accelerate condition-based maintenance validation and scale digital twin telemetry from laboratory research directly to hangar deployments.</p><blockquote style=\"border-left: 3px solid var(--amber); padding-left: 1.2rem; margin: 1.8rem 0; font-style: italic; color: var(--navy);\"><p>&ldquo;African aviation spends millions of dollars on foreign scheduled maintenance cycles. With DIMASA, our goal is to bring physics-informed digital twin prognostics to local hangars, ensuring components are serviced based on actual operational health rather than rigid schedules. Collaborating with TerAstine accelerates that roadmap.&rdquo;</p><cite style=\"font-size: 0.88rem; color: var(--slate); font-style: normal; display: block; margin-top: 0.5rem;\">&mdash; Mohammed Bello Sani, Founder of PHI Lab</cite></blockquote><p>PHI Lab develops physics-informed digital twins for aircraft component health monitoring, from landing gear prognostics to flight control, with research and testbeds based in Kaduna, Nigeria.</p><p>Engineers, researchers, OEMs and MRO operators interested in collaborating can get in touch through <a href=\"/contact.html\" style=\"color: var(--amber); font-weight: 600;\">our contact portal</a>.</p>",
+    "image": "/assets/news/phi-lab-x-terastine.png",
+    "link": "/news/phi-lab-terastine.html",
+    "published": true,
+    "featured": true,
+    "partnerApproved": true,
+    "partners": [
+      {
+        "name": "TerAstine Technology Ltd",
+        "logo": "/assets/news/phi-lab-x-terastine.png"
+      }
+    ]
+  }
+]
