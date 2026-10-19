@@ -209,7 +209,7 @@ publishedItems.forEach(item => {
     <meta property="og:title" content="${item.title.replace(/"/g, '&quot;')} | PHI Lab">
     <meta property="og:description" content="${item.summary.replace(/"/g, '&quot;')}">
     <meta property="og:image" content="${item.image}">
-    <meta property="og:url" content="https://phi-lab.vercel.app/news/${item.id}.html">
+    <meta property="og:url" content="https://penelope-inc.vercel.app/news/${item.id}.html">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${item.title.replace(/"/g, '&quot;')} | PHI Lab">
     <meta name="twitter:description" content="${item.summary.replace(/"/g, '&quot;')}">
@@ -419,7 +419,7 @@ const newsIndexHtml = `<!DOCTYPE html>
     <meta property="og:title" content="News &amp; Dispatches | PHI Lab">
     <meta property="og:description" content="Official announcements, aerospace research milestones, and institutional dispatches from PHI Lab.">
     <meta property="og:image" content="/assets/phi-lab-social-1200x630.png">
-    <meta property="og:url" content="https://phi-lab.vercel.app/news/index.html">
+    <meta property="og:url" content="https://penelope-inc.vercel.app/news/index.html">
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- Fonts -->
@@ -670,6 +670,7 @@ if (fs.existsSync(VERCEL_JSON_PATH)) {
 }
 
 vercelConfig.cleanUrls = true;
+vercelConfig.outputDirectory = ".";
 
 fs.writeFileSync(VERCEL_JSON_PATH, JSON.stringify(vercelConfig, null, 2), 'utf8');
-console.log('Updated vercel.json with cleanUrls: true.');
+console.log('Updated vercel.json with cleanUrls: true and outputDirectory: "."');

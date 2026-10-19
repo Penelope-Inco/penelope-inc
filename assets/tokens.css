@@ -47,16 +47,16 @@ body {
 
 /* ─── Headings: Manrope 800 with light 300 for secondary words ─── */
 h1, h2, h3, h4, h5, h6,
-.section-title, .footer-brand, .hero h1 {
-    font-family: var(--font-heading);
-    font-weight: 800;
+.section-title, .footer-brand, .hero h1, .hero-content h1, .page-hero h1, .vision-container h2, .dd-title, .quiet-hero h1 {
+    font-family: var(--font-heading) !important;
+    font-weight: 800 !important;
     letter-spacing: -0.025em;
     color: inherit;
 }
 
 .heading-light,
 h1 .light, h2 .light, h3 .light {
-    font-weight: 300;
+    font-weight: 300 !important;
     opacity: 0.9;
 }
 
@@ -124,9 +124,15 @@ footer,
 .latest-news-section,
 .phi-landscape,
 .ongoing-project,
-.suite-story {
-    background-color: var(--paper);
-    color: var(--navy);
+.suite-story,
+.stand-section,
+.principles-section,
+.history-section,
+.zone-card,
+.service-block,
+.service-detail-section {
+    background-color: var(--paper) !important;
+    color: var(--navy) !important;
 }
 
 /* Video Navy Overlay for Legibility */
