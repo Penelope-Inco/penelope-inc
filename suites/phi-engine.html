@@ -19,21 +19,16 @@
     <meta name="twitter:title" content="PHI-Engine | PHI Lab">
     <meta name="twitter:description" content="PHI-Engine — rotating detonation engine CFD research and gas turbine prognostics.">
     <meta name="twitter:image" content="/assets/phi-lab-social-1200x630.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/tokens.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/nav.css">
     <link rel="stylesheet" href="../assets/design-system.css">
 
     <style>
-        :root {
-            --bg-milky-white: #FAF9F5; --bg-milky-card: #F3F0E8;
-            --navy-creamy-dark: #0E1726; --navy-creamy-mid: #1E293B;
-            --blue-accent: #2563EB; --text-dark: #1A1A1A;
-            --text-light: #F8FAFC; --text-muted: #64748B;
-            --font-serif: 'Instrument Serif', Georgia, serif;
-            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
-        }
+        /* Design tokens imported via assets/tokens.css */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-milky-white); color: var(--text-dark); font-family: var(--font-sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
         a { text-decoration: none; color: inherit; }
@@ -142,6 +137,8 @@
 </head>
 <body>
 
+    <div id="phi-announcement-bar" class="phi-announcement-bar"></div>
+
     <header>
         <a href="/" class="logo">
             <img src="/assets/phi-lab-mark-reverse.svg" alt="PHI Lab Mark" class="logo-mark">
@@ -165,6 +162,7 @@
                 </div>
             </li>
             <li class="nav-item"><a href="/lab.html" class="nav-trigger">The Lab</a></li>
+            <li class="nav-item"><a href="/news/index.html" class="nav-trigger">News</a></li>
             <li class="nav-item"><a href="/about.html" class="nav-trigger">About</a></li>
             <li class="nav-item"><a href="/join.html" class="nav-trigger">Join Us</a></li>
             <li class="nav-item"><a href="/contact.html" class="nav-trigger">Contact</a></li>
@@ -203,7 +201,8 @@
             </div>
         </div>
         <a href="/lab.html" class="mobile-simple-link">The Lab</a>
-        <a href="/about.html" class="mobile-simple-link">About</a>
+    <a href="/news/index.html" class="mobile-simple-link">News</a>
+    <a href="/about.html" class="mobile-simple-link">About</a>
         <a href="/join.html" class="mobile-simple-link">Join Us</a>
         <a href="/contact.html" class="mobile-simple-link">Contact</a>
         <div class="mobile-accordion-item">
@@ -385,6 +384,7 @@
     </script>
     <script src="../assets/pb-realtime.js"></script>
     <script src="../assets/nav.js" defer></script>
+    <script src="../assets/news-client.js" defer></script>
     <script src="../penelope.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {

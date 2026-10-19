@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 28" width="160" height="28" fill="none" role="presentation" aria-hidden="true">
+  <circle cx="16" cy="18" r="3.5" fill="#5B6B7D" opacity="0.35"/>
+  <circle cx="38" cy="12" r="3.8" fill="#5B6B7D" opacity="0.55"/>
+  <circle cx="60" cy="8" r="4.2" fill="#5B6B7D" opacity="0.8"/>
+  <circle cx="80" cy="6" r="4.8" fill="#E8A33D"/>
+  <circle cx="100" cy="8" r="4.2" fill="#5B6B7D" opacity="0.8"/>
+  <circle cx="122" cy="12" r="3.8" fill="#5B6B7D" opacity="0.55"/>
+  <circle cx="144" cy="18" r="3.5" fill="#5B6B7D" opacity="0.35"/>
+</svg>
