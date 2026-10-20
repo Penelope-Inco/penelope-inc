@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Workstation | PHI Lab</title>
+    <meta name="description" content="Download the official PHI Lab DIMASA desktop workstation for Windows, Linux, and macOS. Connected engineering environment for digital twin research, telemetry, and avionics suites.">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/assets/phi-lab-mark.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0E1726">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/tokens.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/nav.css">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-milky-white); color: var(--text-dark); font-family: var(--font-sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        a { text-decoration: none; color: inherit; }
+
+        .page-hero {
+            position: relative;
+            color: var(--text-light); padding: 11rem 8% 6rem; text-align: center;
+            background-color: #0E1726;
+            background-image: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.22) 0%, transparent 60%);
+        }
+        .page-hero h1 { font-family: var(--font-serif); font-size: clamp(2.6rem, 5.5vw, 4.2rem); font-weight: 400; line-height: 1.15; margin: 1rem 0 1.2rem; }
+        .page-hero p { font-size: 1.15rem; color: #CBD5E1; max-width: 680px; margin: 0 auto; }
+        .section-label { text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; font-weight: 700; color: #94A3B8; margin-bottom: 1rem; }
+
+        .download-container { max-width: 1200px; margin: -3rem auto 6rem; padding: 0 8%; position: relative; z-index: 5; }
+        
+        /* 3 Platform Cards Grid */
+        .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 4rem; }
+        .platform-card {
+            background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 2.2rem 1.8rem;
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.06); transition: all 0.25s ease;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .platform-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); border-color: var(--blue-accent); }
+        .platform-icon { font-size: 2.6rem; color: #0E1726; margin-bottom: 1.2rem; }
+        .platform-card h3 { font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 0.4rem; color: #0E1726; }
+        .platform-card .version-tag { font-family: var(--font-mono); font-size: 0.78rem; color: var(--blue-accent); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 1.2rem; display: block; }
+        .platform-card p { font-size: 0.9rem; color: #64748B; margin-bottom: 1.8rem; line-height: 1.6; }
+        
+        .download-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            background-color: #0E1726; color: #fff; padding: 0.85rem 1.5rem; border-radius: 6px;
+            font-weight: 600; font-size: 0.95rem; transition: background 0.2s; width: 100%;
+        }
+        .download-btn:hover { background-color: var(--blue-accent); }
+        
+        /* 3-Step Security Standard Strip */
+        .security-strip {
+            background-color: #FAF9F5; border: 1px solid #E2E8F0; border-radius: 12px; padding: 3rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04); margin-bottom: 4rem;
+        }
+        .security-strip h2 { font-family: var(--font-serif); font-size: 2.2rem; color: #0E1726; margin-bottom: 0.8rem; text-align: center; }
+        .security-strip .sub { text-align: center; color: #64748B; max-width: 650px; margin: 0 auto 2.5rem; font-size: 0.95rem; }
+        
+        .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .step-item { background: #fff; padding: 1.8rem; border-radius: 8px; border: 1px solid #E2E8F0; }
+        .step-num { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--blue-accent); margin-bottom: 0.5rem; }
+        .step-item h4 { font-size: 1.15rem; color: #0E1726; margin-bottom: 0.5rem; }
+        .step-item p { font-size: 0.88rem; color: #64748B; line-height: 1.6; }
+
+        @media (max-width: 900px) {
+            .platform-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="logo">
+            <img src="/assets/phi-lab-mark-reverse.svg" alt="PHI Lab Mark" class="logo-mark">
+            <span>PHI Lab</span>
+        </a>
+        <ul class="nav-links">
+            <li class="nav-item" data-has-panel>
+                <button class="nav-trigger">PHI Suites <span class="caret"></span></button>
+                <div class="nav-panel">
+                    <div class="nav-panel-grid">
+                        <a href="/suites/phi-twin.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-01</span><span class="nav-panel-copy"><h4>PHI-Twin</h4><p>Edge digital twins for landing gear.</p></span></a>
+                        <a href="/suites/phi-chain.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-02</span><span class="nav-panel-copy"><h4>PHI-Chain</h4><p>Blockchain security for avionics.</p></span></a>
+                        <a href="/suites/phi-arc.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-03</span><span class="nav-panel-copy"><h4>PHI-Arc</h4><p>Structural fatigue & thermomechanics.</p></span></a>
+                        <a href="/suites/phi-sense.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-04</span><span class="nav-panel-copy"><h4>PHI-Sense</h4><p>HUMS acoustic sensor arrays.</p></span></a>
+                        <a href="/suites/phi-engine.html" class="nav-panel-link"><span class="nav-panel-tag">PHI-05</span><span class="nav-panel-copy"><h4>PHI-Engine</h4><p>Rotating detonation engine test cell.</p></span></a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="/lab.html" class="nav-link">The Lab</a></li>
+            <li class="nav-item"><a href="/about.html" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="/join.html" class="nav-link">Join Us</a></li>
+            <li class="nav-item"><a href="/download.html" class="nav-link active" style="color:var(--blue-accent); font-weight:700;">Download</a></li>
+            <li class="nav-item"><a href="/contact.html" class="nav-link">Contact</a></li>
+        </ul>
+    </header>
+
+    <section class="page-hero">
+        <div class="section-label">PHI LAB CONNECTED WORKSTATION</div>
+        <h1>Download the Official Workstation</h1>
+        <p>The dedicated DIMASA engineering desktop app for research collaborators, facility engineers, and telemetry analysts. Available for Windows, Linux, and macOS.</p>
+    </section>
+
+    <div class="download-container">
+        <!-- 3 Platform Cards -->
+        <div class="platform-grid">
+            <!-- Windows Card -->
+            <div class="platform-card">
+                <div>
+                    <div class="platform-icon"><i class="fab fa-windows"></i></div>
+                    <h3>Windows</h3>
+                    <span class="version-tag">x64 Installer (.msi / .exe)</span>
+                    <p>Native 64-bit build with WebRTC hardware acceleration, offline SQLite ledger sync, and CPDC verification.</p>
+                </div>
+                <a href="https://github.com/Sm-bello/PHI-LAB/releases/latest" class="download-btn">
+                    <i class="fas fa-download"></i> Download for Windows
+                </a>
+            </div>
+
+            <!-- Linux Card -->
+            <div class="platform-card">
+                <div>
+                    <div class="platform-icon"><i class="fab fa-linux"></i></div>
+                    <h3>Linux</h3>
+                    <span class="version-tag">.deb & .AppImage (Ubuntu / Debian / Fedora)</span>
+                    <p>Sandboxed desktop runtime with native WebKitGTK and PipeWire display stream portal support.</p>
+                </div>
+                <a href="https://github.com/Sm-bello/PHI-LAB/releases/latest" class="download-btn">
+                    <i class="fas fa-download"></i> Download for Linux
+                </a>
+            </div>
+
+            <!-- macOS Card -->
+            <div class="platform-card">
+                <div>
+                    <div class="platform-icon"><i class="fab fa-apple"></i></div>
+                    <h3>macOS</h3>
+                    <span class="version-tag">Universal (.dmg) — Apple Silicon & Intel</span>
+                    <p>Optimized for macOS Sonoma and Sequoia with Metal hardware acceleration and smooth display scaling.</p>
+                </div>
+                <a href="https://github.com/Sm-bello/PHI-LAB/releases/latest" class="download-btn">
+                    <i class="fas fa-download"></i> Download for macOS
+                </a>
+            </div>
+        </div>
+
+        <!-- 3-Step Security Standard -->
+        <div class="security-strip">
+            <h2>Three-Tier Credential Standard</h2>
+            <p class="sub">To safeguard aerospace digital twin telemetry and proprietary test data, every workstation session is anchored by three cryptographic anchors:</p>
+
+            <div class="steps-grid">
+                <div class="step-item">
+                    <div class="step-num">01 / IDENTITY</div>
+                    <h4>Verified Gmail</h4>
+                    <p>Sign in with your registered corporate or personal Google account. Authenticates your session against the identity ledger.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">02 / IMMUTABLE HANDLE</div>
+                    <h4>Permanent Username</h4>
+                    <p>Established on first entry. Locked permanently to your ID so all telemetry commits and time punches remain auditable.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">03 / CLEARANCE KEY</div>
+                    <h4>CPDC Digital Card</h4>
+                    <p>An HMAC-SHA256 signed PNG credential issued by the Founder that cryptographically unlocks your assigned facility suites and rooms.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand" style="display:flex; align-items:center; gap:0.6rem;">
+                <img src="/assets/phi-lab-mark-reverse.svg" alt="PHI Lab Mark" style="width:28px; height:28px;">
+                <span>PHI Lab</span>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h4>PHI Suites</h4>
+                    <ul>
+                        <li><a href="/suites/phi-twin.html">PHI-Twin</a></li>
+                        <li><a href="/suites/phi-chain.html">PHI-Chain</a></li>
+                        <li><a href="/suites/phi-arc.html">PHI-Arc</a></li>
+                        <li><a href="/suites/phi-sense.html">PHI-Sense</a></li>
+                        <li><a href="/suites/phi-engine.html">PHI-Engine</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Organization</h4>
+                    <ul>
+                        <li><a href="/lab.html">The Lab (Kaduna)</a></li>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/join.html">Join Us</a></li>
+                        <li><a href="/download.html">Download Workstation</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 PHI Lab (Physics Hybrid Integrity Lab). All rights reserved.</p>
+            <p>DIMASA &bull; Digital Intelligent Maintenance for Aircraft Systems in Africa</p>
+        </div>
+    </footer>
+
+    <script src="assets/nav.js" defer></script>
+</body>
+</html>
