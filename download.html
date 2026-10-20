@@ -26,14 +26,41 @@
             position: relative;
             color: var(--text-light); padding: 11rem 8% 6rem; text-align: center;
             background-color: #0E1726;
-            background-image: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.22) 0%, transparent 60%);
+            background-image: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.25) 0%, transparent 60%);
         }
         .page-hero h1 { font-family: var(--font-serif); font-size: clamp(2.6rem, 5.5vw, 4.2rem); font-weight: 400; line-height: 1.15; margin: 1rem 0 1.2rem; }
         .page-hero p { font-size: 1.15rem; color: #CBD5E1; max-width: 680px; margin: 0 auto; }
         .section-label { text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; font-weight: 700; color: #94A3B8; margin-bottom: 1rem; }
 
-        .download-container { max-width: 1200px; margin: -3rem auto 6rem; padding: 0 8%; position: relative; z-index: 5; }
+        .download-container { max-width: 1200px; margin: -3.5rem auto 6rem; padding: 0 8%; position: relative; z-index: 5; }
         
+        /* Auto-detected Hero Card */
+        .detected-hero-card {
+            background: #0B1324; border: 1px solid rgba(232, 163, 61, 0.35); border-radius: 16px;
+            padding: 2.5rem 3rem; margin-bottom: 3.5rem; color: #FFFFFF;
+            box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            display: grid; grid-template-columns: 1.4fr 1fr; gap: 2.5rem; align-items: center;
+        }
+        .dh-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(232, 163, 61, 0.15); color: var(--amber);
+            border: 1px solid rgba(232, 163, 61, 0.3); font-family: var(--font-mono);
+            font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 999px;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;
+        }
+        .dh-title { font-family: var(--font-serif); font-size: 2.3rem; margin-bottom: 0.6rem; color: #FFFFFF; }
+        .dh-desc { color: #94A3B8; font-size: 0.96rem; line-height: 1.6; margin-bottom: 1rem; }
+        .dh-meta { font-family: var(--font-mono); font-size: 0.82rem; color: #CBD5E1; }
+        .dh-action-col { display: flex; flex-direction: column; gap: 0.8rem; }
+        .dh-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background: var(--amber); color: #080D1A; padding: 1.1rem 2rem; border-radius: 8px;
+            font-weight: 700; font-size: 1.05rem; transition: all 0.2s; box-shadow: 0 10px 25px rgba(232, 163, 61, 0.3);
+            text-align: center;
+        }
+        .dh-btn:hover { background: #F59E0B; transform: translateY(-2px); box-shadow: 0 15px 30px rgba(232, 163, 61, 0.4); }
+        .dh-sub-note { text-align: center; font-size: 0.82rem; color: #94A3B8; }
+
         /* 3 Platform Cards Grid */
         .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 4rem; }
         .platform-card {
@@ -53,6 +80,8 @@
             font-weight: 600; font-size: 0.95rem; transition: background 0.2s; width: 100%;
         }
         .download-btn:hover { background-color: var(--blue-accent); }
+        .secondary-dl-link { display: inline-block; font-size: 0.82rem; color: #64748B; margin-top: 0.8rem; text-decoration: underline; }
+        .secondary-dl-link:hover { color: var(--blue-accent); }
         
         /* 3-Step Security Standard Strip */
         .security-strip {
@@ -69,6 +98,7 @@
         .step-item p { font-size: 0.88rem; color: #64748B; line-height: 1.6; }
 
         @media (max-width: 900px) {
+            .detected-hero-card { grid-template-columns: 1fr; padding: 2rem; }
             .platform-grid { grid-template-columns: 1fr; }
             .steps-grid { grid-template-columns: 1fr; }
         }
@@ -97,7 +127,7 @@
             <li class="nav-item"><a href="/lab.html" class="nav-link">The Lab</a></li>
             <li class="nav-item"><a href="/about.html" class="nav-link">About</a></li>
             <li class="nav-item"><a href="/join.html" class="nav-link">Join Us</a></li>
-            <li class="nav-item"><a href="/download.html" class="nav-link active" style="color:var(--blue-accent); font-weight:700;">Download</a></li>
+            <li class="nav-item"><a href="/download.html" class="nav-link active" style="color:var(--blue-accent); font-weight:700;">Workstation</a></li>
             <li class="nav-item"><a href="/contact.html" class="nav-link">Contact</a></li>
         </ul>
     </header>
@@ -105,10 +135,26 @@
     <section class="page-hero">
         <div class="section-label">PHI LAB CONNECTED WORKSTATION</div>
         <h1>Download the Official Workstation</h1>
-        <p>The dedicated DIMASA engineering desktop app for research collaborators, facility engineers, and telemetry analysts. Available for Windows, Linux, and macOS.</p>
+        <p>The dedicated DIMASA engineering desktop app for research collaborators, facility engineers, and telemetry analysts. Seamless direct download for Windows, Linux, and macOS.</p>
     </section>
 
     <div class="download-container">
+        <!-- Auto-detected Primary Download Card -->
+        <div class="detected-hero-card" id="detected-hero">
+            <div>
+                <span class="dh-badge"><i class="fas fa-microchip"></i> Detected Operating System &bull; <span id="detected-os-name">Windows</span></span>
+                <h2 class="dh-title" id="detected-title">PHI-LAB for Windows</h2>
+                <p class="dh-desc" id="detected-desc">Complete installer with native hardware GPU acceleration, LiveKit avionics audio RMS meters, encrypted screen share, and offline-to-cloud ledger synchronization.</p>
+                <div class="dh-meta" id="detected-meta">Version v0.1.1 &bull; 64-bit Architecture &bull; Cryptographically Verified</div>
+            </div>
+            <div class="dh-action-col">
+                <a href="/api/download?os=windows" class="dh-btn" id="detected-btn">
+                    <i class="fas fa-download"></i> <span id="detected-btn-text">Download Installer</span>
+                </a>
+                <span class="dh-sub-note">Clicking immediately starts direct file download. No GitHub account required.</span>
+            </div>
+        </div>
+
         <!-- 3 Platform Cards -->
         <div class="platform-grid">
             <!-- Windows Card -->
@@ -116,12 +162,15 @@
                 <div>
                     <div class="platform-icon"><i class="fab fa-windows"></i></div>
                     <h3>Windows</h3>
-                    <span class="version-tag">x64 Installer (.msi / .exe)</span>
+                    <span class="version-tag" id="tag-win">x64 Installer (v0.1.1 &bull; 22.6 MB)</span>
                     <p>Native 64-bit build with WebRTC hardware acceleration, offline SQLite ledger sync, and CPDC verification.</p>
                 </div>
-                <a href="https://github.com/Sm-bello/PHI-LAB/releases/latest" class="download-btn">
-                    <i class="fas fa-download"></i> Download for Windows
-                </a>
+                <div>
+                    <a href="/api/download?os=windows" class="download-btn">
+                        <i class="fas fa-download"></i> Download Setup (.exe)
+                    </a>
+                    <a href="/api/download?os=windows_msi" class="secondary-dl-link">Download Enterprise (.msi &bull; 24.2 MB)</a>
+                </div>
             </div>
 
             <!-- Linux Card -->
@@ -129,12 +178,15 @@
                 <div>
                     <div class="platform-icon"><i class="fab fa-linux"></i></div>
                     <h3>Linux</h3>
-                    <span class="version-tag">.deb & .AppImage (Ubuntu / Debian / Fedora)</span>
+                    <span class="version-tag" id="tag-linux">AppImage (v0.1.1 &bull; 104.4 MB)</span>
                     <p>Sandboxed desktop runtime with native WebKitGTK and PipeWire display stream portal support.</p>
                 </div>
-                <a href="https://github.com/Sm-bello/PHI-LAB/releases/latest" class="download-btn">
-                    <i class="fas fa-download"></i> Download for Linux
-                </a>
+                <div>
+                    <a href="/api/download?os=linux" class="download-btn">
+                        <i class="fas fa-download"></i> Download AppImage
+                    </a>
+                    <a href="/api/download?os=linux_deb" class="secondary-dl-link">Download Debian/Ubuntu (.deb &bull; 24.6 MB)</a>
+                </div>
             </div>
 
             <!-- macOS Card -->
@@ -142,12 +194,15 @@
                 <div>
                     <div class="platform-icon"><i class="fab fa-apple"></i></div>
                     <h3>macOS</h3>
-                    <span class="version-tag">Universal (.dmg) — Apple Silicon & Intel</span>
+                    <span class="version-tag" id="tag-mac">Universal DMG (v0.1.1 &bull; 27.9 MB)</span>
                     <p>Optimized for macOS Sonoma and Sequoia with Metal hardware acceleration and smooth display scaling.</p>
                 </div>
-                <a href="https://github.com/Sm-bello/PHI-LAB/releases/latest" class="download-btn">
-                    <i class="fas fa-download"></i> Download for macOS
-                </a>
+                <div>
+                    <a href="/api/download?os=mac" class="download-btn">
+                        <i class="fas fa-download"></i> Download for macOS (.dmg)
+                    </a>
+                    <span class="secondary-dl-link" style="text-decoration:none;">Apple Silicon &amp; Intel</span>
+                </div>
             </div>
         </div>
 
@@ -160,7 +215,7 @@
                 <div class="step-item">
                     <div class="step-num">01 / IDENTITY</div>
                     <h4>Verified Gmail</h4>
-                    <p>Sign in with your registered corporate or personal Google account. Authenticates your session against the identity ledger.</p>
+                    <p>Sign in with your registered Google account. Authenticates your session against the identity ledger and unlocks the Lobby Waiting Room.</p>
                 </div>
                 <div class="step-item">
                     <div class="step-num">02 / IMMUTABLE HANDLE</div>
@@ -211,5 +266,51 @@
     </footer>
 
     <script src="assets/nav.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auto-detect visitor OS
+            const ua = navigator.userAgent.toLowerCase();
+            const heroCard = document.getElementById('detected-hero');
+            const osNameEl = document.getElementById('detected-os-name');
+            const titleEl = document.getElementById('detected-title');
+            const descEl = document.getElementById('detected-desc');
+            const btnEl = document.getElementById('detected-btn');
+            const btnTextEl = document.getElementById('detected-btn-text');
+
+            if (ua.includes('mac')) {
+                osNameEl.textContent = 'macOS';
+                titleEl.textContent = 'PHI-LAB for macOS';
+                descEl.textContent = 'Universal DMG with Metal hardware acceleration, high-DPI display scaling, and full avionics telemetry suites.';
+                btnEl.href = '/api/download?os=mac';
+                btnTextEl.textContent = 'Download for macOS (.dmg)';
+            } else if (ua.includes('linux')) {
+                osNameEl.textContent = 'Linux';
+                titleEl.textContent = 'PHI-LAB for Linux';
+                descEl.textContent = 'Portable AppImage and Debian packages with native WebKitGTK and PipeWire screen capture portal support.';
+                btnEl.href = '/api/download?os=linux';
+                btnTextEl.textContent = 'Download Linux AppImage';
+            } else {
+                osNameEl.textContent = 'Windows';
+                titleEl.textContent = 'PHI-LAB for Windows';
+                descEl.textContent = 'Complete installer with native hardware GPU acceleration, LiveKit avionics audio RMS meters, and offline ledger sync.';
+                btnEl.href = '/api/download?os=windows';
+                btnTextEl.textContent = 'Download for Windows (.exe)';
+            }
+
+            // Quietly fetch latest release info from serverless endpoint
+            fetch('/api/download?info=true')
+                .then(r => r.json())
+                .then(data => {
+                    if (data && data.ok) {
+                        const tag = data.tag || 'v0.1.1';
+                        const metaEl = document.getElementById('detected-meta');
+                        if (metaEl) {
+                            metaEl.textContent = `Version ${tag} • 64-bit Architecture • Cryptographically Verified`;
+                        }
+                    }
+                })
+                .catch(() => {});
+        });
+    </script>
 </body>
 </html>
