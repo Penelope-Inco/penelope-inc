@@ -703,9 +703,7 @@
                 status.style.display = 'none';
 
                 try {
-                    const options = isMultipart
-                        ? { method: 'POST', body: new FormData(form) }
-                        : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form).entries())) };
+                    const fd = new FormData(form); const jsonObj = {}; for (const [k, v] of fd.entries()) { if (v instanceof File) { jsonObj[k + '_name'] = v.name; jsonObj[k + '_size'] = v.size; } else { jsonObj[k] = v; } } if (jsonObj.full_name && !jsonObj.name) jsonObj.name = jsonObj.full_name; const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(jsonObj) };
 
                     const res = await fetch(endpoint, options);
                     const data = await res.json();

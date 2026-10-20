@@ -22,40 +22,51 @@ export default async function handler(req, res) {
   }
 
   try {
-    let name = '';
-    let email = '';
-    let suite = 'phi-twin';
-    let role = 'member';
-    let motivation = '';
+    let body = req.body;
 
-    // Handle JSON or URL-encoded payload
-    if (req.headers['content-type']?.includes('application/json')) {
-      const b = req.body || {};
-      name = b.full_name || b.name || '';
-      email = b.email || '';
-      suite = b.suite || 'phi-twin';
-      role = b.role || 'member';
-      motivation = b.motivation || b.about || b.bio || '';
-    } else {
-      // In serverless, body might be parsed as object
-      const b = req.body || {};
-      name = b.full_name || b.name || '';
-      email = b.email || '';
-      suite = b.suite || 'phi-twin';
-      role = b.role || 'member';
-      motivation = b.motivation || b.about || b.bio || '';
+    // Handle raw string body if not parsed
+    if (typeof body === 'string') {
+      try {
+        body = JSON.parse(body);
+      } catch {
+        // Parse URL-encoded or multipart boundary lines if plain text
+        body = {};
+      }
     }
 
-    if (!name || !email) {
-      return res.status(400).json({ ok: false, error: 'Full name and email are required.' });
+    body = body || {};
+
+    const name = (body.full_name || body.name || '').trim();
+    const email = (body.email || '').trim().toLowerCase();
+    const suite = body.suite || 'phi-twin';
+    const role = body.role || 'member';
+
+    const motivationParts = [
+      body.motivation,
+      body.research_history ? `Research / Proof: ${body.research_history}` : '',
+      body.location ? `Location: ${body.location}` : '',
+      body.phone_number || body.phone ? `Phone: ${body.phone_number || body.phone}` : '',
+      body.age ? `Age: ${body.age}` : '',
+      body.how_they_found_us ? `Referral: ${body.how_they_found_us}` : '',
+      body.cv_name ? `CV Attached: ${body.cv_name}` : '',
+      body.photo_name ? `Photo: ${body.photo_name}` : '',
+    ].filter(Boolean);
+
+    const motivation = motivationParts.join(' | ') || `Application for ${suite} workspace under DIMASA aerospace initiative.`;
+
+    if (!name || !email || !email.includes('@')) {
+      return res.status(400).json({
+        ok: false,
+        error: 'Please provide both your Full Name and a valid Email address.',
+      });
     }
 
     const payload = {
       name,
-      email: email.toLowerCase().trim(),
+      email,
       suite,
       role,
-      motivation: motivation || `Application for ${suite} workspace under DIMASA aerospace initiative.`,
+      motivation,
       status: 'pending',
     };
 
@@ -75,7 +86,7 @@ export default async function handler(req, res) {
       console.error('[API/Join] PocketBase error:', upstream.status, errText);
       return res.status(200).json({
         ok: false,
-        error: 'Unable to submit application to facility ledger. Please try again or email penelopeincorporated1@gmail.com.',
+        error: 'Unable to record applicant to facility ledger. Please try again or email penelopeincorporated1@gmail.com.',
       });
     }
 
