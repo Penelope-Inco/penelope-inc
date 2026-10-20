@@ -291,6 +291,84 @@
             .ft-content p { margin: 0 auto 2rem auto; }
             .ft-tech-stack { justify-content: center; }
         }
+        /* ─── CONNECTED WORKSTATION SHOWCASE ─── */
+        .workstation-section {
+            background: linear-gradient(180deg, var(--paper) 0%, #080D1A 12%, #0B1324 88%, var(--paper) 100%);
+            padding: 6rem 8%;
+            color: #F8FAFC;
+            position: relative;
+        }
+        .workstation-container { max-width: 1300px; margin: 0 auto; }
+        .ws-header { text-align: center; max-width: 780px; margin: 0 auto 3.5rem; }
+        .ws-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(232, 163, 61, 0.12); color: var(--amber);
+            border: 1px solid rgba(232, 163, 61, 0.3);
+            font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700;
+            padding: 5px 14px; border-radius: 999px; text-transform: uppercase;
+            letter-spacing: 1.5px; margin-bottom: 1.2rem;
+        }
+        .ws-header h2 {
+            font-family: var(--font-heading); font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800; color: #FFFFFF; line-height: 1.2; margin-bottom: 1rem;
+        }
+        .ws-header p { font-size: 1.1rem; color: #94A3B8; line-height: 1.7; }
+        .ws-showcase-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 3rem; align-items: stretch; }
+        .ws-features-col { display: flex; flex-direction: column; gap: 1.2rem; }
+        .ws-feat-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px; padding: 1.4rem; display: flex; gap: 1.2rem; align-items: flex-start;
+            transition: all 0.25s ease;
+        }
+        .ws-feat-card:hover {
+            background: rgba(255, 255, 255, 0.05); border-color: rgba(232, 163, 61, 0.4);
+            transform: translateY(-2px);
+        }
+        .ws-feat-icon {
+            width: 44px; height: 44px; border-radius: 8px; background: rgba(232, 163, 61, 0.1);
+            color: var(--amber); display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; flex-shrink: 0;
+        }
+        .ws-feat-card h4 { font-size: 1.05rem; font-weight: 700; color: #FFFFFF; margin-bottom: 0.35rem; }
+        .ws-feat-card p { font-size: 0.9rem; color: #94A3B8; line-height: 1.5; margin: 0; }
+        
+        .ws-download-box {
+            background: rgba(14, 23, 38, 0.85); border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px; padding: 2.2rem; backdrop-filter: blur(12px);
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); height: 100%;
+        }
+        .ws-os-tabs { display: flex; gap: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 1rem; margin-bottom: 1.8rem; }
+        .ws-tab {
+            padding: 8px 16px; border-radius: 6px; font-size: 0.88rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; color: #94A3B8; display: inline-flex; align-items: center; gap: 8px;
+            background: transparent; border: 1px solid transparent;
+        }
+        .ws-tab:hover { color: #FFFFFF; background: rgba(255, 255, 255, 0.05); }
+        .ws-tab.active { background: rgba(232, 163, 61, 0.15); color: var(--amber); border-color: rgba(232, 163, 61, 0.3); }
+        .ws-os-head { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1rem; }
+        .ws-os-icon { width: 56px; height: 56px; border-radius: 10px; background: rgba(255, 255, 255, 0.06); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #FFFFFF; }
+        .ws-os-head h3 { font-size: 1.45rem; font-weight: 700; color: #FFFFFF; margin: 0; }
+        .ws-os-meta { font-family: var(--font-mono); font-size: 0.8rem; color: #94A3B8; }
+        .ws-os-desc { color: #CBD5E1; font-size: 0.94rem; line-height: 1.6; margin-bottom: 1.8rem; }
+        .ws-primary-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background: var(--amber); color: #080D1A; padding: 1rem 2rem; border-radius: 8px;
+            font-weight: 700; font-size: 1rem; text-decoration: none; transition: all 0.2s; width: 100%;
+        }
+        .ws-primary-btn:hover { background: #F59E0B; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(232, 163, 61, 0.3); }
+        .ws-auth-note {
+            display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: #94A3B8;
+            margin-top: 1.6rem; padding-top: 1.2rem; border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .ws-auth-note a { color: var(--amber); text-decoration: underline; font-weight: 600; }
+        .ws-links-row { display: flex; justify-content: space-between; margin-top: 1.2rem; font-size: 0.85rem; }
+        .ws-sub-link { color: #94A3B8; text-decoration: none; transition: color 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .ws-sub-link:hover { color: var(--amber); }
+
+        @media (max-width: 900px) {
+            .ws-showcase-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -613,6 +691,130 @@
         </div>
     </div>
 
+    <!-- ─── CONNECTED WORKSTATION SHOWCASE ─── -->
+    <section class="workstation-section" id="workstation">
+        <div class="workstation-container">
+            <div class="ws-header">
+                <span class="ws-badge"><i class="fas fa-desktop"></i> Workstation Client &bull; v0.1.1</span>
+                <h2>The Connected Desktop for DIMASA Engineers</h2>
+                <p>Collaborate, stream telemetry, monitor structural digital twins, and join avionics flight suites with zero-leakage cryptographic clearance.</p>
+            </div>
+
+            <div class="ws-showcase-grid">
+                <!-- Left: Interactive Feature Pillars -->
+                <div class="ws-features-col">
+                    <div class="ws-feat-card">
+                        <div class="ws-feat-icon"><i class="fas fa-shield-halved"></i></div>
+                        <div>
+                            <h4>CPDC Cryptographic Clearance</h4>
+                            <p>Every engineer receives a tamper-proof digital card. Clearance is verified cryptographically before unlocking room access.</p>
+                        </div>
+                    </div>
+
+                    <div class="ws-feat-card">
+                        <div class="ws-feat-icon"><i class="fas fa-satellite-dish"></i></div>
+                        <div>
+                            <h4>Real-Time Audio & Video Stage</h4>
+                            <p>Integrated LiveKit SFU with WebRTC fallback, hardware 5-bar RMS audio level meters, and multi-monitor screen sharing.</p>
+                        </div>
+                    </div>
+
+                    <div class="ws-feat-card">
+                        <div class="ws-feat-icon"><i class="fas fa-layer-group"></i></div>
+                        <div>
+                            <h4>9 Compartmentalized Flight Suites</h4>
+                            <p>Dedicated channels for PHI-Twin, PHI-Chain, PHI-Arc, PHI-Sense, and all aerospace test divisions.</p>
+                        </div>
+                    </div>
+
+                    <div class="ws-feat-card">
+                        <div class="ws-feat-icon"><i class="fas fa-database"></i></div>
+                        <div>
+                            <h4>Offline SQLite Sync</h4>
+                            <p>Draft engineering logs, run telemetry audits offline, and automatically sync when network re-establishes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Download Matrix & OS Cards -->
+                <div class="ws-download-col">
+                    <div class="ws-download-box">
+                        <div class="ws-download-box-top">
+                            <div class="ws-os-tabs">
+                                <span class="ws-tab active" data-os="windows"><i class="fab fa-windows"></i> Windows</span>
+                                <span class="ws-tab" data-os="mac"><i class="fab fa-apple"></i> macOS</span>
+                                <span class="ws-tab" data-os="linux"><i class="fab fa-linux"></i> Linux</span>
+                            </div>
+                        </div>
+
+                        <div class="ws-download-body">
+                            <!-- Windows Panel -->
+                            <div class="ws-os-panel active" id="panel-windows">
+                                <div class="ws-os-head">
+                                    <div class="ws-os-icon"><i class="fab fa-windows"></i></div>
+                                    <div>
+                                        <h3>Windows x64</h3>
+                                        <span class="ws-os-meta">Windows 10 / 11 &bull; 64-bit Installer (.msi / .exe)</span>
+                                    </div>
+                                </div>
+                                <p class="ws-os-desc">Native Windows WebView2 runtime with DirectX GPU acceleration, hardware camera/mic access, and background sync engine.</p>
+                                <div class="ws-action-row">
+                                    <a href="https://github.com/Sm-bello/PHI-LAB/releases/latest" class="ws-primary-btn">
+                                        <i class="fas fa-download"></i> Download for Windows
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- macOS Panel -->
+                            <div class="ws-os-panel" id="panel-mac" style="display:none;">
+                                <div class="ws-os-head">
+                                    <div class="ws-os-icon"><i class="fab fa-apple"></i></div>
+                                    <div>
+                                        <h3>macOS Universal</h3>
+                                        <span class="ws-os-meta">Apple Silicon & Intel &bull; macOS 12+ (.dmg)</span>
+                                    </div>
+                                </div>
+                                <p class="ws-os-desc">Universal binary with Apple Metal acceleration, native macOS menu integration, and high-DPI Retina display scaling.</p>
+                                <div class="ws-action-row">
+                                    <a href="https://github.com/Sm-bello/PHI-LAB/releases/latest" class="ws-primary-btn">
+                                        <i class="fas fa-download"></i> Download for macOS
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Linux Panel -->
+                            <div class="ws-os-panel" id="panel-linux" style="display:none;">
+                                <div class="ws-os-head">
+                                    <div class="ws-os-icon"><i class="fab fa-linux"></i></div>
+                                    <div>
+                                        <h3>Linux x86_64</h3>
+                                        <span class="ws-os-meta">Ubuntu, Debian, Fedora &bull; .AppImage & .deb</span>
+                                    </div>
+                                </div>
+                                <p class="ws-os-desc">Sandboxed portable AppImage and native Debian package with WebKitGTK and PipeWire screen capture portal support.</p>
+                                <div class="ws-action-row">
+                                    <a href="https://github.com/Sm-bello/PHI-LAB/releases/latest" class="ws-primary-btn">
+                                        <i class="fas fa-download"></i> Download for Linux
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="ws-auth-note">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Requires a verified CPDC digital card. New candidates must first apply via <a href="join.html">Join Us</a>.</span>
+                            </div>
+
+                            <div class="ws-links-row">
+                                <a href="download.html" class="ws-sub-link"><i class="fas fa-book"></i> Installation Guide &amp; Checksums &rarr;</a>
+                                <a href="https://github.com/Sm-bello/PHI-LAB/releases" target="_blank" rel="noopener noreferrer" class="ws-sub-link"><i class="fab fa-github"></i> Release Notes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="phi-landscape">
       <div class="phi-landscape-inner">
         <span class="phi-landscape-badge">Live Intelligence</span>
@@ -696,6 +898,34 @@
                 });
             }, observerOptions);
             scrollVideos.forEach(video => videoObserver.observe(video));
+
+            // Workstation OS Tab Switcher
+            const wsTabs = document.querySelectorAll('.ws-tab');
+            const wsPanels = {
+                windows: document.getElementById('panel-windows'),
+                mac: document.getElementById('panel-mac'),
+                linux: document.getElementById('panel-linux')
+            };
+            wsTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const os = tab.getAttribute('data-os');
+                    wsTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    Object.keys(wsPanels).forEach(key => {
+                        if (wsPanels[key]) {
+                            wsPanels[key].style.display = key === os ? 'block' : 'none';
+                        }
+                    });
+                });
+            });
+
+            // Auto-detect visitor OS
+            const ua = navigator.userAgent.toLowerCase();
+            let detected = 'windows';
+            if (ua.includes('mac')) detected = 'mac';
+            else if (ua.includes('linux')) detected = 'linux';
+            const defaultTab = document.querySelector(`.ws-tab[data-os="${detected}"]`);
+            if (defaultTab) defaultTab.click();
         });
     </script>
     <script src="assets/nav.js" defer></script>
