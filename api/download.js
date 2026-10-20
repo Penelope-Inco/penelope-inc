@@ -9,7 +9,8 @@
  */
 
 const GITHUB_REPO = 'Sm-bello/PHI-LAB';
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const rawToken = process.env.GITHUB_TOKEN || '';
+const GITHUB_TOKEN = rawToken.replace(/[^\x20-\x7E]/g, '').trim();
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
