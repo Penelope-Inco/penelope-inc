@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,6 +83,195 @@
 
         .cpdc-note { background: #fff; border-left: 3px solid var(--blue-accent); padding: 1.2rem 1.5rem; margin-bottom: 2rem; font-size: 0.9rem; color: #475569; border-radius: 4px; }
 
+        html { scroll-behavior: smooth; }
+        .cpdc-skip { display: inline-block; margin-top: 0.6rem; font-weight: 600; color: var(--navy); border-bottom: 1px solid var(--amber); transition: border-color 0.2s; }
+        .cpdc-skip:hover { border-bottom-width: 2px; }
+        #panel-collaborator { scroll-margin-top: 90px; }
+
+        /* ─── PHI-LAB WORKSTATION · collaborator download zone ───
+           Lives beneath the "I want to collaborate" path only (toggled by switchPath). */
+        .wsx-section {
+            position: relative; overflow: hidden; color: var(--text-light);
+            padding: 7rem 8%;
+            background:
+                radial-gradient(1100px 520px at 12% -10%, rgba(232, 163, 61, 0.13), transparent 60%),
+                radial-gradient(900px 600px at 105% 110%, rgba(56, 189, 248, 0.07), transparent 60%),
+                linear-gradient(180deg, #0B1626 0%, #0A1322 100%);
+            scroll-margin-top: 64px;
+        }
+        .wsx-section.is-hidden { display: none; }
+        .wsx-section::before {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+            background-size: 48px 48px;
+            -webkit-mask-image: radial-gradient(ellipse at 50% 25%, #000 15%, transparent 72%);
+                    mask-image: radial-gradient(ellipse at 50% 25%, #000 15%, transparent 72%);
+        }
+        .wsx-inner { position: relative; max-width: 1200px; margin: 0 auto; }
+
+        .wsx-head { text-align: center; max-width: 760px; margin: 0 auto 3rem; }
+        .wsx-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--amber); background: var(--amber-soft); border: 1px solid rgba(232, 163, 61, 0.32);
+            padding: 6px 14px; border-radius: 999px; margin-bottom: 1.4rem;
+        }
+        .wsx-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); animation: wsxPulse 2.2s infinite; }
+        .wsx-head h2 { font-size: clamp(2.2rem, 4.6vw, 3.4rem); line-height: 1.1; color: #fff; margin-bottom: 1.1rem; }
+        .wsx-head p { color: #A7B4C6; font-size: 1.08rem; line-height: 1.7; }
+
+        /* Onboarding steps */
+        .wsx-steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 1000px; margin: 0 auto 3.5rem; }
+        .wsx-step { display: flex; gap: 0.9rem; align-items: flex-start; padding: 1.1rem 1.2rem; border-radius: 12px; background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.07); }
+        .wsx-step-num {
+            flex-shrink: 0; min-width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; color: #7C8BA0; border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+        .wsx-step h3 { font-size: 0.95rem; color: #fff; margin-bottom: 0.2rem; }
+        .wsx-step p { font-size: 0.83rem; color: #8FA0B5; line-height: 1.5; }
+        .wsx-step.is-current { border-color: rgba(232, 163, 61, 0.45); background: linear-gradient(135deg, rgba(232, 163, 61, 0.10), rgba(232, 163, 61, 0.02)); }
+        .wsx-step.is-current .wsx-step-num { background: var(--amber); border-color: var(--amber); color: #0B1626; }
+
+        .wsx-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 2rem; align-items: stretch; }
+
+        /* Decorative app preview */
+        .wsx-window {
+            display: flex; flex-direction: column; border-radius: 14px; overflow: hidden;
+            background: #0D1828; border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.75);
+        }
+        .wsx-titlebar { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 1rem; background: #0A1322; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+        .wsx-dots { display: flex; gap: 6px; }
+        .wsx-dots i { display: block; width: 10px; height: 10px; border-radius: 50%; opacity: 0.85; }
+        .wsx-dots i:nth-child(1) { background: #F87171; }
+        .wsx-dots i:nth-child(2) { background: #FBBF24; }
+        .wsx-dots i:nth-child(3) { background: #34D399; }
+        .wsx-wtitle { flex: 1; text-align: center; font-family: var(--font-mono); font-size: 0.72rem; color: #7C8BA0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .wsx-live { display: flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; color: #F87171; }
+        .wsx-live::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #F87171; animation: wsxBlink 1.4s infinite; }
+        .wsx-app { display: grid; grid-template-columns: 170px 1fr; flex: 1; }
+        .wsx-side { display: flex; flex-direction: column; gap: 3px; padding: 1rem 0.7rem; background: #0B1524; border-right: 1px solid rgba(255, 255, 255, 0.06); }
+        .wsx-side-label { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: #5E6F86; padding: 0 0.5rem 0.5rem; }
+        .wsx-room { display: flex; align-items: center; gap: 8px; padding: 0.45rem 0.5rem; border-radius: 6px; font-size: 0.78rem; color: #94A3B8; }
+        .wsx-room b { font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; color: #5E6F86; }
+        .wsx-room.active { background: rgba(232, 163, 61, 0.12); color: #fff; }
+        .wsx-room.active b { color: var(--amber); }
+        .wsx-room .n { margin-left: auto; padding: 0 6px; border-radius: 999px; background: var(--amber); color: #0B1626; font-size: 0.6rem; font-weight: 700; }
+        .wsx-room.more { color: #5E6F86; font-size: 0.72rem; }
+        .wsx-main { display: flex; flex-direction: column; gap: 0.8rem; padding: 1rem; }
+        .wsx-stage { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+        .wsx-tile {
+            position: relative; aspect-ratio: 16 / 10; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(160deg, #16263B, #0F1D2E); border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .wsx-tile.speaking { border-color: rgba(232, 163, 61, 0.7); box-shadow: 0 0 0 3px rgba(232, 163, 61, 0.12); }
+        .wsx-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.08); color: #CBD5E1; font-size: 0.72rem; font-weight: 700; }
+        .wsx-tile-name { position: absolute; left: 6px; bottom: 6px; padding: 1px 6px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); font-size: 0.6rem; color: #CBD5E1; }
+        .wsx-meter { position: absolute; right: 7px; bottom: 7px; display: flex; gap: 2px; align-items: flex-end; height: 12px; }
+        .wsx-meter i { display: block; width: 3px; border-radius: 1px; background: #3B4B61; transform-origin: bottom; }
+        .wsx-meter i:nth-child(1) { height: 35%; } .wsx-meter i:nth-child(2) { height: 60%; } .wsx-meter i:nth-child(3) { height: 100%; }
+        .wsx-meter i:nth-child(4) { height: 70%; } .wsx-meter i:nth-child(5) { height: 45%; }
+        .wsx-tile.speaking .wsx-meter i { background: var(--amber); animation: wsxMeter 0.8s ease-in-out infinite alternate; }
+        .wsx-tile.speaking .wsx-meter i:nth-child(2) { animation-delay: -0.2s; }
+        .wsx-tile.speaking .wsx-meter i:nth-child(3) { animation-delay: -0.5s; }
+        .wsx-tile.speaking .wsx-meter i:nth-child(4) { animation-delay: -0.1s; }
+        .wsx-tile.speaking .wsx-meter i:nth-child(5) { animation-delay: -0.35s; }
+        .wsx-chart { flex: 1; display: flex; flex-direction: column; min-height: 140px; padding: 0.75rem 0.9rem; border-radius: 8px; background: #0B1524; border: 1px solid rgba(255, 255, 255, 0.06); }
+        .wsx-chart-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.06em; text-transform: uppercase; color: #7C8BA0; }
+        .wsx-chart-head strong { color: #fff; font-size: 0.9rem; letter-spacing: 0; }
+        .wsx-chart svg { width: 100%; flex: 1; margin-top: 0.4rem; }
+        .wsx-line { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 700; stroke-dashoffset: 0; }
+        .wsx-line.a { stroke: var(--amber); }
+        .wsx-line.b { stroke: #38BDF8; opacity: 0.65; }
+        .wsx-armed .wsx-line { stroke-dashoffset: 700; }
+        .wsx-armed.is-visible .wsx-line { animation: wsxDraw 2.6s ease-out forwards; }
+        .wsx-armed.is-visible .wsx-line.b { animation-delay: 0.35s; }
+        .wsx-statusbar { display: flex; flex-wrap: wrap; gap: 1rem; font-family: var(--font-mono); font-size: 0.64rem; color: #7C8BA0; }
+        .wsx-statusbar span { display: inline-flex; align-items: center; gap: 5px; }
+        .wsx-statusbar .ok { color: #34D399; }
+
+        /* Download card */
+        .wsx-card {
+            display: flex; flex-direction: column; padding: 1.8rem; border-radius: 16px; border: 1px solid transparent;
+            background:
+                linear-gradient(180deg, #111F33, #0D1828) padding-box,
+                linear-gradient(150deg, rgba(232, 163, 61, 0.65), rgba(255, 255, 255, 0.08) 35%, rgba(255, 255, 255, 0.04)) border-box;
+            box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.75);
+        }
+        .wsx-card-label { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: #6F8099; margin-bottom: 0.7rem; }
+        .wsx-os-switch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; margin-bottom: 1.6rem; border-radius: 10px; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.06); }
+        .wsx-os-btn {
+            appearance: none; border: 0; background: transparent; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0.6rem 0.4rem; border-radius: 7px;
+            font-family: var(--font-sans); font-size: 0.85rem; font-weight: 600; color: #8FA0B5; transition: background 0.2s, color 0.2s;
+        }
+        .wsx-os-btn:hover { color: #fff; }
+        .wsx-os-btn[aria-selected="true"] { background: rgba(255, 255, 255, 0.08); color: #fff; box-shadow: inset 0 0 0 1px rgba(232, 163, 61, 0.35); }
+        .wsx-os-btn[aria-selected="true"] i { color: var(--amber); }
+        .wsx-os-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.9rem; }
+        .wsx-os-icon {
+            flex-shrink: 0; width: 54px; height: 54px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.7rem; color: #fff; background: linear-gradient(145deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02)); border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .wsx-os-head h3 { font-size: 1.35rem; line-height: 1.2; color: #fff; }
+        .wsx-os-meta { font-family: var(--font-mono); font-size: 0.72rem; color: #8FA0B5; }
+        .wsx-os-desc { margin-bottom: 1.4rem; font-size: 0.9rem; line-height: 1.6; color: #B6C2D2; }
+        .wsx-dl-btn {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; padding: 1rem 1.2rem; border-radius: 10px;
+            background: var(--amber); color: #0B1626; font-weight: 700; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+        .wsx-dl-btn:hover { background: #F0B252; transform: translateY(-2px); box-shadow: 0 14px 30px -10px rgba(232, 163, 61, 0.55); }
+        .wsx-dl-btn .lbl { display: inline-flex; align-items: center; gap: 10px; }
+        .wsx-dl-btn .size { padding: 3px 8px; border-radius: 6px; background: rgba(11, 22, 38, 0.12); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+        .wsx-dl-btn.is-disabled { background: rgba(255, 255, 255, 0.07); color: #8FA0B5; pointer-events: none; box-shadow: none; transform: none; }
+        .wsx-alt { display: inline-flex; align-items: center; gap: 6px; margin-top: 0.8rem; font-size: 0.82rem; color: #A7B4C6; transition: color 0.2s; }
+        .wsx-alt:hover { color: var(--amber); }
+        .wsx-alt[hidden] { display: none; }
+        .wsx-specs { list-style: none; margin-top: 1.4rem; border-top: 1px solid rgba(255, 255, 255, 0.07); }
+        .wsx-specs li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.82rem; }
+        .wsx-specs span:first-child { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: #6F8099; }
+        .wsx-specs span:last-child { color: #D5DEEA; text-align: right; }
+        .wsx-cpdc-wrap { display: flex; flex-direction: column; flex: 1; justify-content: flex-end; margin-top: 1.4rem; }
+        .wsx-cpdc { display: flex; gap: 0.7rem; align-items: flex-start; padding: 0.9rem 1rem; border-radius: 10px; background: rgba(232, 163, 61, 0.07); border: 1px solid rgba(232, 163, 61, 0.18); font-size: 0.8rem; line-height: 1.5; color: #C9D3E0; }
+        .wsx-cpdc i { margin-top: 3px; color: var(--amber); }
+        .wsx-cpdc a { color: var(--amber); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+        .wsx-links { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; font-size: 0.8rem; }
+        .wsx-links a { display: inline-flex; align-items: center; gap: 6px; color: #8FA0B5; transition: color 0.2s; }
+        .wsx-links a:hover { color: #fff; }
+
+        /* Feature pillars */
+        .wsx-features { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
+        .wsx-feat { padding: 1.3rem; border-radius: 12px; background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.07); transition: border-color 0.25s, transform 0.25s, background 0.25s; }
+        .wsx-feat:hover { border-color: rgba(232, 163, 61, 0.4); background: rgba(255, 255, 255, 0.04); transform: translateY(-3px); }
+        .wsx-feat-icon { width: 38px; height: 38px; margin-bottom: 0.9rem; border-radius: 9px; display: flex; align-items: center; justify-content: center; background: var(--amber-soft); color: var(--amber); }
+        .wsx-feat h3 { font-size: 0.95rem; color: #fff; margin-bottom: 0.35rem; }
+        .wsx-feat p { font-size: 0.82rem; line-height: 1.55; color: #8FA0B5; }
+
+        /* Scroll reveal (armed only once JS runs, so content never hides without JS) */
+        .wsx-armed .wsx-reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .wsx-armed.is-visible .wsx-reveal { opacity: 1; transform: none; }
+        .wsx-armed.is-visible .wsx-grid > .wsx-reveal:nth-child(2) { transition-delay: 0.1s; }
+
+        @keyframes wsxPulse { 0% { box-shadow: 0 0 0 0 rgba(232, 163, 61, 0.55); } 70% { box-shadow: 0 0 0 8px rgba(232, 163, 61, 0); } 100% { box-shadow: 0 0 0 0 rgba(232, 163, 61, 0); } }
+        @keyframes wsxBlink { 50% { opacity: 0.25; } }
+        @keyframes wsxMeter { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
+        @keyframes wsxDraw { to { stroke-dashoffset: 0; } }
+
+        @media (max-width: 1024px) {
+            .wsx-grid { grid-template-columns: 1fr; }
+            .wsx-card { order: -1; }
+            .wsx-features { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 700px) {
+            .wsx-section { padding: 5rem 6%; }
+            .wsx-steps, .wsx-features { grid-template-columns: 1fr; }
+            .wsx-app { grid-template-columns: 1fr; }
+            .wsx-side { display: none; }
+            .wsx-card { padding: 1.4rem; }
+        }
+
         footer { background-color: #070C14; color: #94A3B8; padding: 4rem 8% 2rem 8%; font-size: 0.9rem; }
         .footer-top { display: flex; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
         .footer-brand { font-family: var(--font-serif); font-size: 1.8rem; color: var(--text-light); }
@@ -130,6 +319,7 @@
             <li class="nav-item"><a href="/about.html" class="nav-trigger">About</a></li>
             <li class="nav-item"><a href="/join.html" class="nav-trigger" style="color:#fff;">Join Us</a></li>
             <li class="nav-item"><a href="/contact.html" class="nav-trigger">Contact</a></li>
+            <li class="nav-item"><a href="#workstation" class="nav-trigger" style="color: var(--amber); font-weight: 700;" onclick="switchPath('collaborator')">Workstation</a></li>
             <li class="nav-item" data-has-panel>
                 <button class="nav-trigger" style="color: var(--text-muted); font-size: 0.85rem;">Services <span class="caret"></span></button>
                 <div class="nav-panel">
@@ -169,6 +359,7 @@
     <a href="/about.html" class="mobile-simple-link">About</a>
         <a href="/join.html" class="mobile-simple-link">Join Us</a>
         <a href="/contact.html" class="mobile-simple-link">Contact</a>
+        <a href="#workstation" class="mobile-simple-link" style="color: var(--amber); font-weight: 700;" onclick="switchPath('collaborator'); document.querySelector('.mobile-drawer').classList.remove('open');">Workstation App</a>
         <div class="mobile-accordion-item">
             <button class="mobile-accordion-trigger" style="font-size: 1rem; color: var(--text-muted);">Services <span class="caret"></span></button>
             <div class="mobile-accordion-panel">
@@ -214,6 +405,7 @@
         </div>
         <div class="cpdc-note">
             <i class="fas fa-info-circle"></i> No usernames or passwords for internal teams — we issue a signed CPDC file instead. Accepted applicants get it emailed automatically once reviewed.
+            <br><a href="#workstation" class="cpdc-skip">Already hold a CPDC? Download the Workstation &darr;</a>
         </div>
         <div class="form-card">
             <form id="collaborator-form">
@@ -300,6 +492,148 @@
         </div>
     </div>
 
+    <!-- ─── PHI-LAB WORKSTATION · shown only beneath the collaborator path ─── -->
+    <section class="wsx-section" id="workstation" aria-labelledby="wsx-title">
+        <div class="wsx-inner">
+            <header class="wsx-head wsx-reveal">
+                <span class="wsx-badge"><span class="dot"></span> PHI-LAB Workstation &bull; <span id="wsx-version">v0.1.1</span></span>
+                <h2 id="wsx-title">Your desk <span class="light">inside the lab.</span></h2>
+                <p>The connected desktop for DIMASA engineers — collaborate live, stream telemetry, monitor structural digital twins and work inside compartmentalised flight suites, all behind cryptographic clearance.</p>
+            </header>
+
+            <ol class="wsx-steps wsx-reveal" aria-label="How to get access">
+                <li class="wsx-step">
+                    <span class="wsx-step-num">01</span>
+                    <div><h3>Submit your dossier</h3><p>Use the form above. Every application gets an architectural review.</p></div>
+                </li>
+                <li class="wsx-step">
+                    <span class="wsx-step-num">02</span>
+                    <div><h3>Receive your CPDC</h3><p>Accepted engineers get a signed digital card by email.</p></div>
+                </li>
+                <li class="wsx-step is-current">
+                    <span class="wsx-step-num">03</span>
+                    <div><h3>Install &amp; sign in</h3><p>Download the Workstation below and load your CPDC to unlock your suites.</p></div>
+                </li>
+            </ol>
+
+            <div class="wsx-grid">
+                <!-- Decorative product preview -->
+                <div class="wsx-window wsx-reveal" aria-hidden="true">
+                    <div class="wsx-titlebar">
+                        <span class="wsx-dots"><i></i><i></i><i></i></span>
+                        <span class="wsx-wtitle">PHI-LAB Workstation — PHI-Twin · Landing Gear Rig</span>
+                        <span class="wsx-live">LIVE</span>
+                    </div>
+                    <div class="wsx-app">
+                        <div class="wsx-side">
+                            <span class="wsx-side-label">Flight Suites</span>
+                            <span class="wsx-room active"><b>01</b> PHI-Twin <span class="n">3</span></span>
+                            <span class="wsx-room"><b>02</b> PHI-Chain</span>
+                            <span class="wsx-room"><b>03</b> PHI-Arc</span>
+                            <span class="wsx-room"><b>04</b> PHI-Sense</span>
+                            <span class="wsx-room"><b>06</b> PHI-Drone</span>
+                            <span class="wsx-room"><b>08</b> PHI-Ctrl</span>
+                            <span class="wsx-room more">+ 3 more suites</span>
+                        </div>
+                        <div class="wsx-main">
+                            <div class="wsx-stage">
+                                <div class="wsx-tile speaking"><span class="wsx-avatar">ST</span><span class="wsx-tile-name">Structures</span><span class="wsx-meter"><i></i><i></i><i></i><i></i><i></i></span></div>
+                                <div class="wsx-tile"><span class="wsx-avatar">AV</span><span class="wsx-tile-name">Avionics</span><span class="wsx-meter"><i></i><i></i><i></i><i></i><i></i></span></div>
+                                <div class="wsx-tile"><span class="wsx-avatar">TL</span><span class="wsx-tile-name">Telemetry</span><span class="wsx-meter"><i></i><i></i><i></i><i></i><i></i></span></div>
+                            </div>
+                            <div class="wsx-chart">
+                                <div class="wsx-chart-head"><span>Strut load · Gear L / R</span><strong>4.82 kN</strong></div>
+                                <svg viewBox="0 0 300 90" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="wsxFill" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#E8A33D" stop-opacity="0.22"/>
+                                            <stop offset="100%" stop-color="#E8A33D" stop-opacity="0"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M0,62 L20,58 L40,60 L60,48 L80,52 L100,40 L120,44 L140,30 L160,36 L180,26 L200,34 L220,22 L240,28 L260,18 L280,24 L300,16 L300,90 L0,90 Z" fill="url(#wsxFill)"/>
+                                    <path class="wsx-line a" d="M0,62 L20,58 L40,60 L60,48 L80,52 L100,40 L120,44 L140,30 L160,36 L180,26 L200,34 L220,22 L240,28 L260,18 L280,24 L300,16"/>
+                                    <path class="wsx-line b" d="M0,70 L20,68 L40,72 L60,64 L80,66 L100,58 L120,62 L140,52 L160,56 L180,48 L200,54 L220,46 L240,50 L260,42 L280,46 L300,40"/>
+                                </svg>
+                            </div>
+                            <div class="wsx-statusbar">
+                                <span class="ok"><i class="fas fa-shield-halved"></i> CPDC verified</span>
+                                <span><i class="fas fa-database"></i> Synced · local ledger</span>
+                                <span><i class="fas fa-signal"></i> LiveKit 18 ms</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download card -->
+                <div class="wsx-card wsx-reveal">
+                    <span class="wsx-card-label" id="wsx-os-label">Choose your platform</span>
+                    <div class="wsx-os-switch" role="tablist" aria-labelledby="wsx-os-label">
+                        <button class="wsx-os-btn" type="button" role="tab" id="wsx-tab-windows" data-os="windows" aria-selected="true" aria-controls="wsx-os-panel"><i class="fab fa-windows"></i> Windows</button>
+                        <button class="wsx-os-btn" type="button" role="tab" id="wsx-tab-mac" data-os="mac" aria-selected="false" aria-controls="wsx-os-panel" tabindex="-1"><i class="fab fa-apple"></i> macOS</button>
+                        <button class="wsx-os-btn" type="button" role="tab" id="wsx-tab-linux" data-os="linux" aria-selected="false" aria-controls="wsx-os-panel" tabindex="-1"><i class="fab fa-linux"></i> Linux</button>
+                    </div>
+
+                    <div id="wsx-os-panel" role="tabpanel" aria-labelledby="wsx-tab-windows" aria-live="polite">
+                        <div class="wsx-os-head">
+                            <div class="wsx-os-icon" id="wsx-os-icon"><i class="fab fa-windows"></i></div>
+                            <div>
+                                <h3 id="wsx-os-title">Windows x64</h3>
+                                <span class="wsx-os-meta" id="wsx-os-meta">Windows 10 / 11 &bull; 64-bit installer</span>
+                            </div>
+                        </div>
+                        <p class="wsx-os-desc" id="wsx-os-desc">Native WebView2 runtime with DirectX GPU acceleration, hardware camera &amp; mic access, and a background sync engine.</p>
+
+                        <a href="/api/download?os=windows" class="wsx-dl-btn" id="wsx-dl">
+                            <span class="lbl"><i class="fas fa-download"></i> <span id="wsx-dl-label">Download for Windows</span></span>
+                            <span class="size" id="wsx-dl-size">22.6 MB</span>
+                        </a>
+                        <a href="/api/download?os=windows_msi" class="wsx-alt" id="wsx-alt"><i class="fas fa-box-archive"></i> <span id="wsx-alt-label">Enterprise installer (.msi &bull; 24.2 MB)</span></a>
+
+                        <ul class="wsx-specs" id="wsx-specs">
+                            <li><span>Format</span><span>.exe installer</span></li>
+                            <li><span>Runtime</span><span>WebView2 &bull; DirectX</span></li>
+                            <li><span>Hardware</span><span>Camera &amp; mic access</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="wsx-cpdc-wrap">
+                        <div class="wsx-cpdc">
+                            <i class="fas fa-id-card"></i>
+                            <span>Sign-in requires a verified CPDC digital card. Don't have one yet? <a href="#panel-collaborator">Submit your dossier</a> first.</span>
+                        </div>
+                        <div class="wsx-links">
+                            <a href="/download.html"><i class="fas fa-book"></i> Installation guide &amp; checksums</a>
+                            <a href="https://github.com/Sm-bello/PHI-LAB/releases" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Release notes</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="wsx-features wsx-reveal">
+                <li class="wsx-feat">
+                    <div class="wsx-feat-icon"><i class="fas fa-shield-halved"></i></div>
+                    <h3>CPDC Clearance</h3>
+                    <p>A tamper-proof digital card, verified cryptographically before any room unlocks.</p>
+                </li>
+                <li class="wsx-feat">
+                    <div class="wsx-feat-icon"><i class="fas fa-satellite-dish"></i></div>
+                    <h3>Live Audio &amp; Video Stage</h3>
+                    <p>LiveKit SFU with WebRTC fallback, RMS level meters and multi-monitor screen share.</p>
+                </li>
+                <li class="wsx-feat">
+                    <div class="wsx-feat-icon"><i class="fas fa-layer-group"></i></div>
+                    <h3>9 Flight Suites</h3>
+                    <p>Compartmentalised channels for PHI-Twin, PHI-Chain, PHI-Arc, PHI-Sense and more.</p>
+                </li>
+                <li class="wsx-feat">
+                    <div class="wsx-feat-icon"><i class="fas fa-database"></i></div>
+                    <h3>Offline-First Sync</h3>
+                    <p>Draft logs and run telemetry audits offline; everything syncs when you reconnect.</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
     <footer>
         <div class="footer-top">
             <div class="footer-brand" style="display:flex; align-items:center; gap:0.6rem;">
@@ -328,6 +662,7 @@
                         <li><a href="/about.html">About Us</a></li>
                         <li><a href="/join.html">Join Us</a></li>
                         <li><a href="/contact.html">Contact Us</a></li>
+                        <li><a href="#workstation" onclick="switchPath('collaborator')">Workstation App</a></li>
                     </ul>
                 </div>
                 <div>
@@ -350,6 +685,9 @@
         function switchPath(path) {
             document.querySelectorAll('.path-tab').forEach(t => t.classList.toggle('active', t.dataset.path === path));
             document.querySelectorAll('.path-panel').forEach(p => p.classList.toggle('active', p.id === `panel-${path}`));
+            // The Workstation download zone belongs to the collaborator journey only
+            const ws = document.getElementById('workstation');
+            if (ws) ws.classList.toggle('is-hidden', path !== 'collaborator');
         }
 
         // Shared submit handler for all three forms — swaps endpoint + payload shape per path
@@ -400,6 +738,142 @@
         wireForm('collaborator-form', 'collaborator-status', '/api/join', true);
         wireForm('learn-form', 'learn-status', '/api/waitlist', false);
         wireForm('tour-form', 'tour-status', '/api/tour-request', false);
+
+        // ─── PHI-LAB Workstation download zone ───
+        (function initWorkstation() {
+            const section = document.getElementById('workstation');
+            if (!section) return;
+
+            // Single source of truth per platform; `keys` mirror /api/download?info=true asset names (first match wins)
+            const PLATFORMS = {
+                windows: {
+                    icon: 'fab fa-windows', title: 'Windows x64', meta: 'Windows 10 / 11 • 64-bit installer',
+                    desc: 'Native WebView2 runtime with DirectX GPU acceleration, hardware camera & mic access, and a background sync engine.',
+                    href: '/api/download?os=windows', label: 'Download for Windows', keys: ['windows', 'windows_msi'], size: '22.6 MB',
+                    alt: { href: '/api/download?os=windows_msi', label: 'Enterprise installer (.msi', key: 'windows_msi', size: '24.2 MB' },
+                    specs: [['Format', '.exe installer'], ['Runtime', 'WebView2 • DirectX'], ['Hardware', 'Camera & mic access']]
+                },
+                mac: {
+                    icon: 'fab fa-apple', title: 'macOS Universal', meta: 'Apple Silicon & Intel • macOS 12+',
+                    desc: 'Universal binary with Apple Metal acceleration, native menu-bar integration and high-DPI Retina scaling.',
+                    href: '/api/download?os=mac', label: 'Download for macOS', keys: ['mac'], size: '27.9 MB',
+                    alt: null,
+                    specs: [['Format', '.dmg universal'], ['Runtime', 'Apple Metal'], ['Display', 'Retina high-DPI']]
+                },
+                linux: {
+                    icon: 'fab fa-linux', title: 'Linux x86_64', meta: 'Ubuntu • Debian • Fedora',
+                    desc: 'Sandboxed portable AppImage plus a native Debian package, with WebKitGTK and PipeWire screen-capture portal support.',
+                    href: '/api/download?os=linux', label: 'Download for Linux', keys: ['linux', 'linux_deb'], size: '104.4 MB',
+                    alt: { href: '/api/download?os=linux_deb', label: 'Debian / Ubuntu package (.deb', key: 'linux_deb', size: '24.6 MB' },
+                    specs: [['Format', '.AppImage portable'], ['Runtime', 'WebKitGTK'], ['Capture', 'PipeWire portal']]
+                }
+            };
+
+            const $ = (id) => document.getElementById(id);
+            const tabs = Array.from(section.querySelectorAll('.wsx-os-btn'));
+            const panel = $('wsx-os-panel');
+            const toMB = (bytes) => (bytes / 1048576).toFixed(1) + ' MB';
+            const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+            let release = null; // populated from /api/download?info=true
+            let current = 'windows';
+
+            // Returns the asset object, `null` if the live release lacks it, or `undefined` if we have no live data
+            function liveAsset(key) {
+                if (!release || !release.assets) return undefined;
+                return release.assets[key] || null;
+            }
+
+            function render(os) {
+                const p = PLATFORMS[os];
+                current = os;
+                tabs.forEach((t) => {
+                    const on = t.dataset.os === os;
+                    t.setAttribute('aria-selected', String(on));
+                    t.tabIndex = on ? 0 : -1;
+                    if (on) panel.setAttribute('aria-labelledby', t.id);
+                });
+
+                $('wsx-os-icon').innerHTML = `<i class="${p.icon}"></i>`;
+                $('wsx-os-title').textContent = p.title;
+                $('wsx-os-meta').textContent = p.meta;
+                $('wsx-os-desc').textContent = p.desc;
+
+                // Primary button: live size when known, graceful "coming soon" when the release has no build
+                const dl = $('wsx-dl');
+                const found = release ? p.keys.map(liveAsset).find(Boolean) || null : undefined;
+                if (found === null) {
+                    dl.classList.add('is-disabled');
+                    dl.removeAttribute('href');
+                    dl.setAttribute('aria-disabled', 'true');
+                    $('wsx-dl-label').textContent = `${p.title} build coming soon`;
+                    $('wsx-dl-size').textContent = 'Soon';
+                } else {
+                    dl.classList.remove('is-disabled');
+                    dl.href = p.href;
+                    dl.removeAttribute('aria-disabled');
+                    $('wsx-dl-label').textContent = p.label;
+                    $('wsx-dl-size').textContent = found ? toMB(found.size) : p.size;
+                }
+
+                // Secondary format link
+                const alt = $('wsx-alt');
+                const altAsset = p.alt ? liveAsset(p.alt.key) : null;
+                if (p.alt && altAsset !== null) {
+                    alt.hidden = false;
+                    alt.href = p.alt.href;
+                    $('wsx-alt-label').textContent = `${p.alt.label} • ${altAsset ? toMB(altAsset.size) : p.alt.size})`;
+                } else {
+                    alt.hidden = true;
+                }
+
+                $('wsx-specs').innerHTML = p.specs.map(([k, v]) => `<li><span>${esc(k)}</span><span>${esc(v)}</span></li>`).join('');
+            }
+
+            // Tabs: click + roving arrow-key navigation
+            tabs.forEach((t, i) => {
+                t.addEventListener('click', () => render(t.dataset.os));
+                t.addEventListener('keydown', (e) => {
+                    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+                    e.preventDefault();
+                    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+                    next.focus();
+                    render(next.dataset.os);
+                });
+            });
+
+            // Auto-select the visitor's platform
+            const platform = ((navigator.userAgentData && navigator.userAgentData.platform) || navigator.userAgent || '').toLowerCase();
+            render(platform.includes('mac') ? 'mac' : platform.includes('linux') ? 'linux' : 'windows');
+
+            // Live release metadata (version + exact sizes); static values remain if this fails
+            fetch('/api/download?info=true')
+                .then((r) => (r.ok ? r.json() : null))
+                .then((data) => {
+                    if (!data || !data.ok) return;
+                    release = data;
+                    if (data.tag) $('wsx-version').textContent = data.tag;
+                    render(current);
+                })
+                .catch(() => {});
+
+            // Scroll reveal + chart draw (armed only when IntersectionObserver exists)
+            if ('IntersectionObserver' in window) {
+                section.classList.add('wsx-armed');
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) { section.classList.add('is-visible'); io.disconnect(); }
+                    });
+                }, { threshold: 0.12 });
+                io.observe(section);
+            }
+
+            // Deep links (e.g. homepage "Workstation" → /join.html#workstation) always land on the collaborator path
+            function handleHash() {
+                if (location.hash === '#workstation' || location.hash === '#panel-collaborator') switchPath('collaborator');
+            }
+            window.addEventListener('hashchange', handleHash);
+            handleHash();
+        })();
     </script>
     <script src="assets/nav.js" defer></script>
     <script src="assets/news-client.js" defer></script>
