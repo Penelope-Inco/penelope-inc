@@ -9,21 +9,40 @@
  */
 
 const GITHUB_REPO = 'Sm-bello/PHI-LAB';
-const rawToken = process.env.GITHUB_TOKEN || '';
-const GITHUB_TOKEN = rawToken.replace(/[^\x20-\x7E]/g, '').trim();
+
+function getCleanToken() {
+  const envToken = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
+  let cleaned = envToken
+    .replace(/^\uFEFF+/, '')
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    .replace(/^["']|["']$/g, '')
+    .replace(/[^\x21-\x7E]/g, '')
+    .trim();
+
+  if (cleaned.length >= 20) {
+    return cleaned;
+  }
+  return '';
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
   try {
+    const token = getCleanToken();
+
     // 1. Fetch latest release from GitHub
     const reqHeaders = {
       'Accept': 'application/vnd.github+json',
-      'User-Agent': 'PHI-LAB-Downloader'
+      'User-Agent': 'PHI-LAB-Workstation-Distributor'
     };
-    if (GITHUB_TOKEN) {
-      reqHeaders['Authorization'] = `Bearer ${GITHUB_TOKEN}`;
+    if (token) {
+      reqHeaders['Authorization'] = `Bearer ${token}`;
     }
 
     const releaseRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`, {
@@ -96,7 +115,7 @@ export default async function handler(req, res) {
     if (!requested) {
       const ua = (req.headers['user-agent'] || '').toLowerCase();
       if (ua.includes('win')) requested = 'windows';
-      else if (ua.includes('mac')) requested = 'mac';
+      else if (ua.includes('mac') || ua.includes('darwin')) requested = 'mac';
       else if (ua.includes('linux')) requested = 'linux';
       else requested = 'windows';
     }
@@ -124,10 +143,10 @@ export default async function handler(req, res) {
     // 4. Request the asset binary download URL from GitHub API
     const assetHeaders = {
       'Accept': 'application/octet-stream',
-      'User-Agent': 'PHI-LAB-Downloader'
+      'User-Agent': 'PHI-LAB-Workstation-Distributor'
     };
-    if (GITHUB_TOKEN) {
-      assetHeaders['Authorization'] = `Bearer ${GITHUB_TOKEN}`;
+    if (token) {
+      assetHeaders['Authorization'] = `Bearer ${token}`;
     }
 
     const assetDownloadRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/assets/${targetAsset.id}`, {
@@ -146,7 +165,15 @@ export default async function handler(req, res) {
       return res.end();
     }
 
-    // Fallback: If not redirecting, return error
+    // If GitHub followed redirect or returned direct body
+    if (assetDownloadRes.ok && targetAsset.browser_download_url) {
+      res.writeHead(302, {
+        'Location': targetAsset.browser_download_url,
+        'Content-Disposition': `attachment; filename="${targetAsset.name}"`
+      });
+      return res.end();
+    }
+
     return res.status(500).json({
       ok: false,
       error: 'Could not obtain direct storage URL for asset'
