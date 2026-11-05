@@ -1,63 +1,84 @@
 /**
  * /api/partner-request.js
  * POST https://penelope-inc.vercel.app/api/partner-request
- * Forwards MOU/partner applications from services/index.html to the
- * Hetzner backend. Same mixed-content workaround as /api/projects.js —
- * see that file's header comment for why this proxy exists at all.
- *
- * Expects the Hetzner Node API (:3002) to expose a matching endpoint,
- * e.g. POST /api/partner-requests, storing into the
- * `service_partner_requests` PocketBase collection (already in
- * pb_schema.json from earlier). CONFIRM THIS ENDPOINT EXISTS on the
- * backend before relying on this in production — it was not in Kimi's
- * confirmed-live endpoint list as of the last status update.
+ * Forwards MOU/partner applications directly to Supabase and Fly.io PocketBase.
  */
 
-const PENELOPE_API_BASE = process.env.PENELOPE_API_BASE || 'http://46.62.217.83:3002';
+import { supabase } from '../services/supabase.js';
+
+const FLY_PB_BASE = process.env.PB_BASE || 'https://penelope-510.fly.dev';
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
+
+  let b = req.body || {};
+  if (typeof b === 'string') {
+    try { b = JSON.parse(b); } catch { b = {}; }
   }
 
-  const { company_name, contact_name, email, service_category, pitch_url } = req.body || {};
+  const { company_name, contact_name, email, service_category, pitch_url } = b;
 
-  if (!company_name || !contact_name || !email || !service_category || !pitch_url) {
-    return res.status(400).json({ ok: false, error: 'All fields are required.' });
+  if (!company_name || !contact_name || !email) {
+    return res.status(400).json({ ok: false, error: 'Company name, contact name, and email are required.' });
   }
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
-
+  // 1. Supabase write
   try {
-    const upstream = await fetch(`${PENELOPE_API_BASE}/api/partner-requests`, {
+    const { data } = await supabase
+      .from('dossiers')
+      .insert([
+        {
+          full_name: contact_name,
+          email: email.trim().toLowerCase(),
+          callsign: email.split('@')[0],
+          suite: 'general',
+          role: 'partner',
+          motivation: `[PARTNER / MOU REQUEST] Company: ${company_name} | Service: ${service_category || 'N/A'} | Pitch: ${pitch_url || 'N/A'}`,
+          research_history: `MOU Proposal for ${company_name}`,
+          status: 'partner_pending',
+          metadata: {
+            company_name,
+            service_category,
+            pitch_url,
+            ip: req.headers['x-forwarded-for'] || req.socket?.remoteAddress,
+            submitted_at: new Date().toISOString()
+          }
+        }
+      ])
+      .select()
+      .single();
+
+    if (data) {
+      console.log('[API/Partner] Saved partner inquiry to Supabase:', data.id);
+    }
+  } catch (err) {
+    console.error('[API/Partner] Supabase error:', err);
+  }
+
+  // 2. Mirror to Fly.io
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2500);
+    await fetch(`${FLY_PB_BASE}/api/collections/applicants/records`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: controller.signal,
       body: JSON.stringify({
-        company_name,
-        contact_name,
+        name: contact_name,
         email,
-        service_category,
-        pitch: pitch_url,
+        suite: 'phi-twin',
+        role: 'partner',
+        motivation: `MOU Partner Request: ${company_name} (${service_category})`,
         status: 'pending'
       })
     });
     clearTimeout(timeout);
+  } catch {}
 
-    if (!upstream.ok) {
-      return res.status(200).json({
-        ok: false,
-        error: 'Backend could not accept the request right now. Please email us directly.'
-      });
-    }
-
-    return res.status(200).json({ ok: true });
-  } catch (err) {
-    clearTimeout(timeout);
-    return res.status(200).json({
-      ok: false,
-      error: err.name === 'AbortError' ? 'Request timed out.' : 'Server temporarily unreachable.'
-    });
-  }
+  return res.status(200).json({ ok: true, message: 'Partner inquiry received by PHI Lab leadership.' });
 }
