@@ -139,17 +139,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // 4. Instant direct redirect to GitHub Release Browser Download URL
-    if (targetAsset.browser_download_url) {
-      res.writeHead(302, {
-        'Location': targetAsset.browser_download_url,
-        'Content-Disposition': `attachment; filename="${targetAsset.name}"`,
-        'Cache-Control': 'no-cache, no-store, must-revalidate'
-      });
-      return res.end();
-    }
-
-    // 5. Fallback: Request binary stream via GitHub API for private asset
+    // 4. Request pre-signed binary stream URL via GitHub API (works for ALL users even when repo is private)
     const assetHeaders = {
       'Accept': 'application/octet-stream',
       'User-Agent': 'PHI-LAB-Workstation-Distributor'
@@ -168,6 +158,16 @@ export default async function handler(req, res) {
     if (directDownloadUrl) {
       res.writeHead(302, {
         'Location': directDownloadUrl,
+        'Content-Disposition': `attachment; filename="${targetAsset.name}"`,
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
+      });
+      return res.end();
+    }
+
+    // 5. Fallback to browser_download_url if public repo
+    if (targetAsset.browser_download_url) {
+      res.writeHead(302, {
+        'Location': targetAsset.browser_download_url,
         'Content-Disposition': `attachment; filename="${targetAsset.name}"`,
         'Cache-Control': 'no-cache, no-store, must-revalidate'
       });
