@@ -12,10 +12,8 @@ const GITHUB_REPO = 'Sm-bello/PHI-LAB';
 
 function getCleanToken() {
   const envToken = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
-  let cleaned = envToken
-    .replace(/^\uFEFF+/, '')
-    .replace(/[\u200B-\u200D\uFEFF]/g, '')
-    .replace(/^["']|["']$/g, '')
+  if (!envToken || typeof envToken !== 'string') return '';
+  const cleaned = envToken
     .replace(/[^\x21-\x7E]/g, '')
     .trim();
 
@@ -41,7 +39,7 @@ export default async function handler(req, res) {
       'Accept': 'application/vnd.github+json',
       'User-Agent': 'PHI-LAB-Workstation-Distributor'
     };
-    if (token) {
+    if (token && /^[\x21-\x7E]+$/.test(token)) {
       reqHeaders['Authorization'] = `Bearer ${token}`;
     }
 
@@ -140,12 +138,22 @@ export default async function handler(req, res) {
       });
     }
 
-    // 4. Request the asset binary download URL from GitHub API
+    // 4. Instant direct redirect to GitHub Release Browser Download URL
+    if (targetAsset.browser_download_url) {
+      res.writeHead(302, {
+        'Location': targetAsset.browser_download_url,
+        'Content-Disposition': `attachment; filename="${targetAsset.name}"`,
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
+      });
+      return res.end();
+    }
+
+    // 5. Fallback: Request binary stream via GitHub API for private asset
     const assetHeaders = {
       'Accept': 'application/octet-stream',
       'User-Agent': 'PHI-LAB-Workstation-Distributor'
     };
-    if (token) {
+    if (token && /^[\x21-\x7E]+$/.test(token)) {
       assetHeaders['Authorization'] = `Bearer ${token}`;
     }
 
@@ -161,15 +169,6 @@ export default async function handler(req, res) {
         'Location': directDownloadUrl,
         'Content-Disposition': `attachment; filename="${targetAsset.name}"`,
         'Cache-Control': 'no-cache, no-store, must-revalidate'
-      });
-      return res.end();
-    }
-
-    // If GitHub followed redirect or returned direct body
-    if (assetDownloadRes.ok && targetAsset.browser_download_url) {
-      res.writeHead(302, {
-        'Location': targetAsset.browser_download_url,
-        'Content-Disposition': `attachment; filename="${targetAsset.name}"`
       });
       return res.end();
     }
