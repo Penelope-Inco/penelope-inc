@@ -145,7 +145,7 @@
                 <span class="dh-badge"><i class="fas fa-microchip"></i> Detected Operating System &bull; <span id="detected-os-name">Windows</span></span>
                 <h2 class="dh-title" id="detected-title">PHI-LAB for Windows</h2>
                 <p class="dh-desc" id="detected-desc">Complete installer with native hardware GPU acceleration, LiveKit avionics audio RMS meters, encrypted screen share, and offline-to-cloud ledger synchronization.</p>
-                <div class="dh-meta" id="detected-meta">Version v0.1.7 &bull; 64-bit Architecture &bull; Cryptographically Verified</div>
+                <div class="dh-meta" id="detected-meta">Version v0.1.8 &bull; 64-bit Architecture &bull; Cryptographically Verified</div>
             </div>
             <div class="dh-action-col">
                 <a href="/api/download?os=windows" class="dh-btn" id="detected-btn">
@@ -166,7 +166,7 @@
                 <div>
                     <div class="platform-icon"><i class="fab fa-windows"></i></div>
                     <h3>Windows</h3>
-                    <span class="version-tag" id="tag-win">x64 Installer (v0.1.7 &bull; 21.7 MB)</span>
+                    <span class="version-tag" id="tag-win">x64 Installer (v0.1.8 &bull; 21.7 MB)</span>
                     <p>Native 64-bit build with WebRTC hardware acceleration, offline SQLite ledger sync, and CPDC verification.</p>
                 </div>
                 <div>
@@ -306,7 +306,7 @@
                 .then(r => r.json())
                 .then(data => {
                     if (data && data.ok) {
-                        const tag = data.tag || 'v0.1.7';
+                        const tag = data.tag || 'v0.1.8';
                         const metaEl = document.getElementById('detected-meta');
                         if (metaEl) {
                             metaEl.textContent = `Version ${tag} • 64-bit Architecture • Cryptographically Verified`;
