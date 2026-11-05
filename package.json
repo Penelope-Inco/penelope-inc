@@ -4,5 +4,9 @@
   "private": true,
   "scripts": {
     "build": "node scripts/build-news.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
+    "pg": "^8.23.1"
   }
 }

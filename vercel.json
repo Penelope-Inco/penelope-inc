@@ -4,12 +4,33 @@
   "buildCommand": "node scripts/build-news.js",
   "outputDirectory": ".",
   "rewrites": [
-    { "source": "/workstation", "destination": "/join.html" },
-    { "source": "/download", "destination": "/download.html" },
-    { "source": "/app", "destination": "/download.html" },
-    { "source": "/software", "destination": "/download.html" },
-    { "source": "/install", "destination": "/download.html" },
-    { "source": "/releases", "destination": "/download.html" },
-    { "source": "/release", "destination": "/download.html" }
+    {
+      "source": "/workstation",
+      "destination": "/join.html"
+    },
+    {
+      "source": "/download",
+      "destination": "/download.html"
+    },
+    {
+      "source": "/app",
+      "destination": "/download.html"
+    },
+    {
+      "source": "/software",
+      "destination": "/download.html"
+    },
+    {
+      "source": "/install",
+      "destination": "/download.html"
+    },
+    {
+      "source": "/releases",
+      "destination": "/download.html"
+    },
+    {
+      "source": "/release",
+      "destination": "/download.html"
+    }
   ]
 }

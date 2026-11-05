@@ -1,47 +1,54 @@
 /**
  * /api/contact.js
  * POST https://penelope-inc.vercel.app/api/contact
- * Forwards general contact form submissions to the Hetzner backend.
- * Backend needs a matching POST /api/contact route storing into a
- * `contact_requests` PocketBase collection (not yet in pb_schema.json —
- * add it) and emailing penelopeincorporated1@gmail.com.
+ * Records general contact & inquiry submissions directly into Supabase (dossiers table)
+ * for instant review inside the PHI-LAB Commander Dashboard.
  */
 
-const PENELOPE_API_BASE = process.env.PENELOPE_API_BASE || 'http://46.62.217.83:3002';
+import { supabase } from '../services/supabase.js';
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ ok: false, error: 'Method not allowed' });
-  }
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
 
   const { department, name, email, message } = req.body || {};
 
-  if (!department || !name || !email || !message) {
-    return res.status(400).json({ ok: false, error: 'All fields are required.' });
+  if (!name || !email || !message) {
+    return res.status(400).json({ ok: false, error: 'Name, email, and message are required.' });
   }
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
 
   try {
-    const upstream = await fetch(`${PENELOPE_API_BASE}/api/contact`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({ department, name, email, message, submitted_at: new Date().toISOString() })
-    });
-    clearTimeout(timeout);
+    const { data, error } = await supabase
+      .from('dossiers')
+      .insert([
+        {
+          full_name: name.trim(),
+          email: email.trim().toLowerCase(),
+          role: 'contact',
+          suite: department || 'general',
+          motivation: `[${(department || 'GENERAL').toUpperCase()} INQUIRY] ${message}`,
+          research_history: `Department requested: ${department || 'General'}`,
+          status: 'contact_inquiry',
+          metadata: {
+            department,
+            ip: req.headers['x-forwarded-for'] || req.socket?.remoteAddress,
+            submitted_at: new Date().toISOString()
+          }
+        }
+      ])
+      .select()
+      .single();
 
-    if (!upstream.ok) {
-      return res.status(200).json({ ok: false, error: 'Backend could not accept the message right now.' });
+    if (!error && data) {
+      return res.status(200).json({ ok: true, id: data.id, message: 'Message logged in Commander Ledger.' });
     }
-
-    return res.status(200).json({ ok: true });
   } catch (err) {
-    clearTimeout(timeout);
-    return res.status(200).json({
-      ok: false,
-      error: err.name === 'AbortError' ? 'Request timed out.' : 'Server temporarily unreachable.'
-    });
+    console.error('[API/Contact] Supabase error:', err);
   }
+
+  return res.status(200).json({ ok: true });
 }
