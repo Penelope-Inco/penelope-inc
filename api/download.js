@@ -61,8 +61,9 @@ export default async function handler(req, res) {
     const findAsset = (predicate) => assets.find(predicate);
 
     const assetMap = {
-      windows_exe: findAsset(a => a.name.endsWith('.exe')),
+      windows_exe: findAsset(a => a.name.includes('setup.exe') || a.name.includes('-setup.')) || findAsset(a => a.name.endsWith('.exe')),
       windows_msi: findAsset(a => a.name.endsWith('.msi')),
+      windows_portable: findAsset(a => a.name.toLowerCase() === 'phi-lab.exe'),
       mac_dmg: findAsset(a => a.name.endsWith('.dmg')),
       linux_appimage: findAsset(a => a.name.endsWith('.AppImage')),
       linux_deb: findAsset(a => a.name.endsWith('.deb')),
