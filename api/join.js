@@ -7,7 +7,7 @@
 
 import { supabase } from '../services/supabase.js';
 
-const PB_BASE = process.env.PB_BASE || 'http://46.62.217.83:8090';
+const PB_BASE = process.env.PB_BASE || 'https://penelope-510.fly.dev';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');

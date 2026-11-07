@@ -7,7 +7,7 @@
  * confirmed-live list, same caveat as /api/partner-request.js.
  */
 
-const PENELOPE_API_BASE = process.env.PENELOPE_API_BASE || 'http://46.62.217.83:3002';
+const PENELOPE_API_BASE = process.env.PENELOPE_API_BASE || 'https://penelope-510.fly.dev';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
