@@ -92,7 +92,10 @@ export default async function handler(req, res) {
             metadata: {
               ip: req.headers['x-forwarded-for'] || req.socket?.remoteAddress,
               user_agent: req.headers['user-agent'],
-              submitted_at: new Date().toISOString()
+              submitted_at: new Date().toISOString(),
+              cv_data: body.cv_data || null,
+              cv_name: cv_name || null,
+              photo_data: body.photo_data || null,
             }
           }
         ])
