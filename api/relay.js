@@ -183,10 +183,16 @@ export default async function handler(req, res) {
       // 5. WebRTC Signals
       if (channel === 'signals') {
         const room = req.query.room || 'global';
+        const user = req.query.user || req.query.user_id || '';
         const since = Number(req.query.since || 0);
         const now = Date.now();
         state.signals = (state.signals || []).filter((s) => now - s.ts < 60000);
-        const matching = state.signals.filter((s) => (!room || s.room === room) && s.ts > since);
+        const matching = state.signals.filter((s) => {
+          if (s.ts <= since) return false;
+          if (user && (s.to === user || s.to === '*' || s.to === 'all' || s.target_user_id === user || s.target_user_id === '*')) return true;
+          if (!room || room === '*' || s.room === room || s.room === 'global') return true;
+          return false;
+        });
         return res.status(200).json({ ok: true, items: matching, serverTime: now });
       }
 
@@ -387,11 +393,12 @@ export default async function handler(req, res) {
     // 5. WebRTC P2P Signals
     if (channel === 'signals') {
       const signalItem = {
-        id: `sig_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        ...body,
+        id: body.id || `sig_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
         room: body.room || 'global',
         from: body.from || 'peer',
         to: body.to || 'all',
-        payload: body.payload || {},
+        payload: body.payload || body,
         ts: Date.now(),
       };
       state.signals.push(signalItem);
