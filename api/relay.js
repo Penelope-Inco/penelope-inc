@@ -173,9 +173,21 @@ export default async function handler(req, res) {
         });
       }
 
-      // 4. Messages Stream
+      // 4. Messages Stream (Strict Human Chat Only — ZERO Signal Packets)
       if (channel === 'messages') {
         const room = req.query.room || 'global';
+        const isSignalMessage = (m) => {
+          if (!m) return true;
+          if (m.kind === 'signal') return true;
+          if (m.sender_name === 'Signal') return true;
+          const c = (m.content || '').trim();
+          if (c.startsWith('__SIG__:')) return true;
+          if (c.startsWith('{"type":') || c.startsWith('{"candidate":') || c.startsWith('{"offer":') || c.startsWith('{"sdp":') || c.startsWith('{"peers":')) {
+            return true;
+          }
+          return false;
+        };
+
         try {
           let query = supabase
             .from('messages')
@@ -190,24 +202,28 @@ export default async function handler(req, res) {
 
           const { data: dbMsgs } = await query;
           if (dbMsgs && dbMsgs.length > 0) {
-            const formatted = dbMsgs.reverse().map(m => ({
-              id: m.id,
-              room: m.room,
-              sender: m.sender,
-              sender_name: m.sender_name || 'Engineer',
-              content: m.content,
-              kind: m.kind || 'chat',
-              created_at: m.created_at,
-            }));
+            const formatted = dbMsgs
+              .reverse()
+              .filter((m) => !isSignalMessage(m))
+              .map(m => ({
+                id: m.id,
+                room: m.room,
+                sender: m.sender,
+                sender_name: m.sender_name || 'Engineer',
+                content: m.content,
+                kind: m.kind || 'chat',
+                created_at: m.created_at,
+              }));
             return res.status(200).json({ ok: true, items: formatted, source: 'supabase' });
           }
         } catch {}
 
-        const roomMsgs = (state.messages || []).filter((m) => !room || m.room === room);
+        const roomMsgs = (state.messages || [])
+          .filter((m) => (!room || m.room === room) && !isSignalMessage(m));
         return res.status(200).json({ ok: true, items: roomMsgs.slice(-150), source: 'memory' });
       }
 
-      // 5. WebRTC Signals (Backed by Supabase + Memory for Instant Multi-Container Relay)
+      // 5. WebRTC Signals (Backed by Isolated Telemetry Table + Memory — Completely Separate from Messages)
       if (channel === 'signals') {
         const room = req.query.room || 'global';
         const user = (req.query.user || req.query.user_id || '').toLowerCase().trim();
@@ -218,9 +234,9 @@ export default async function handler(req, res) {
         const items = [];
         try {
           const { data: dbSignals } = await supabase
-            .from('messages')
+            .from('telemetry')
             .select('*')
-            .eq('kind', 'signal')
+            .eq('event_type', 'webrtc_signal')
             .gt('created_at', sinceDate)
             .order('created_at', { ascending: true })
             .limit(150);
@@ -228,9 +244,9 @@ export default async function handler(req, res) {
           if (dbSignals && dbSignals.length > 0) {
             for (const row of dbSignals) {
               try {
-                const parsed = JSON.parse(row.content);
-                const sTs = parsed.ts || new Date(row.created_at).getTime();
-                if (sTs > since) {
+                const parsed = typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata;
+                const sTs = parsed?.ts || new Date(row.created_at).getTime();
+                if (sTs > since && parsed) {
                   items.push({ ...parsed, id: row.id, ts: sTs });
                 }
               } catch {}
@@ -264,9 +280,9 @@ export default async function handler(req, res) {
         if (Math.random() < 0.1) {
           const purgeDate = new Date(Date.now() - 180000).toISOString();
           supabase
-            .from('messages')
+            .from('telemetry')
             .delete()
-            .eq('kind', 'signal')
+            .eq('event_type', 'webrtc_signal')
             .lt('created_at', purgeDate)
             .then(() => {})
             .catch(() => {});
@@ -486,7 +502,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true, message: msg });
     }
 
-    // 5. WebRTC P2P Signals (Persisted to Supabase for 100% Guaranteed Multi-station Delivery)
+    // 5. WebRTC P2P Signals (Persisted to Isolated Telemetry Table — NEVER Inserted to Messages)
     if (channel === 'signals') {
       const signalItem = {
         ...body,
@@ -503,14 +519,14 @@ export default async function handler(req, res) {
       saveState(state);
 
       try {
-        await supabase.from('messages').insert([
+        await supabase.from('telemetry').insert([
           {
-            id: signalItem.id,
-            room: signalItem.room,
-            sender: signalItem.from,
-            sender_name: 'Signal',
-            content: JSON.stringify(signalItem),
-            kind: 'signal',
+            operator_id: signalItem.from,
+            operator_name: 'Signal',
+            event_type: 'webrtc_signal',
+            suite: signalItem.room || 'global',
+            prompt_summary: signalItem.type || 'signal',
+            metadata: signalItem,
             created_at: new Date(signalItem.ts).toISOString(),
           },
         ]);
