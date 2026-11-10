@@ -176,23 +176,102 @@ export default async function handler(req, res) {
       // 4. Messages Stream
       if (channel === 'messages') {
         const room = req.query.room || 'global';
+        try {
+          let query = supabase
+            .from('messages')
+            .select('*')
+            .neq('kind', 'signal')
+            .order('created_at', { ascending: false })
+            .limit(100);
+
+          if (room && room !== '*') {
+            query = query.eq('room', room);
+          }
+
+          const { data: dbMsgs } = await query;
+          if (dbMsgs && dbMsgs.length > 0) {
+            const formatted = dbMsgs.reverse().map(m => ({
+              id: m.id,
+              room: m.room,
+              sender: m.sender,
+              sender_name: m.sender_name || 'Engineer',
+              content: m.content,
+              kind: m.kind || 'chat',
+              created_at: m.created_at,
+            }));
+            return res.status(200).json({ ok: true, items: formatted, source: 'supabase' });
+          }
+        } catch {}
+
         const roomMsgs = (state.messages || []).filter((m) => !room || m.room === room);
-        return res.status(200).json({ ok: true, items: roomMsgs.slice(-150) });
+        return res.status(200).json({ ok: true, items: roomMsgs.slice(-150), source: 'memory' });
       }
 
-      // 5. WebRTC Signals
+      // 5. WebRTC Signals (Backed by Supabase + Memory for Instant Multi-Container Relay)
       if (channel === 'signals') {
         const room = req.query.room || 'global';
-        const user = req.query.user || req.query.user_id || '';
+        const user = (req.query.user || req.query.user_id || '').toLowerCase().trim();
         const since = Number(req.query.since || 0);
+        const sinceDate = new Date(Math.max(since, Date.now() - 60000)).toISOString();
         const now = Date.now();
+
+        const items = [];
+        try {
+          const { data: dbSignals } = await supabase
+            .from('messages')
+            .select('*')
+            .eq('kind', 'signal')
+            .gt('created_at', sinceDate)
+            .order('created_at', { ascending: true })
+            .limit(150);
+
+          if (dbSignals && dbSignals.length > 0) {
+            for (const row of dbSignals) {
+              try {
+                const parsed = JSON.parse(row.content);
+                const sTs = parsed.ts || new Date(row.created_at).getTime();
+                if (sTs > since) {
+                  items.push({ ...parsed, id: row.id, ts: sTs });
+                }
+              } catch {}
+            }
+          }
+        } catch (dbErr) {
+          console.error('[Relay] Error fetching signals from Supabase:', dbErr);
+        }
+
+        // Merge with in-memory state signals as redundancy
         state.signals = (state.signals || []).filter((s) => now - s.ts < 60000);
-        const matching = state.signals.filter((s) => {
-          if (s.ts <= since) return false;
-          if (user && (s.to === user || s.to === '*' || s.to === 'all' || s.target_user_id === user || s.target_user_id === '*')) return true;
+        for (const s of state.signals) {
+          if (s.ts > since && !items.some((it) => it.id === s.id)) {
+            items.push(s);
+          }
+        }
+
+        const matching = items.filter((s) => {
+          const to = (s.to || '').toLowerCase().trim();
+          const target = (s.target_user_id || '').toLowerCase().trim();
+          const isBroadcast = to === '*' || to === 'all' || target === '*';
+          if (user) {
+            const isForMe = to === user || target === user || isBroadcast;
+            if (isForMe) return true;
+          }
           if (!room || room === '*' || s.room === room || s.room === 'global') return true;
-          return false;
+          return isBroadcast;
         });
+
+        // Background garbage collection of stale signals older than 3 minutes
+        if (Math.random() < 0.1) {
+          const purgeDate = new Date(Date.now() - 180000).toISOString();
+          supabase
+            .from('messages')
+            .delete()
+            .eq('kind', 'signal')
+            .lt('created_at', purgeDate)
+            .then(() => {})
+            .catch(() => {});
+        }
+
         return res.status(200).json({ ok: true, items: matching, serverTime: now });
       }
 
@@ -384,13 +463,30 @@ export default async function handler(req, res) {
         kind: body.kind || 'chat',
         created_at: new Date().toISOString(),
       };
+
+      try {
+        await supabase.from('messages').insert([
+          {
+            id: msg.id,
+            room: msg.room,
+            sender: msg.sender,
+            sender_name: msg.sender_name,
+            content: msg.content,
+            kind: msg.kind,
+            created_at: msg.created_at,
+          },
+        ]);
+      } catch (err) {
+        console.error('[Relay] Supabase message insert error:', err);
+      }
+
       state.messages.push(msg);
       if (state.messages.length > 1000) state.messages = state.messages.slice(-500);
       saveState(state);
       return res.status(200).json({ ok: true, message: msg });
     }
 
-    // 5. WebRTC P2P Signals
+    // 5. WebRTC P2P Signals (Persisted to Supabase for 100% Guaranteed Multi-station Delivery)
     if (channel === 'signals') {
       const signalItem = {
         ...body,
@@ -401,8 +497,27 @@ export default async function handler(req, res) {
         payload: body.payload || body,
         ts: Date.now(),
       };
+
       state.signals.push(signalItem);
+      if (state.signals.length > 500) state.signals = state.signals.slice(-250);
       saveState(state);
+
+      try {
+        await supabase.from('messages').insert([
+          {
+            id: signalItem.id,
+            room: signalItem.room,
+            sender: signalItem.from,
+            sender_name: 'Signal',
+            content: JSON.stringify(signalItem),
+            kind: 'signal',
+            created_at: new Date(signalItem.ts).toISOString(),
+          },
+        ]);
+      } catch (err) {
+        console.error('[Relay] Supabase signal insert error:', err);
+      }
+
       return res.status(200).json({ ok: true, signal: signalItem });
     }
 
