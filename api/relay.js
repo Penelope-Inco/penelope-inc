@@ -1,545 +1,488 @@
-/**
- * /api/relay.js
- * PHI Lab Sovereign Cloud Backplane & Cross-Layer Intelligence Relay
- * Powered by Supabase (PostgreSQL) + In-Memory Fallback
- *
- * 24/7 always-on hybrid cloud relay handling:
- *  - dossiers / applicants : Website dossiers, visitor applications & Waiting Room state
- *  - cards                 : Cryptographic CPDC card issuance & verification
- *  - telemetry             : Cross-Layer Activity Feed across workstations and Penelope AI
- *  - messages              : Real-time Multi-laptop chat stream
- *  - signals               : WebRTC P2P signaling
- */
+import { query, upsertDossierRecord } from '../services/neon.js';
+import { isS3Configured, uploadDataUrl, getPresignedUrl } from '../services/s3.js';
+import { sendCpdcIssuedEmail, isBrevoConfigured } from '../services/email.js';
 
-import fs from 'fs';
-import { supabase } from '../services/supabase.js';
-
-const TMP_STATE_FILE = '/tmp/phi_lab_cloud_relay_v1.json';
-
-function loadState() {
-  if (globalThis.__PHI_RELAY_STATE__) {
-    return globalThis.__PHI_RELAY_STATE__;
-  }
-  try {
-    if (fs.existsSync(TMP_STATE_FILE)) {
-      const raw = fs.readFileSync(TMP_STATE_FILE, 'utf8');
-      const parsed = JSON.parse(raw);
-      globalThis.__PHI_RELAY_STATE__ = parsed;
-      return parsed;
-    }
-  } catch {}
-
-  const initial = {
-    applicants: [],
-    cards: {},
-    messages: [
-      {
-        id: 'welcome-global-1',
-        sender: 'system',
-        sender_name: 'PHI Lab Hybrid Relay',
-        content: 'DIMASA Hybrid Cloud Bridge online with Supabase Data Engine. Multi-station chat, WebRTC signaling, and Dossier Intelligence are active.',
-        room: 'global',
-        created_at: new Date().toISOString(),
-      },
-    ],
-    telemetry: [],
-    signals: [],
-    presence: {},
-  };
-  globalThis.__PHI_RELAY_STATE__ = initial;
-  return initial;
-}
-
-function saveState(state) {
-  globalThis.__PHI_RELAY_STATE__ = state;
-  try {
-    fs.writeFileSync(TMP_STATE_FILE, JSON.stringify(state), 'utf8');
-  } catch {}
-}
-
-export default async function handler(req, res) {
+function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+}
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+function norm(v) {
+  return String(v || '').trim().toLowerCase();
+}
 
-  const state = loadState();
-  const channel = (req.query.channel || 'status').toLowerCase();
+export default async function handler(req, res) {
+  setCors(res);
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  const channel = String(req.query?.channel || req.body?.channel || 'applicants').toLowerCase();
 
   try {
-    // ─── GET REQUESTS ───
-    if (req.method === 'GET') {
-      // 1. Dossiers / Applicants from Supabase
-      if (channel === 'dossiers' || channel === 'applicants') {
-        try {
-          const { data: dossiers, error } = await supabase
-            .from('dossiers')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(100);
-
-          if (!error && dossiers && dossiers.length > 0) {
-            const formatted = dossiers.map(d => ({
-              id: d.id,
-              name: d.full_name,
-              full_name: d.full_name,
-              email: d.email,
-              callsign: d.callsign,
-              suite: d.suite,
-              role: d.role,
-              motivation: d.motivation,
-              research_history: d.research_history,
-              phone: d.phone,
-              location: d.location,
-              status: d.status,
-              cpdc_issued: d.cpdc_issued,
-              cpdc_card_url: d.cpdc_card_url,
-              created_at: d.created_at,
-              created: d.created_at,
-            }));
-            return res.status(200).json({ ok: true, items: formatted, source: 'supabase' });
-          }
-        } catch (sbErr) {
-          console.error('[Relay] Supabase dossiers query error:', sbErr);
-        }
-
-        // In-memory fallback
-        return res.status(200).json({ ok: true, items: state.applicants || [], source: 'memory' });
-      }
-
-      // 2. CPDC Cards Issued
-      if (channel === 'cards') {
-        const email = (req.query.email || req.query.userId || '').toLowerCase().trim();
-        if (email) {
-          try {
-            const { data: cardRow } = await supabase
-              .from('cpdc_registry')
-              .select('*')
-              .eq('applicant_email', email)
-              .maybeSingle();
-
-            if (cardRow) {
-              const card = {
-                uid: cardRow.callsign,
-                name: cardRow.applicant_name,
-                email: cardRow.applicant_email,
-                role: cardRow.role,
-                suite: cardRow.suite,
-                spaces: [cardRow.suite, '*'],
-                access_matrix: [cardRow.suite, '*'],
-                sig: cardRow.signature,
-                cpdc_payload: cardRow.card_png_base64,
-                issued_at: Math.floor(new Date(cardRow.issued_at).getTime() / 1000),
-              };
-              return res.status(200).json({ ok: true, card, source: 'supabase' });
-            }
-          } catch {}
-
-          const card = state.cards[email] || null;
-          return res.status(200).json({ ok: true, card, source: 'memory' });
-        }
-
-        return res.status(200).json({ ok: true, cards: state.cards });
-      }
-
-      // 3. Telemetry Stream
-      if (channel === 'telemetry') {
-        try {
-          const { data: rows, error } = await supabase
-            .from('telemetry')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(100);
-
-          if (!error && rows) {
-            return res.status(200).json({
-              ok: true,
-              items: rows,
-              presence: state.presence || {},
-              source: 'supabase'
-            });
-          }
-        } catch {}
-
-        return res.status(200).json({
-          ok: true,
-          items: (state.telemetry || []).slice(0, 200),
-          presence: state.presence || {},
-          source: 'memory'
-        });
-      }
-
-      // 4. Messages Stream (Strict Human Chat Only — ZERO Signal Packets)
-      if (channel === 'messages') {
-        const room = req.query.room || 'global';
-        const isSignalMessage = (m) => {
-          if (!m) return true;
-          if (m.kind === 'signal') return true;
-          if (m.sender_name === 'Signal') return true;
-          const c = (m.content || '').trim();
-          if (c.startsWith('__SIG__:')) return true;
-          if (c.startsWith('{"type":') || c.startsWith('{"candidate":') || c.startsWith('{"offer":') || c.startsWith('{"sdp":') || c.startsWith('{"peers":')) {
-            return true;
-          }
-          return false;
-        };
-
-        try {
-          let query = supabase
-            .from('messages')
-            .select('*')
-            .neq('kind', 'signal')
-            .order('created_at', { ascending: false })
-            .limit(100);
-
-          if (room && room !== '*') {
-            query = query.eq('room', room);
-          }
-
-          const { data: dbMsgs } = await query;
-          if (dbMsgs && dbMsgs.length > 0) {
-            const formatted = dbMsgs
-              .reverse()
-              .filter((m) => !isSignalMessage(m))
-              .map(m => ({
-                id: m.id,
-                room: m.room,
-                sender: m.sender,
-                sender_name: m.sender_name || 'Engineer',
-                content: m.content,
-                kind: m.kind || 'chat',
-                created_at: m.created_at,
-              }));
-            return res.status(200).json({ ok: true, items: formatted, source: 'supabase' });
-          }
-        } catch {}
-
-        const roomMsgs = (state.messages || [])
-          .filter((m) => (!room || m.room === room) && !isSignalMessage(m));
-        return res.status(200).json({ ok: true, items: roomMsgs.slice(-150), source: 'memory' });
-      }
-
-      // 5. WebRTC Signals (Backed by Isolated Telemetry Table + Memory — Completely Separate from Messages)
-      if (channel === 'signals') {
-        const room = req.query.room || 'global';
-        const user = (req.query.user || req.query.user_id || '').toLowerCase().trim();
-        const since = Number(req.query.since || 0);
-        const sinceDate = new Date(Math.max(since, Date.now() - 60000)).toISOString();
-        const now = Date.now();
-
-        const items = [];
-        try {
-          const { data: dbSignals } = await supabase
-            .from('telemetry')
-            .select('*')
-            .eq('event_type', 'webrtc_signal')
-            .gt('created_at', sinceDate)
-            .order('created_at', { ascending: true })
-            .limit(150);
-
-          if (dbSignals && dbSignals.length > 0) {
-            for (const row of dbSignals) {
-              try {
-                const parsed = typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata;
-                const sTs = parsed?.ts || new Date(row.created_at).getTime();
-                if (sTs > since && parsed) {
-                  items.push({ ...parsed, id: row.id, ts: sTs });
-                }
-              } catch {}
-            }
-          }
-        } catch (dbErr) {
-          console.error('[Relay] Error fetching signals from Supabase:', dbErr);
-        }
-
-        // Merge with in-memory state signals as redundancy
-        state.signals = (state.signals || []).filter((s) => now - s.ts < 60000);
-        for (const s of state.signals) {
-          if (s.ts > since && !items.some((it) => it.id === s.id)) {
-            items.push(s);
-          }
-        }
-
-        const matching = items.filter((s) => {
-          const to = (s.to || '').toLowerCase().trim();
-          const target = (s.target_user_id || '').toLowerCase().trim();
-          const isBroadcast = to === '*' || to === 'all' || target === '*';
-          if (user) {
-            const isForMe = to === user || target === user || isBroadcast;
-            if (isForMe) return true;
-          }
-          if (!room || room === '*' || s.room === room || s.room === 'global') return true;
-          return isBroadcast;
-        });
-
-        // Background garbage collection of stale signals older than 3 minutes
-        if (Math.random() < 0.1) {
-          const purgeDate = new Date(Date.now() - 180000).toISOString();
-          supabase
-            .from('telemetry')
-            .delete()
-            .eq('event_type', 'webrtc_signal')
-            .lt('created_at', purgeDate)
-            .then(() => {})
-            .catch(() => {});
-        }
-
-        return res.status(200).json({ ok: true, items: matching, serverTime: now });
-      }
-
-      // Default Health & Status
-      let dbStatus = 'connecting';
-      try {
-        const { count } = await supabase.from('dossiers').select('*', { count: 'exact', head: true });
-        dbStatus = `online (${count || 0} dossiers)`;
-      } catch {
-        dbStatus = 'offline';
-      }
-
+    // ────────── HEALTH / SYNC STATUS ──────────
+    if (channel === 'sync-status' || channel === 'health') {
+      const dbCheck = await query('SELECT NOW() AS now');
       return res.status(200).json({
         ok: true,
-        status: 'online',
-        database: dbStatus,
-        counts: {
-          applicants: (state.applicants || []).length,
-          cards: Object.keys(state.cards || {}).length,
-          messages: (state.messages || []).length,
-          telemetry: (state.telemetry || []).length,
-          active_stations: Object.keys(state.presence || {}).length,
-        },
+        mode: 'neon+s3+brevo+cloudflare',
+        database: 'neon-postgres',
+        dbTime: dbCheck.rows[0]?.now,
+        s3Configured: isS3Configured(),
+        brevoConfigured: isBrevoConfigured(),
+        ts: Date.now(),
       });
     }
 
-    // ─── POST / PATCH REQUESTS ───
-    const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {};
-
-    // 1. Dossiers / Applicants write
-    if (channel === 'dossiers' || channel === 'applicants') {
-      const email = (body.email || '').trim().toLowerCase();
-      const name = (body.name || body.full_name || email.split('@')[0] || 'Applicant').trim();
-      const callsign = (body.callsign || email.split('@')[0] || '').toLowerCase().replace(/[^a-z0-9_]/g, '');
-
-      try {
-        await supabase
-          .from('dossiers')
-          .upsert(
-            [
-              {
-                full_name: name,
-                email,
-                callsign,
-                suite: body.suite || 'phi-twin',
-                role: body.role || 'member',
-                motivation: body.motivation || 'Workstation Onboarding Request',
-                research_history: body.research_history || '',
-                phone: body.phone || '',
-                location: body.location || '',
-                status: body.status || 'pending',
-                updated_at: new Date().toISOString()
-              }
-            ],
-            { onConflict: 'email' }
-          );
-      } catch (err) {
-        console.error('[Relay] Supabase upsert dossier error:', err);
+    // ────────── S3 PRESIGNED URL REFRESH ──────────
+    if (channel === 's3-url' && req.method === 'GET') {
+      const key = String(req.query?.key || '').trim();
+      if (!key || key.includes('..')) {
+        return res.status(400).json({ ok: false, error: 'Valid key is required' });
       }
-
-      // In-memory update
-      const existingIdx = state.applicants.findIndex(
-        (a) => a.id === callsign || (email && a.email?.toLowerCase() === email)
-      );
-      const record = {
-        id: callsign,
-        name,
-        full_name: name,
-        email,
-        callsign,
-        suite: body.suite || 'phi-twin',
-        role: body.role || 'member',
-        motivation: body.motivation || 'Workstation Onboarding Request',
-        status: body.status || 'pending',
-        created: existingIdx >= 0 ? state.applicants[existingIdx].created : new Date().toISOString(),
-        updated: new Date().toISOString(),
-      };
-      if (existingIdx >= 0) {
-        state.applicants[existingIdx] = { ...state.applicants[existingIdx], ...record };
-      } else {
-        state.applicants.unshift(record);
-      }
-      saveState(state);
-      return res.status(200).json({ ok: true, record });
+      const url = getPresignedUrl(key, 3600);
+      return res.status(200).json({ ok: Boolean(url), url, key });
     }
 
-    // 2. CPDC Card Issuance & Registration
-    if (channel === 'cards') {
-      const targetEmail = (body.email || '').trim().toLowerCase();
-      const callsign = (body.userId || body.callsign || targetEmail.split('@')[0] || '').trim().toLowerCase();
-      const name = body.name || 'Engineer';
-      const role = body.role || 'member';
-      const suite = body.suite || 'phi-twin';
-      const sig = body.sig || `PHI_CLOUD_HMAC_${Date.now().toString(36)}`;
-      const card_png_base64 = body.cpdc_payload || null;
+    // ────────── GET REQUESTS ──────────
+    if (req.method === 'GET') {
+      if (channel === 'applicants' || channel === 'dossiers') {
+        const { rows } = await query(
+          `SELECT * FROM dossiers ORDER BY created_at DESC LIMIT 250`
+        );
+        const formatted = rows.map((d) => ({
+          id: d.id,
+          user_id: d.metadata?.uid || d.callsign || d.id,
+          email: d.email,
+          full_name: d.full_name,
+          name: d.full_name,
+          callsign: d.callsign,
+          username: d.callsign,
+          role: d.role,
+          suite: d.suite,
+          status: d.status,
+          motivation: d.motivation,
+          research_history: d.research_history,
+          phone: d.phone,
+          location: d.location,
+          referral: d.referral,
+          age: d.age,
+          cv_name: d.cv_name,
+          photo_name: d.photo_name,
+          cv_s3_key: d.cv_s3_key || d.metadata?.cv_s3_key || '',
+          photo_s3_key: d.photo_s3_key || d.metadata?.photo_s3_key || '',
+          cv_url: (d.cv_s3_key || d.metadata?.cv_s3_key)
+            ? getPresignedUrl(d.cv_s3_key || d.metadata?.cv_s3_key, 3600)
+            : '',
+          photo_url: (d.photo_s3_key || d.metadata?.photo_s3_key)
+            ? getPresignedUrl(d.photo_s3_key || d.metadata?.photo_s3_key, 3600)
+            : '',
+          cpdc_issued: d.cpdc_issued,
+          cpdc_card_url: d.cpdc_card_url,
+          metadata: d.metadata,
+          created_at: d.created_at,
+          updated_at: d.updated_at,
+        }));
+        return res.status(200).json({ ok: true, items: formatted, source: 'neon' });
+      }
 
-      try {
-        await supabase
-          .from('cpdc_registry')
-          .upsert(
+      if (channel === 'cards') {
+        const email = norm(req.query?.email);
+        const userId = norm(req.query?.userId || req.query?.uid || req.query?.callsign);
+
+        const cpdcRes = await query(
+          `SELECT * FROM cpdc_registry
+           WHERE ($1 <> '' AND LOWER(applicant_email) = $1)
+              OR ($2 <> '' AND LOWER(callsign) = $2)
+           ORDER BY issued_at DESC LIMIT 1`,
+          [email, userId]
+        );
+        const cardRow = cpdcRes.rows[0];
+        if (cardRow) {
+          let payload = null;
+          let cardData = cardRow.card_png_base64 || '';
+          try {
+            if (typeof cardData === 'string' && cardData.trim().startsWith('{')) {
+              const parsed = JSON.parse(cardData);
+              if (parsed.cpdc_payload || parsed.v === 2) {
+                payload = parsed.cpdc_payload || parsed;
+                cardData = parsed.cpdc_card_data || '';
+              }
+            }
+          } catch {}
+          const cardUrl = cardRow.card_s3_key ? getPresignedUrl(cardRow.card_s3_key, 3600) : '';
+          const cardObj = {
+            userId: cardRow.callsign,
+            uid: cardRow.callsign,
+            name: cardRow.applicant_name,
+            email: cardRow.applicant_email,
+            role: cardRow.role,
+            suite: cardRow.suite,
+            spaces: payload?.access_matrix || [cardRow.suite || 'phi-twin'],
+            access_matrix: payload?.access_matrix || [cardRow.suite || 'phi-twin'],
+            sig: cardRow.signature,
+            cpdc_payload: payload,
+            cpdc_card_data: cardData || undefined,
+            card_url: cardUrl || undefined,
+            issued_at: cardRow.issued_at,
+          };
+          return res.status(200).json({
+            ok: true,
+            ...cardObj,
+            card: cardObj,
+            source: 'neon-cpdc',
+          });
+        }
+
+        // Fallback to dossiers metadata if CPDC issued directly on dossier
+        const dosRes = await query(
+          `SELECT * FROM dossiers
+           WHERE ($1 <> '' AND LOWER(email) = $1)
+              OR ($2 <> '' AND (LOWER(callsign) = $2 OR id::text = $2))
+           ORDER BY updated_at DESC LIMIT 1`,
+          [email, userId]
+        );
+        const dRow = dosRes.rows[0];
+        if (dRow && (dRow.cpdc_issued || dRow.metadata?.cpdc_payload || dRow.metadata?.cpdc_card_data)) {
+          const cardObj = {
+            userId: dRow.callsign || dRow.id,
+            uid: dRow.callsign || dRow.id,
+            name: dRow.full_name,
+            email: dRow.email,
+            role: dRow.role,
+            suite: dRow.suite,
+            spaces: dRow.metadata?.spaces || [dRow.suite || 'phi-twin'],
+            access_matrix: dRow.metadata?.spaces || [dRow.suite || 'phi-twin'],
+            cpdc_payload: dRow.metadata?.cpdc_payload || null,
+            cpdc_card_data: dRow.metadata?.cpdc_card_data || undefined,
+          };
+          return res.status(200).json({
+            ok: true,
+            ...cardObj,
+            card: cardObj,
+            source: 'neon-dossier',
+          });
+        }
+
+        return res.status(200).json({ ok: false, error: 'Card not found' });
+      }
+
+      if (channel === 'telemetry') {
+        const limit = Math.min(200, Math.max(10, Number(req.query?.limit || 60)));
+        const [telRes, presRes] = await Promise.all([
+          query(`SELECT * FROM telemetry ORDER BY created_at DESC LIMIT $1`, [limit]),
+          query(
+            `SELECT user_id, name, suite, role, last_seen
+             FROM team_presence
+             WHERE last_seen > NOW() - INTERVAL '10 minutes'
+             ORDER BY last_seen DESC`
+          ),
+        ]);
+        const presence = {};
+        for (const p of presRes.rows) {
+          presence[p.user_id] = {
+            operator_id: p.user_id,
+            operator_name: p.name,
+            suite: p.suite,
+            role: p.role,
+            updated_at: p.last_seen,
+          };
+        }
+        return res.status(200).json({
+          ok: true,
+          items: telRes.rows,
+          presence,
+          source: 'neon',
+        });
+      }
+
+      if (channel === 'messages') {
+        const room = String(req.query?.room || '').trim();
+        const { rows } = room
+          ? await query(`SELECT * FROM messages WHERE room = $1 ORDER BY created_at DESC LIMIT 120`, [room])
+          : await query(`SELECT * FROM messages ORDER BY created_at DESC LIMIT 120`);
+        return res.status(200).json({
+          ok: true,
+          items: rows.reverse(),
+          source: 'neon',
+        });
+      }
+
+      if (channel === 'timelogs') {
+        const uid = String(req.query?.user_id || '').trim();
+        const { rows } = uid
+          ? await query(`SELECT * FROM time_logs WHERE LOWER(user_id) = LOWER($1) ORDER BY timestamp DESC LIMIT 150`, [uid])
+          : await query(`SELECT * FROM time_logs ORDER BY timestamp DESC LIMIT 150`);
+        return res.status(200).json({ ok: true, items: rows, logs: rows, source: 'neon' });
+      }
+
+      if (channel === 'signals') {
+        const since = Number(req.query?.since || 0);
+        const room = String(req.query?.room || '').trim();
+        const cutoff = Date.now() - 120000;
+        await query(`DELETE FROM signal_events WHERE ts < $1`, [cutoff]);
+        const { rows } = await query(
+          `SELECT id, target, sender, sender_name, room, signal_type, payload, ts
+           FROM signal_events
+           WHERE ts > $1 AND ($2 = '' OR room = $2 OR room = 'global' OR signal_type IN ('incoming-call','call-response','call-end','leave-call','screen-invite'))
+           ORDER BY ts ASC LIMIT 60`,
+          [since, room]
+        );
+        const items = rows.map((r) => ({
+          ...(r.payload && typeof r.payload === 'object' ? r.payload : {}),
+          id: r.id,
+          type: r.signal_type,
+          from: r.sender,
+          to: r.target,
+          room: r.room,
+          ts: Number(r.ts),
+        }));
+        return res.status(200).json({
+          ok: true,
+          items,
+          serverTime: Date.now(),
+          source: 'neon',
+        });
+      }
+
+      return res.status(400).json({ ok: false, error: `Unknown channel: ${channel}` });
+    }
+
+    // ────────── PATCH REQUESTS (e.g. dossier clearance updates) ──────────
+    if (req.method === 'PATCH') {
+      const b = req.body || {};
+      if (channel === 'applicants' || channel === 'dossiers') {
+        const id = String(req.query?.id || b.id || '').trim();
+        const email = norm(req.query?.email || b.email);
+        const callsign = norm(req.query?.callsign || b.callsign);
+
+        const resUpd = await query(
+          `UPDATE dossiers SET
+            status = COALESCE(NULLIF($4, ''), status),
+            role = COALESCE(NULLIF($5, ''), role),
+            suite = COALESCE(NULLIF($6, ''), suite),
+            cpdc_issued = COALESCE($7, cpdc_issued),
+            updated_at = NOW()
+           WHERE ($1 <> '' AND id::text = $1)
+              OR ($2 <> '' AND LOWER(email) = $2)
+              OR ($3 <> '' AND LOWER(callsign) = $3)
+           RETURNING *`,
+          [
+            id,
+            email,
+            callsign,
+            b.status || '',
+            b.role || '',
+            b.suite || '',
+            typeof b.cpdc_issued === 'boolean' ? b.cpdc_issued : null,
+          ]
+        );
+        return res.status(200).json({ ok: true, item: resUpd.rows[0] || null, source: 'neon' });
+      }
+      return res.status(400).json({ ok: false, error: 'Unsupported PATCH channel' });
+    }
+
+    // ────────── POST REQUESTS ──────────
+    if (req.method === 'POST') {
+      const b = req.body || {};
+
+      if (channel === 'applicants' || channel === 'dossiers') {
+        let cvKey = b.cv_s3_key || '';
+        let photoKey = b.photo_s3_key || '';
+        const slug = norm(b.callsign || b.email?.split('@')[0] || 'applicant').replace(/[^a-z0-9]/g, '') || 'applicant';
+        if (isS3Configured()) {
+          if (b.cv_data && !cvKey) {
+            try { cvKey = (await uploadDataUrl(`dossiers/${slug}/cv`, b.cv_name || 'cv.pdf', b.cv_data))?.key || ''; } catch {}
+          }
+          if (b.photo_data && !photoKey) {
+            try { photoKey = (await uploadDataUrl(`dossiers/${slug}/photo`, b.photo_name || 'photo.png', b.photo_data))?.key || ''; } catch {}
+          }
+        }
+        const saved = await upsertDossierRecord({
+          full_name: b.full_name || b.name || 'Candidate',
+          email: b.email,
+          callsign: b.callsign || b.username || b.user_id,
+          role: b.role || 'applicant',
+          suite: b.suite || 'phi-twin',
+          motivation: b.motivation || '',
+          research_history: b.research_history || '',
+          phone: b.phone || '',
+          location: b.location || '',
+          referral: b.referral || '',
+          age: b.age || '',
+          cv_name: b.cv_name || '',
+          photo_name: b.photo_name || '',
+          cv_s3_key: cvKey,
+          photo_s3_key: photoKey,
+          status: b.status || 'pending',
+          cpdc_issued: typeof b.cpdc_issued === 'boolean' ? b.cpdc_issued : undefined,
+          metadata: b.metadata || {},
+        });
+        return res.status(200).json({ ok: true, id: saved.id, item: saved, source: 'neon' });
+      }
+
+      if (channel === 'cards') {
+        const callsign = norm(b.callsign || b.uid || b.userId || b.email?.split('@')[0]);
+        const email = norm(b.email);
+        const name = String(b.name || b.full_name || callsign || 'Operator').trim();
+        const role = String(b.role || 'member').trim();
+        const suite = String(b.suite || 'phi-twin').trim();
+        const sig = String(b.sig || b.signature || `sovereign_neon_${callsign}_${Date.now()}`);
+        const cardDataUrl = String(b.cpdc_card_data || b.card_png_base64 || '');
+
+        let cardS3Key = '';
+        if (cardDataUrl.startsWith('data:image/') && isS3Configured()) {
+          try {
+            const up = await uploadDataUrl(`cpdc/${callsign || 'card'}`, `${callsign || 'card'}.png`, cardDataUrl);
+            cardS3Key = up?.key || '';
+          } catch {}
+        }
+
+        const storedBlob = b.cpdc_payload
+          ? JSON.stringify({
+              cpdc_payload: b.cpdc_payload,
+              cpdc_card_data: cardDataUrl && cardDataUrl.length < 350000 ? cardDataUrl : undefined,
+            })
+          : cardDataUrl;
+
+        await query(
+          `INSERT INTO cpdc_registry (applicant_email, applicant_name, callsign, role, suite, signature, card_png_base64, card_s3_key)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+          [email, name, callsign, role, suite, sig, storedBlob, cardS3Key]
+        );
+
+        if (email || callsign) {
+          await query(
+            `UPDATE dossiers SET
+               status = 'accepted',
+               cpdc_issued = TRUE,
+               role = COALESCE(NULLIF($3, ''), role),
+               suite = COALESCE(NULLIF($4, ''), suite),
+               metadata = metadata || $5::jsonb,
+               updated_at = NOW()
+             WHERE ($1 <> '' AND LOWER(email) = $1) OR ($2 <> '' AND LOWER(callsign) = $2)`,
             [
-              {
-                applicant_email: targetEmail,
-                applicant_name: name,
-                callsign,
-                role,
-                suite,
-                signature: sig,
-                card_png_base64,
+              email,
+              callsign,
+              role,
+              suite,
+              JSON.stringify({
+                cpdc_payload: b.cpdc_payload || undefined,
+                spaces: b.spaces || b.access_matrix || [suite],
+                cpdc_s3_key: cardS3Key || undefined,
                 issued_at: new Date().toISOString(),
-              }
-            ],
-            { onConflict: 'applicant_email' }
+              }),
+            ]
           );
+        }
 
-        // Update dossier status to accepted
-        await supabase
-          .from('dossiers')
-          .update({ status: 'accepted', cpdc_issued: true })
-          .eq('email', targetEmail);
-      } catch (err) {
-        console.error('[Relay] Supabase cpdc insert error:', err);
+        if (email && b.notify !== false && isBrevoConfigured()) {
+          try {
+            await sendCpdcIssuedEmail({
+              email,
+              name,
+              callsign,
+              role,
+              suite,
+              cardPngBase64: cardDataUrl,
+            });
+          } catch (e) {
+            console.warn('[Relay/Cards] Brevo notification warning:', e.message);
+          }
+        }
+
+        return res.status(200).json({ ok: true, callsign, card_s3_key: cardS3Key, source: 'neon' });
       }
 
-      const cardData = {
-        uid: callsign,
-        name,
-        email: targetEmail,
-        role,
-        suite,
-        spaces: [suite, '*'],
-        access_matrix: [suite, '*'],
-        issued_at: Math.floor(Date.now() / 1000),
-        sig,
-        cpdc_payload: card_png_base64,
-      };
+      if (channel === 'telemetry') {
+        const opId = String(b.operator_id || b.user_id || b.uid || 'anon').trim();
+        const opName = String(b.operator_name || b.name || opId).trim();
+        const opEmail = String(b.operator_email || b.email || '').trim().toLowerCase();
+        const role = String(b.role || 'member').trim();
+        const suite = String(b.suite || 'phi-twin').trim();
+        const evType = String(b.event_type || 'event').trim();
+        const summary = String(b.prompt_summary || b.summary || '').trim();
 
-      if (callsign) state.cards[callsign] = cardData;
-      if (targetEmail) state.cards[targetEmail] = cardData;
-      saveState(state);
-      return res.status(200).json({ ok: true, card: cardData });
-    }
-
-    // 3. Telemetry Ingestion
-    if (channel === 'telemetry') {
-      const payload = {
-        operator_id: body.operator_id || 'anonymous',
-        operator_name: body.operator_name || 'Workstation Operator',
-        operator_email: body.operator_email || '',
-        role: body.role || 'member',
-        event_type: body.event_type || 'activity',
-        suite: body.suite || 'workstation',
-        prompt_summary: body.prompt_summary || '',
-        metadata: body.metadata || {},
-        created_at: new Date().toISOString(),
-      };
-
-      try {
-        await supabase.from('telemetry').insert([payload]);
-      } catch (err) {
-        console.error('[Relay] Supabase telemetry insert error:', err);
-      }
-
-      state.telemetry.unshift(payload);
-      if (state.telemetry.length > 500) state.telemetry = state.telemetry.slice(0, 500);
-
-      if (body.operator_id) {
-        state.presence[body.operator_id] = {
-          id: body.operator_id,
-          name: body.operator_name,
-          email: body.operator_email,
-          role: body.role,
-          suite: body.suite,
-          lastSeen: Date.now(),
-        };
-      }
-      saveState(state);
-      return res.status(200).json({ ok: true });
-    }
-
-    // 4. Multi-station Chat Messaging
-    if (channel === 'messages') {
-      const msg = {
-        id: body.id || `msg_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-        sender: body.sender || 'operator',
-        sender_name: body.sender_name || 'Engineer',
-        content: body.content || '',
-        room: body.room || 'global',
-        kind: body.kind || 'chat',
-        created_at: new Date().toISOString(),
-      };
-
-      try {
-        await supabase.from('messages').insert([
-          {
-            id: msg.id,
-            room: msg.room,
-            sender: msg.sender,
-            sender_name: msg.sender_name,
-            content: msg.content,
-            kind: msg.kind,
-            created_at: msg.created_at,
-          },
+        await Promise.all([
+          query(
+            `INSERT INTO telemetry (operator_id, operator_name, operator_email, role, event_type, suite, prompt_summary, metadata)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8::jsonb)`,
+            [opId, opName, opEmail, role, evType, suite, summary, JSON.stringify(b.metadata || {})]
+          ),
+          query(
+            `INSERT INTO team_presence (user_id, name, callsign, suite, role, status, last_seen)
+             VALUES ($1, $2, $3, $4, $5, 'online', NOW())
+             ON CONFLICT (user_id) DO UPDATE SET
+               name = EXCLUDED.name,
+               suite = EXCLUDED.suite,
+               role = EXCLUDED.role,
+               status = 'online',
+               last_seen = NOW()`,
+            [opId.toLowerCase(), opName, opId.toLowerCase(), suite, role]
+          ),
         ]);
-      } catch (err) {
-        console.error('[Relay] Supabase message insert error:', err);
+        return res.status(200).json({ ok: true, source: 'neon' });
       }
 
-      state.messages.push(msg);
-      if (state.messages.length > 1000) state.messages = state.messages.slice(-500);
-      saveState(state);
-      return res.status(200).json({ ok: true, message: msg });
-    }
-
-    // 5. WebRTC P2P Signals (Persisted to Isolated Telemetry Table — NEVER Inserted to Messages)
-    if (channel === 'signals') {
-      const signalItem = {
-        ...body,
-        id: body.id || `sig_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-        room: body.room || 'global',
-        from: body.from || 'peer',
-        to: body.to || 'all',
-        payload: body.payload || body,
-        ts: Date.now(),
-      };
-
-      state.signals.push(signalItem);
-      if (state.signals.length > 500) state.signals = state.signals.slice(-250);
-      saveState(state);
-
-      try {
-        await supabase.from('telemetry').insert([
-          {
-            operator_id: signalItem.from,
-            operator_name: 'Signal',
-            event_type: 'webrtc_signal',
-            suite: signalItem.room || 'global',
-            prompt_summary: signalItem.type || 'signal',
-            metadata: signalItem,
-            created_at: new Date(signalItem.ts).toISOString(),
-          },
-        ]);
-      } catch (err) {
-        console.error('[Relay] Supabase signal insert error:', err);
+      if (channel === 'messages') {
+        const msgId = String(b.id || `msg_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`);
+        const { rows } = await query(
+          `INSERT INTO messages (id, room, sender, sender_name, content, kind)
+           VALUES ($1, $2, $3, $4, $5, $6)
+           ON CONFLICT (id) DO NOTHING
+           RETURNING *`,
+          [
+            msgId,
+            String(b.room || 'lab-general'),
+            String(b.sender || b.user_id || 'peer'),
+            String(b.sender_name || b.sender || 'Engineer'),
+            String(b.content || ''),
+            String(b.kind || 'chat'),
+          ]
+        );
+        return res.status(200).json({ ok: true, message: rows[0] || { id: msgId }, source: 'neon' });
       }
 
-      return res.status(200).json({ ok: true, signal: signalItem });
+      if (channel === 'timelogs') {
+        const uid = String(b.user_id || b.member || 'operator').trim();
+        const uName = String(b.user_name || b.name || uid).trim();
+        const action = String(b.action || (b.type === 'out' ? 'clock-out' : 'clock-in')).trim();
+        const suite = String(b.suite || 'phi-twin').trim();
+        const { rows } = await query(
+          `INSERT INTO time_logs (user_id, user_name, action, suite, timestamp)
+           VALUES ($1, $2, $3, $4, COALESCE($5::timestamptz, NOW()))
+           RETURNING *`,
+          [uid, uName, action, suite, b.timestamp || null]
+        );
+        return res.status(200).json({ ok: true, log: rows[0], source: 'neon' });
+      }
+
+      if (channel === 'signals') {
+        const sigId = String(b.sig_uid || b.id || `sig_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`);
+        const ts = Number(b.ts || Date.now());
+        await query(
+          `INSERT INTO signal_events (id, target, sender, sender_name, room, signal_type, payload, ts)
+           VALUES ($1, $2, $3, $4, $5, $6, $7::jsonb, $8)
+           ON CONFLICT (id) DO NOTHING`,
+          [
+            sigId,
+            String(b.to || '*'),
+            String(b.from || 'peer'),
+            String(b.fromName || b.sender_name || ''),
+            String(b.room || 'global'),
+            String(b.type || 'signal'),
+            JSON.stringify(b),
+            ts,
+          ]
+        );
+        return res.status(200).json({ ok: true, id: sigId, serverTime: Date.now(), source: 'neon' });
+      }
+
+      return res.status(400).json({ ok: false, error: `Unknown POST channel: ${channel}` });
     }
 
-    return res.status(400).json({ ok: false, error: `Unknown channel: ${channel}` });
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
   } catch (err) {
-    console.error('[Relay] Global Exception:', err);
-    return res.status(500).json({ ok: false, error: String(err) });
+    console.error(`[API/Relay:${channel}] Error:`, err);
+    return res.status(500).json({ ok: false, error: err.message });
   }
 }

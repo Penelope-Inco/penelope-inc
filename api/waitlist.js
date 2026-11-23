@@ -1,85 +1,54 @@
-/**
- * /api/waitlist.js
- * POST https://penelope-inc.vercel.app/api/waitlist
- * Forwards digital twin masterclass/training signups directly into Supabase (dossiers table)
- * and mirrors to Fly.io PocketBase.
- */
-
-import { supabase } from '../services/supabase.js';
-
-const FLY_PB_BASE = process.env.PB_BASE || 'https://penelope-510.fly.dev';
+import { upsertDossierRecord } from '../services/neon.js';
+import { sendAdminAlert, sendApplicantConfirmation } from '../services/email.js';
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
-
-  let b = req.body || {};
-  if (typeof b === 'string') {
-    try { b = JSON.parse(b); } catch { b = {}; }
+  if (req.method !== 'POST') {
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
-  const name = (b.name || b.full_name || '').trim();
-  const email = (b.email || '').trim().toLowerCase();
-  const program = b.program || 'Digital Twin Masterclass';
-
-  if (!email || !email.includes('@')) {
-    return res.status(400).json({ ok: false, error: 'Valid email address is required.' });
-  }
-
-  // 1. Write to Supabase
   try {
-    const { data } = await supabase
-      .from('dossiers')
-      .insert([
-        {
-          full_name: name || email.split('@')[0],
-          email,
-          callsign: email.split('@')[0],
-          suite: 'phi-twin',
-          role: 'trainee',
-          motivation: `[MASTERCLASS WAITLIST] Program: ${program}`,
-          research_history: 'Education & Training Ingestion',
-          status: 'waitlist_pending',
-          metadata: {
-            program,
-            ip: req.headers['x-forwarded-for'] || req.socket?.remoteAddress,
-            submitted_at: new Date().toISOString()
-          }
-        }
-      ])
-      .select()
-      .single();
+    const { full_name, name, email, org_type, preferred_track, track } = req.body || {};
+    const cleanName = String(full_name || name || '').trim();
+    const cleanEmail = String(email || '').trim().toLowerCase();
+    const suite = String(preferred_track || track || org_type || 'training').trim();
 
-    if (data) {
-      console.log('[API/Waitlist] Saved waitlist candidate to Supabase:', data.id);
+    if (!cleanName || !cleanEmail) {
+      return res.status(400).json({ ok: false, error: 'Full name and email are required.' });
     }
-  } catch (err) {
-    console.error('[API/Waitlist] Supabase error:', err);
-  }
 
-  // 2. Mirror to Fly.io PocketBase
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 2500);
-    await fetch(`${FLY_PB_BASE}/api/collections/applicants/records`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({
-        name: name || email.split('@')[0],
-        email,
-        suite: 'phi-twin',
-        role: 'trainee',
-        motivation: `Digital Twin Training waitlist request: ${program}`,
-        status: 'pending',
-      }),
+    const callsign = cleanEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '') || `wl${Date.now()}`;
+    const saved = await upsertDossierRecord({
+      full_name: cleanName,
+      email: cleanEmail,
+      callsign,
+      role: 'waitlist',
+      suite,
+      motivation: `[MASTERCLASS / TRAINING WAITLIST — ${org_type || 'General'}]`,
+      status: 'waitlist',
+      metadata: {
+        source: 'penelope-inc-waitlist',
+        org_type: org_type || '',
+        submitted_at: new Date().toISOString(),
+      },
     });
-    clearTimeout(timeout);
-  } catch {}
 
-  return res.status(200).json({ ok: true, message: 'Added to masterclass queue.' });
+    await Promise.allSettled([
+      sendAdminAlert({
+        subject: `Training Waitlist: ${cleanName}`,
+        replyTo: cleanEmail,
+        fields: { Name: cleanName, Email: cleanEmail, OrgType: org_type, Track: suite },
+      }),
+      sendApplicantConfirmation({
+        email: cleanEmail,
+        name: cleanName,
+        pathLabel: 'Digital Twin Training Registration',
+        suite,
+      }),
+    ]);
+
+    return res.status(200).json({ ok: true, id: saved?.id });
+  } catch (err) {
+    console.error('[API/Waitlist] Error:', err);
+    return res.status(500).json({ ok: false, error: 'Unable to record registration right now.' });
+  }
 }

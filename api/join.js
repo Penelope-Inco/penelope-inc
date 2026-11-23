@@ -1,152 +1,141 @@
-/**
- * /api/join.js
- * POST https://penelope-inc.vercel.app/api/join
- * Forwards collaborator / employee applications from join.html directly
- * to Supabase (dossiers table) with live streaming to Commander Dashboard.
- */
-
-import { supabase } from '../services/supabase.js';
-
-const PB_BASE = process.env.PB_BASE || 'https://penelope-510.fly.dev';
+import { upsertDossierRecord, query } from '../services/neon.js';
+import { isS3Configured, uploadDataUrl } from '../services/s3.js';
+import { sendAdminAlert, sendApplicantConfirmation } from '../services/email.js';
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
   if (req.method !== 'POST') {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
   try {
-    let body = req.body;
+    const body = req.body || {};
+    const {
+      full_name,
+      name,
+      email,
+      role,
+      suite,
+      phone,
+      location,
+      age,
+      referral,
+      motivation,
+      research_history,
+      callsign,
+      cv_name,
+      cv_data,
+      photo_name,
+      photo_data,
+    } = body;
 
-    if (typeof body === 'string') {
-      try {
-        body = JSON.parse(body);
-      } catch {
-        body = {};
-      }
+    const cleanName = String(full_name || name || '').trim();
+    const cleanEmail = String(email || '').trim().toLowerCase();
+    const cleanRole = String(role || 'applicant').trim();
+    const cleanSuite = String(suite || 'phi-twin').trim();
+
+    if (!cleanName || !cleanEmail) {
+      return res.status(400).json({ ok: false, error: 'Full name and email are required.' });
     }
 
-    body = body || {};
+    const safeCallsign =
+      String(callsign || cleanEmail.split('@')[0] || 'applicant')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '') || `app${Date.now().toString(36)}`;
+    const dossierUid = safeCallsign.slice(0, 15).padEnd(6, '0');
 
-    const name = (body.full_name || body.name || '').trim();
-    const email = (body.email || '').trim().toLowerCase();
-    const suite = body.suite || 'phi-twin';
-    const role = body.role || 'member';
-    const callsign = (body.callsign || email.split('@')[0] || '').toLowerCase().replace(/[^a-z0-9_]/g, '');
-
-    const research_history = body.research_history || '';
-    const phone = body.phone_number || body.phone || '';
-    const location = body.location || '';
-    const age = body.age || '';
-    const referral = body.how_they_found_us || '';
-    const cv_name = body.cv_name || '';
-    const photo_name = body.photo_name || '';
-
-    const motivationParts = [
-      body.motivation,
-      research_history ? `Research / Proof: ${research_history}` : '',
-      location ? `Location: ${location}` : '',
-      phone ? `Phone: ${phone}` : '',
-      age ? `Age: ${age}` : '',
-      referral ? `Referral: ${referral}` : '',
-      cv_name ? `CV Attached: ${cv_name}` : '',
-      photo_name ? `Photo: ${photo_name}` : '',
-    ].filter(Boolean);
-
-    const motivation = motivationParts.join(' | ') || `Application for ${suite} workspace under DIMASA aerospace initiative.`;
-
-    if (!name || !email || !email.includes('@')) {
-      return res.status(400).json({
-        ok: false,
-        error: 'Please provide both your Full Name and a valid Email address.',
-      });
+    // Upload CV / Photo binaries to Neon S3 (`philab26` bucket) when configured
+    let cvUpload = null;
+    let photoUpload = null;
+    if (isS3Configured()) {
+      const uploads = [];
+      if (cv_data) {
+        uploads.push(
+          uploadDataUrl(`dossiers/${safeCallsign}/cv`, cv_name || 'cv.pdf', cv_data)
+            .then((r) => { cvUpload = r; })
+            .catch((e) => console.warn('[API/Join] CV S3 upload warning:', e.message))
+        );
+      }
+      if (photo_data) {
+        uploads.push(
+          uploadDataUrl(`dossiers/${safeCallsign}/photo`, photo_name || 'photo.png', photo_data)
+            .then((r) => { photoUpload = r; })
+            .catch((e) => console.warn('[API/Join] Photo S3 upload warning:', e.message))
+        );
+      }
+      if (uploads.length > 0) await Promise.all(uploads);
     }
 
-    // 1. Primary write to Supabase dossiers table
-    try {
-      const { data, error } = await supabase
-        .from('dossiers')
-        .insert([
-          {
-            full_name: name,
-            email,
-            callsign,
-            suite,
-            role,
-            motivation,
-            research_history,
-            phone,
-            location,
-            referral,
-            age: String(age),
-            cv_name,
-            photo_name,
-            status: 'pending',
-            metadata: {
-              ip: req.headers['x-forwarded-for'] || req.socket?.remoteAddress,
-              user_agent: req.headers['user-agent'],
-              submitted_at: new Date().toISOString(),
-              cv_data: body.cv_data || null,
-              cv_name: cv_name || null,
-              photo_data: body.photo_data || null,
-            }
-          }
-        ])
-        .select()
-        .single();
-
-      if (!error && data) {
-        console.log('[API/Join] Successfully saved dossier to Supabase:', data.id);
-        return res.status(200).json({
-          ok: true,
-          id: data.id,
-          message: 'Dossier received and recorded in PHI-LAB Commander ledger.',
-        });
-      } else if (error) {
-        console.error('[API/Join] Supabase insert warning:', error);
-      }
-    } catch (sbErr) {
-      console.error('[API/Join] Supabase exception:', sbErr);
-    }
-
-    // 2. Secondary fallback to legacy PocketBase if available
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 2000);
-      const upstream = await fetch(`${PB_BASE}/api/collections/applicants/records`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, suite, role, motivation, status: 'pending' }),
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
-      if (upstream.ok) {
-        const created = await upstream.json();
-        return res.status(200).json({
-          ok: true,
-          id: created.id,
-          message: 'Application received. Founder review underway.',
-        });
-      }
-    } catch {}
-
-    // Success response even if legacy fails, since user shouldn't be blocked
-    return res.status(200).json({
-      ok: true,
-      message: 'Application received. Founder review underway.',
+    const saved = await upsertDossierRecord({
+      full_name: cleanName,
+      email: cleanEmail,
+      callsign: safeCallsign,
+      role: cleanRole,
+      suite: cleanSuite,
+      motivation: motivation || 'Research collaborator submission',
+      research_history: research_history || 'Submitted via penelope-inc.vercel.app/join',
+      phone: phone || '',
+      location: location || '',
+      referral: referral || '',
+      age: age ? String(age) : '',
+      cv_name: cv_name || '',
+      photo_name: photo_name || '',
+      cv_s3_key: cvUpload?.key || '',
+      photo_s3_key: photoUpload?.key || '',
+      status: 'pending',
+      metadata: {
+        uid: dossierUid,
+        source: 'penelope-inc-join',
+        cv_s3_key: cvUpload?.key || '',
+        photo_s3_key: photoUpload?.key || '',
+        submitted_at: new Date().toISOString(),
+      },
     });
+
+    // Log telemetry event + send Brevo alerts cleanly
+    await Promise.allSettled([
+      query(
+        `INSERT INTO telemetry (operator_id, operator_name, operator_email, role, event_type, suite, prompt_summary, metadata)
+         VALUES ($1, $2, $3, $4, 'dossier_submitted', $5, $6, $7::jsonb)`,
+        [
+          dossierUid,
+          cleanName,
+          cleanEmail,
+          cleanRole,
+          cleanSuite,
+          `${cleanName} (${cleanEmail}) applied for ${cleanRole} / ${cleanSuite}`,
+          JSON.stringify({ dossier_id: saved?.id, cv_s3_key: cvUpload?.key || '', photo_s3_key: photoUpload?.key || '' }),
+        ]
+      ),
+      sendAdminAlert({
+        subject: `New Collaborator Dossier: ${cleanName}`,
+        replyTo: cleanEmail,
+        fields: {
+          Name: cleanName,
+          Email: cleanEmail,
+          Callsign: safeCallsign,
+          Role: cleanRole,
+          Suite: cleanSuite,
+          Phone: phone,
+          Location: location,
+          Age: age,
+          Referral: referral,
+          Motivation: motivation,
+          ResearchHistory: research_history,
+          CV: cvUpload?.key || cv_name || 'None',
+          Photo: photoUpload?.key || photo_name || 'None',
+        },
+      }),
+      sendApplicantConfirmation({
+        email: cleanEmail,
+        name: cleanName,
+        pathLabel: 'Research Collaborator Application',
+        suite: cleanSuite,
+      }),
+    ]);
+
+    return res.status(200).json({ ok: true, id: saved?.id || dossierUid, status: 'pending' });
   } catch (err) {
-    console.error('[API/Join] Fatal Exception:', err);
-    return res.status(200).json({
-      ok: false,
-      error: 'Submission error. Please email penelopeincorporated1@gmail.com directly.',
-    });
+    console.error('[API/Join] Error:', err);
+    return res.status(500).json({ ok: false, error: 'Unable to record submission right now.' });
   }
 }

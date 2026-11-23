@@ -1,188 +1,141 @@
-/**
- * /api/download.js
- * Vercel Serverless Function for PHI Lab Workstation direct downloads.
- * 
- * Capabilities:
- * 1. GET /api/download?info=true -> returns JSON metadata of latest release and platform assets.
- * 2. GET /api/download?os=windows | mac | linux -> quietly requests the GitHub release asset
- *    and seamlessly redirects the browser to the direct binary download stream.
- */
+const PRIMARY_REPO = process.env.GITHUB_REPO || 'penelopei/PHI-LAB';
+const FALLBACK_REPO = process.env.FALLBACK_GITHUB_REPO || 'Sm-bello/PHI-LAB';
 
-const GITHUB_REPO = 'Sm-bello/PHI-LAB';
-
-function getCleanToken() {
-  const envToken = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
-  if (!envToken || typeof envToken !== 'string') return '';
-  const cleaned = envToken
-    .replace(/[^\x21-\x7E]/g, '')
-    .trim();
-
-  if (cleaned.length >= 20) {
-    return cleaned;
+function githubHeaders(accept = 'application/vnd.github+json') {
+  const headers = {
+    'User-Agent': 'PHI-Lab-Website/1.0',
+    Accept: accept,
+  };
+  if (process.env.GITHUB_TOKEN) {
+    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
   }
-  return '';
+  return headers;
+}
+
+function classifyAssets(rawAssets = []) {
+  const out = {
+    windows: null,
+    windows_msi: null,
+    mac: null,
+    mac_intel: null,
+    linux: null,
+    linux_deb: null,
+    linux_rpm: null,
+  };
+
+  for (const a of rawAssets) {
+    const n = String(a.name || '').toLowerCase();
+    const item = {
+      id: a.id,
+      name: a.name,
+      size: a.size,
+      url: a.url,
+      browser_download_url: a.browser_download_url,
+    };
+
+    if (n.endsWith('-setup.exe') || (n.endsWith('.exe') && !out.windows)) {
+      out.windows = item;
+    } else if (n.endsWith('.msi')) {
+      out.windows_msi = item;
+    } else if (n.endsWith('.dmg')) {
+      if (n.includes('x64') && !n.includes('universal') && out.mac) {
+        out.mac_intel = item;
+      } else if (!out.mac) {
+        out.mac = item;
+      }
+    } else if (n.endsWith('.appimage')) {
+      out.linux = item;
+    } else if (n.endsWith('.deb')) {
+      out.linux_deb = item;
+    } else if (n.endsWith('.rpm')) {
+      out.linux_rpm = item;
+    }
+  }
+  return out;
+}
+
+async function fetchLatestRelease(repo) {
+  const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, {
+    headers: githubHeaders(),
+  });
+  if (res.ok) {
+    const data = await res.json();
+    if (Array.isArray(data?.assets) && data.assets.length > 0) {
+      return { repo, release: data };
+    }
+  }
+
+  // Fallback to newest non-draft release in /releases?per_page=5
+  const listRes = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=5`, {
+    headers: githubHeaders(),
+  });
+  if (listRes.ok) {
+    const list = await listRes.json();
+    const valid = Array.isArray(list)
+      ? list.find((r) => !r.draft && Array.isArray(r.assets) && r.assets.length > 0)
+      : null;
+    if (valid) return { repo, release: valid };
+  }
+  return null;
 }
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
 
   try {
-    const token = getCleanToken();
-
-    // 1. Fetch latest release from GitHub
-    const reqHeaders = {
-      'Accept': 'application/vnd.github+json',
-      'User-Agent': 'PHI-LAB-Workstation-Distributor'
-    };
-    if (token && /^[\x21-\x7E]+$/.test(token)) {
-      reqHeaders['Authorization'] = `Bearer ${token}`;
+    let found = await fetchLatestRelease(PRIMARY_REPO);
+    if (!found && FALLBACK_REPO && FALLBACK_REPO !== PRIMARY_REPO) {
+      found = await fetchLatestRelease(FALLBACK_REPO);
     }
 
-    const releaseRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`, {
-      headers: reqHeaders
-    });
-
-    if (!releaseRes.ok) {
-      return res.status(502).json({
-        ok: false,
-        error: `GitHub API error: ${releaseRes.status} ${releaseRes.statusText}`
-      });
+    if (!found) {
+      return res.status(404).json({ ok: false, error: 'No release builds available yet.' });
     }
 
-    const release = await releaseRes.json();
-    const assets = release.assets || [];
+    const { repo, release } = found;
+    const assets = classifyAssets(release.assets);
 
-    // Helper to find asset
-    const findAsset = (predicate) => assets.find(predicate);
-
-    const assetMap = {
-      windows_exe: findAsset(a => a.name.includes('setup.exe') || a.name.includes('-setup.')) || findAsset(a => a.name.endsWith('.exe')),
-      windows_msi: findAsset(a => a.name.endsWith('.msi')),
-      windows_portable: findAsset(a => a.name.toLowerCase() === 'phi-lab.exe'),
-      mac_dmg: findAsset(a => a.name.endsWith('.dmg')),
-      linux_appimage: findAsset(a => a.name.endsWith('.AppImage')),
-      linux_deb: findAsset(a => a.name.endsWith('.deb')),
-      linux_rpm: findAsset(a => a.name.endsWith('.rpm'))
-    };
-
-    // 2. Info request
-    if (req.query.info === 'true') {
+    if (req.query?.info === 'true' || req.query?.info === '1') {
       return res.status(200).json({
         ok: true,
+        repo,
         tag: release.tag_name,
-        name: release.name,
         published_at: release.published_at,
-        assets: {
-          windows: assetMap.windows_exe ? {
-            name: assetMap.windows_exe.name,
-            size: assetMap.windows_exe.size,
-            download_url: '/api/download?os=windows'
-          } : null,
-          windows_msi: assetMap.windows_msi ? {
-            name: assetMap.windows_msi.name,
-            size: assetMap.windows_msi.size,
-            download_url: '/api/download?os=windows_msi'
-          } : null,
-          mac: assetMap.mac_dmg ? {
-            name: assetMap.mac_dmg.name,
-            size: assetMap.mac_dmg.size,
-            download_url: '/api/download?os=mac'
-          } : null,
-          linux: assetMap.linux_appimage ? {
-            name: assetMap.linux_appimage.name,
-            size: assetMap.linux_appimage.size,
-            download_url: '/api/download?os=linux'
-          } : null,
-          linux_deb: assetMap.linux_deb ? {
-            name: assetMap.linux_deb.name,
-            size: assetMap.linux_deb.size,
-            download_url: '/api/download?os=linux_deb'
-          } : null
-        }
+        assets,
       });
     }
 
-    // 3. Resolve requested platform
-    let requested = (req.query.os || '').toLowerCase();
-    
-    // Auto-detect from User-Agent if not explicitly specified
-    if (!requested) {
-      const ua = (req.headers['user-agent'] || '').toLowerCase();
-      if (ua.includes('win')) requested = 'windows';
-      else if (ua.includes('mac') || ua.includes('darwin')) requested = 'mac';
-      else if (ua.includes('linux')) requested = 'linux';
-      else requested = 'windows';
+    const osParam = String(req.query?.os || 'windows').toLowerCase();
+    const chosen =
+      assets[osParam] ||
+      (osParam === 'windows' ? assets.windows_msi : null) ||
+      (osParam === 'linux' ? assets.linux_deb : null) ||
+      assets.windows;
+
+    if (!chosen) {
+      return res.status(404).json({ ok: false, error: `No asset found for platform: ${osParam}` });
     }
 
-    let targetAsset = null;
-    if (requested === 'windows' || requested === 'win') {
-      targetAsset = assetMap.windows_exe || assetMap.windows_msi;
-    } else if (requested === 'windows_msi' || requested === 'msi') {
-      targetAsset = assetMap.windows_msi || assetMap.windows_exe;
-    } else if (requested === 'mac' || requested === 'macos' || requested === 'darwin') {
-      targetAsset = assetMap.mac_dmg;
-    } else if (requested === 'linux' || requested === 'appimage') {
-      targetAsset = assetMap.linux_appimage || assetMap.linux_deb;
-    } else if (requested === 'deb' || requested === 'linux_deb') {
-      targetAsset = assetMap.linux_deb || assetMap.linux_appimage;
-    }
-
-    if (!targetAsset) {
-      return res.status(404).json({
-        ok: false,
-        error: `No build asset found for platform: "${requested}" in release ${release.tag_name}`
-      });
-    }
-
-    // 4. Request pre-signed binary stream URL via GitHub API (works for ALL users even when repo is private)
-    const assetHeaders = {
-      'Accept': 'application/octet-stream',
-      'User-Agent': 'PHI-LAB-Workstation-Distributor'
-    };
-    if (token && /^[\x21-\x7E]+$/.test(token)) {
-      assetHeaders['Authorization'] = `Bearer ${token}`;
-    }
-
-    const assetDownloadRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/assets/${targetAsset.id}`, {
-      headers: assetHeaders,
-      redirect: 'manual'
+    // Check if GitHub private asset URL requires proxying via API asset endpoint
+    const upstream = await fetch(chosen.url, {
+      headers: githubHeaders('application/octet-stream'),
+      redirect: 'manual',
     });
 
-    const directDownloadUrl = assetDownloadRes.headers.get('location');
-
-    if (directDownloadUrl) {
-      res.writeHead(302, {
-        'Location': directDownloadUrl,
-        'Content-Disposition': `attachment; filename="${targetAsset.name}"`,
-        'Cache-Control': 'no-cache, no-store, must-revalidate'
-      });
-      return res.end();
+    if (upstream.status >= 300 && upstream.status < 400 && upstream.headers.get('location')) {
+      return res.redirect(302, upstream.headers.get('location'));
     }
 
-    // 5. Fallback to browser_download_url if public repo
-    if (targetAsset.browser_download_url) {
-      res.writeHead(302, {
-        'Location': targetAsset.browser_download_url,
-        'Content-Disposition': `attachment; filename="${targetAsset.name}"`,
-        'Cache-Control': 'no-cache, no-store, must-revalidate'
-      });
-      return res.end();
+    if (upstream.ok) {
+      res.setHeader('Content-Disposition', `attachment; filename="${chosen.name}"`);
+      res.setHeader('Content-Type', 'application/octet-stream');
+      const buf = Buffer.from(await upstream.arrayBuffer());
+      return res.status(200).send(buf);
     }
 
-    return res.status(500).json({
-      ok: false,
-      error: 'Could not obtain direct storage URL for asset'
-    });
-
+    return res.redirect(302, chosen.browser_download_url);
   } catch (err) {
-    return res.status(500).json({
-      ok: false,
-      error: err.message || 'Internal server error while resolving release asset'
-    });
+    console.error('[API/Download] Error:', err);
+    return res.status(500).json({ ok: false, error: 'Download lookup failed' });
   }
 }

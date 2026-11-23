@@ -1,54 +1,55 @@
-/**
- * /api/contact.js
- * POST https://penelope-inc.vercel.app/api/contact
- * Records general contact & inquiry submissions directly into Supabase (dossiers table)
- * for instant review inside the PHI-LAB Commander Dashboard.
- */
-
-import { supabase } from '../services/supabase.js';
+import { upsertDossierRecord } from '../services/neon.js';
+import { sendAdminAlert, sendApplicantConfirmation } from '../services/email.js';
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
-
-  const { department, name, email, message } = req.body || {};
-
-  if (!name || !email || !message) {
-    return res.status(400).json({ ok: false, error: 'Name, email, and message are required.' });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
   try {
-    const { data, error } = await supabase
-      .from('dossiers')
-      .insert([
-        {
-          full_name: name.trim(),
-          email: email.trim().toLowerCase(),
-          role: 'contact',
-          suite: department || 'general',
-          motivation: `[${(department || 'GENERAL').toUpperCase()} INQUIRY] ${message}`,
-          research_history: `Department requested: ${department || 'General'}`,
-          status: 'contact_inquiry',
-          metadata: {
-            department,
-            ip: req.headers['x-forwarded-for'] || req.socket?.remoteAddress,
-            submitted_at: new Date().toISOString()
-          }
-        }
-      ])
-      .select()
-      .single();
+    const body = req.body || {};
+    const { name, full_name, email, subject, message } = body;
+    const cleanName = String(full_name || name || '').trim();
+    const cleanEmail = String(email || '').trim().toLowerCase();
 
-    if (!error && data) {
-      return res.status(200).json({ ok: true, id: data.id, message: 'Message logged in Commander Ledger.' });
+    if (!cleanName || !cleanEmail || !message) {
+      return res.status(400).json({ ok: false, error: 'Name, email, and message are required.' });
     }
-  } catch (err) {
-    console.error('[API/Contact] Supabase error:', err);
-  }
 
-  return res.status(200).json({ ok: true });
+    const callsign = cleanEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '') || `msg${Date.now()}`;
+    const saved = await upsertDossierRecord({
+      full_name: cleanName,
+      email: cleanEmail,
+      callsign,
+      role: 'inquiry',
+      suite: subject || 'general',
+      motivation: `[CONTACT INQUIRY — ${subject || 'General'}]\n${message}`,
+      status: 'pending',
+      metadata: {
+        source: 'penelope-inc-contact',
+        subject: subject || 'general',
+        message,
+        submitted_at: new Date().toISOString(),
+      },
+    });
+
+    await Promise.allSettled([
+      sendAdminAlert({
+        subject: `Website Contact: ${subject || 'General'} (${cleanName})`,
+        replyTo: cleanEmail,
+        fields: { Name: cleanName, Email: cleanEmail, Subject: subject || 'General', Message: message },
+      }),
+      sendApplicantConfirmation({
+        email: cleanEmail,
+        name: cleanName,
+        pathLabel: 'Contact Inquiry',
+        suite: subject || 'General',
+      }),
+    ]);
+
+    return res.status(200).json({ ok: true, id: saved?.id });
+  } catch (err) {
+    console.error('[API/Contact] Error:', err);
+    return res.status(500).json({ ok: false, error: 'Unable to record inquiry right now.' });
+  }
 }

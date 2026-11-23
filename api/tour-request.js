@@ -1,93 +1,56 @@
-/**
- * /api/tour-request.js
- * POST https://penelope-inc.vercel.app/api/tour-request
- * Forwards PHI Lab tour waiting-room signups (join.html "Tour" panel)
- * directly into Supabase (dossiers table) with live streaming to Commander Dashboard.
- */
-
-import { supabase } from '../services/supabase.js';
-
-const FLY_PB_BASE = process.env.PB_BASE || 'https://penelope-510.fly.dev';
+import { upsertDossierRecord } from '../services/neon.js';
+import { sendAdminAlert, sendApplicantConfirmation } from '../services/email.js';
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
-
-  let body = req.body;
-  if (typeof body === 'string') {
-    try { body = JSON.parse(body); } catch { body = {}; }
-  }
-  const { full_name, name, email, interest_note } = body || {};
-  const applicantName = (full_name || name || '').trim();
-  const applicantEmail = (email || '').trim().toLowerCase();
-
-  if (!applicantName || !applicantEmail || !applicantEmail.includes('@')) {
-    return res.status(400).json({ ok: false, error: 'Full name and a valid email address are required.' });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
-  // 1. Primary Write to Supabase dossiers table
   try {
-    const { data, error } = await supabase
-      .from('dossiers')
-      .insert([
-        {
-          full_name: applicantName,
-          email: applicantEmail,
-          callsign: applicantEmail.split('@')[0],
-          suite: 'phi-twin',
-          role: 'tour',
-          motivation: interest_note ? `[TOUR WAITING ROOM] ${interest_note}` : 'Tour PHI Lab waiting room registration.',
-          research_history: 'Tour & Demonstration Request',
-          status: 'tour_waiting',
-          metadata: {
-            interest_note: interest_note || '',
-            ip: req.headers['x-forwarded-for'] || req.socket?.remoteAddress,
-            submitted_at: new Date().toISOString()
-          }
-        }
-      ])
-      .select()
-      .single();
+    const body = req.body || {};
+    const { name, full_name, email, organization, org_type, preferred_suite, purpose } = body;
+    const cleanName = String(full_name || name || '').trim();
+    const cleanEmail = String(email || '').trim().toLowerCase();
+    const cleanSuite = String(preferred_suite || 'phi-twin').trim();
 
-    if (!error && data) {
-      console.log('[API/Tour] Successfully saved tour request to Supabase:', data.id);
-      return res.status(200).json({
-        ok: true,
-        id: data.id,
-        message: 'Received. We will reach out when tours open up.'
-      });
+    if (!cleanName || !cleanEmail) {
+      return res.status(400).json({ ok: false, error: 'Name and email are required.' });
     }
-  } catch (err) {
-    console.error('[API/Tour] Supabase error:', err);
-  }
 
-  // 2. Secondary replica to Fly.io PocketBase
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 2500);
-    await fetch(`${FLY_PB_BASE}/api/collections/applicants/records`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({
-        name: applicantName,
-        email: applicantEmail,
-        suite: 'phi-twin',
-        role: 'tour',
-        motivation: interest_note || 'Tour request',
-        status: 'pending'
-      })
+    const callsign = cleanEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '') || `tour${Date.now()}`;
+    const saved = await upsertDossierRecord({
+      full_name: cleanName,
+      email: cleanEmail,
+      callsign,
+      role: 'tour-guest',
+      suite: cleanSuite,
+      motivation: `[TOUR REQUEST — ${organization || org_type || 'Visitor'}]\n${purpose || 'Requested guided digital twin workstation tour'}`,
+      status: 'tour-requested',
+      metadata: {
+        source: 'penelope-inc-tour',
+        organization: organization || org_type || '',
+        purpose: purpose || '',
+        submitted_at: new Date().toISOString(),
+      },
     });
-    clearTimeout(timeout);
-  } catch {}
 
-  // 3. Always succeed gracefully so the user is never shown a timeout
-  return res.status(200).json({
-    ok: true,
-    message: 'Received. We will reach out when tours open up.'
-  });
+    await Promise.allSettled([
+      sendAdminAlert({
+        subject: `Workstation Tour Request: ${cleanName}`,
+        replyTo: cleanEmail,
+        fields: { Name: cleanName, Email: cleanEmail, Organization: organization || org_type, Suite: cleanSuite, Purpose: purpose },
+      }),
+      sendApplicantConfirmation({
+        email: cleanEmail,
+        name: cleanName,
+        pathLabel: 'Workstation Guided Tour Request',
+        suite: cleanSuite,
+      }),
+    ]);
+
+    return res.status(200).json({ ok: true, id: saved?.id });
+  } catch (err) {
+    console.error('[API/Tour] Error:', err);
+    return res.status(500).json({ ok: false, error: 'Unable to schedule tour request right now.' });
+  }
 }

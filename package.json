@@ -1,12 +1,10 @@
 {
-  "name": "phi-lab",
-  "version": "1.0.0",
-  "private": true,
+  "name": "penelope-inc",
+  "version": "1.1.0",
   "scripts": {
     "build": "node scripts/build-news.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.119.0",
     "pg": "^8.23.1"
   }
 }
