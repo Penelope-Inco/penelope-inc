@@ -7,9 +7,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { full_name, name, email, org_type, preferred_track, track } = req.body || {};
+    const { full_name, name, email, org_type, preferred_track, track, phone, phone_number } = req.body || {};
     const cleanName = String(full_name || name || '').trim();
     const cleanEmail = String(email || '').trim().toLowerCase();
+    const cleanPhone = String(phone || phone_number || '').trim();
     const suite = String(preferred_track || track || org_type || 'training').trim();
 
     if (!cleanName || !cleanEmail) {
@@ -23,11 +24,13 @@ export default async function handler(req, res) {
       callsign,
       role: 'waitlist',
       suite,
+      phone: cleanPhone,
       motivation: `[MASTERCLASS / TRAINING WAITLIST — ${org_type || 'General'}]`,
       status: 'waitlist',
       metadata: {
         source: 'penelope-inc-waitlist',
         org_type: org_type || '',
+        phone: cleanPhone,
         submitted_at: new Date().toISOString(),
       },
     });
@@ -36,7 +39,7 @@ export default async function handler(req, res) {
       sendAdminAlert({
         subject: `Training Waitlist: ${cleanName}`,
         replyTo: cleanEmail,
-        fields: { Name: cleanName, Email: cleanEmail, OrgType: org_type, Track: suite },
+        fields: { Name: cleanName, Email: cleanEmail, Phone: cleanPhone, OrgType: org_type, Track: suite },
       }),
       sendApplicantConfirmation({
         email: cleanEmail,

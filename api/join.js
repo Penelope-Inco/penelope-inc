@@ -16,14 +16,18 @@ export default async function handler(req, res) {
       role,
       suite,
       phone,
+      phone_number,
       location,
       age,
       referral,
+      how_they_found_us,
       motivation,
       research_history,
       callsign,
       cv_name,
       cv_data,
+      cv_resume_name,
+      cv_resume_data,
       photo_name,
       photo_data,
     } = body;
@@ -32,6 +36,10 @@ export default async function handler(req, res) {
     const cleanEmail = String(email || '').trim().toLowerCase();
     const cleanRole = String(role || 'applicant').trim();
     const cleanSuite = String(suite || 'phi-twin').trim();
+    const cleanPhone = String(phone || phone_number || '').trim();
+    const cleanReferral = String(referral || how_they_found_us || '').trim();
+    const cleanCvName = String(cv_name || cv_resume_name || '').trim();
+    const cleanCvData = cv_data || cv_resume_data || '';
 
     if (!cleanName || !cleanEmail) {
       return res.status(400).json({ ok: false, error: 'Full name and email are required.' });
@@ -48,9 +56,9 @@ export default async function handler(req, res) {
     let photoUpload = null;
     if (isS3Configured()) {
       const uploads = [];
-      if (cv_data) {
+      if (cleanCvData) {
         uploads.push(
-          uploadDataUrl(`dossiers/${safeCallsign}/cv`, cv_name || 'cv.pdf', cv_data)
+          uploadDataUrl(`dossiers/${safeCallsign}/cv`, cleanCvName || 'cv.pdf', cleanCvData)
             .then((r) => { cvUpload = r; })
             .catch((e) => console.warn('[API/Join] CV S3 upload warning:', e.message))
         );
@@ -73,11 +81,11 @@ export default async function handler(req, res) {
       suite: cleanSuite,
       motivation: motivation || 'Research collaborator submission',
       research_history: research_history || 'Submitted via penelope-inc.vercel.app/join',
-      phone: phone || '',
+      phone: cleanPhone,
       location: location || '',
-      referral: referral || '',
+      referral: cleanReferral,
       age: age ? String(age) : '',
-      cv_name: cv_name || '',
+      cv_name: cleanCvName,
       photo_name: photo_name || '',
       cv_s3_key: cvUpload?.key || '',
       photo_s3_key: photoUpload?.key || '',
@@ -115,13 +123,13 @@ export default async function handler(req, res) {
           Callsign: safeCallsign,
           Role: cleanRole,
           Suite: cleanSuite,
-          Phone: phone,
+          Phone: cleanPhone,
           Location: location,
           Age: age,
-          Referral: referral,
+          Referral: cleanReferral,
           Motivation: motivation,
           ResearchHistory: research_history,
-          CV: cvUpload?.key || cv_name || 'None',
+          CV: cvUpload?.key || cleanCvName || 'None',
           Photo: photoUpload?.key || photo_name || 'None',
         },
       }),

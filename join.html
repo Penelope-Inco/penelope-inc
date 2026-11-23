@@ -496,7 +496,7 @@
     <section class="wsx-section" id="workstation" aria-labelledby="wsx-title">
         <div class="wsx-inner">
             <div class="wsx-head wsx-reveal">
-                <span class="wsx-badge"><span class="dot"></span> Client Software &bull; <span id="wsx-version">v0.1.9</span></span>
+                <span class="wsx-badge"><span class="dot"></span> Client Software &bull; <span id="wsx-version">v0.3.0</span></span>
                 <h2 id="wsx-title">Download Workstation</h2>
             </div>
 
@@ -584,9 +584,9 @@
 
                         <a href="/api/download?os=windows" class="wsx-dl-btn" id="wsx-dl">
                             <span class="lbl"><i class="fas fa-download"></i> <span id="wsx-dl-label">Download for Windows</span></span>
-                            <span class="size" id="wsx-dl-size">22.6 MB</span>
+                            <span class="size" id="wsx-dl-size">20.9 MB</span>
                         </a>
-                        <a href="/api/download?os=windows_msi" class="wsx-alt" id="wsx-alt"><i class="fas fa-box-archive"></i> <span id="wsx-alt-label">Enterprise installer (.msi &bull; 24.2 MB)</span></a>
+                        <a href="/api/download?os=windows_msi" class="wsx-alt" id="wsx-alt"><i class="fas fa-box-archive"></i> <span id="wsx-alt-label">Enterprise installer (.msi &bull; 22.6 MB)</span></a>
 
                         <ul class="wsx-specs" id="wsx-specs">
                             <li><span>Format</span><span>.exe installer</span></li>
@@ -602,7 +602,7 @@
                         </div>
                         <div class="wsx-links">
                             <a href="/download.html"><i class="fas fa-book"></i> Installation guide &amp; checksums</a>
-                            <a href="https://github.com/Sm-bello/PHI-LAB/releases" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Release notes</a>
+                            <a href="https://github.com/penelopei/PHI-LAB/releases" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Release notes</a>
                         </div>
                     </div>
                 </div>
@@ -711,7 +711,9 @@
                     status.style.display = 'block';
                     if (data.ok) {
                         status.className = 'form-status success';
-                        status.textContent = 'Received. We will follow up by email.';
+                        status.innerHTML = endpoint === '/api/join'
+                            ? 'Dossier received &amp; saved. You will receive your CPDC clearance by email once reviewed. <a href="#workstation" style="color:inherit;text-decoration:underline;font-weight:700;margin-left:6px;">Download PHI-LAB Workstation v0.3.0 &darr;</a>'
+                            : 'Received. We will follow up by email.';
                         form.reset();
                         document.querySelectorAll('#pic-text, #cv-text').forEach(el => {
                             if (el) el.innerText = el.id === 'pic-text' ? 'Click to select image' : 'Click to select PDF';
@@ -746,8 +748,8 @@
                 windows: {
                     icon: 'fab fa-windows', title: 'Windows x64', meta: 'Windows 10 / 11 • 64-bit installer',
                     desc: 'Native WebView2 runtime with DirectX GPU acceleration, hardware camera & mic access, and a background sync engine.',
-                    href: '/api/download?os=windows', label: 'Download for Windows', keys: ['windows', 'windows_msi'], size: '22.6 MB',
-                    alt: { href: '/api/download?os=windows_msi', label: 'Enterprise installer (.msi', key: 'windows_msi', size: '24.2 MB' },
+                    href: '/api/download?os=windows', label: 'Download for Windows', keys: ['windows', 'windows_msi'], size: '20.9 MB',
+                    alt: { href: '/api/download?os=windows_msi', label: 'Enterprise installer (.msi', key: 'windows_msi', size: '22.6 MB' },
                     specs: [['Format', '.exe installer'], ['Runtime', 'WebView2 • DirectX'], ['Hardware', 'Camera & mic access']]
                 },
                 mac: {

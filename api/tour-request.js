@@ -8,10 +8,11 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body || {};
-    const { name, full_name, email, organization, org_type, preferred_suite, purpose } = body;
+    const { name, full_name, email, organization, org_type, preferred_suite, purpose, interest_note } = body;
     const cleanName = String(full_name || name || '').trim();
     const cleanEmail = String(email || '').trim().toLowerCase();
     const cleanSuite = String(preferred_suite || 'phi-twin').trim();
+    const cleanPurpose = String(purpose || interest_note || 'Requested guided digital twin workstation tour').trim();
 
     if (!cleanName || !cleanEmail) {
       return res.status(400).json({ ok: false, error: 'Name and email are required.' });
@@ -24,12 +25,12 @@ export default async function handler(req, res) {
       callsign,
       role: 'tour-guest',
       suite: cleanSuite,
-      motivation: `[TOUR REQUEST — ${organization || org_type || 'Visitor'}]\n${purpose || 'Requested guided digital twin workstation tour'}`,
+      motivation: `[TOUR REQUEST — ${organization || org_type || 'Visitor'}]\n${cleanPurpose}`,
       status: 'tour-requested',
       metadata: {
         source: 'penelope-inc-tour',
         organization: organization || org_type || '',
-        purpose: purpose || '',
+        purpose: cleanPurpose,
         submitted_at: new Date().toISOString(),
       },
     });
@@ -38,7 +39,7 @@ export default async function handler(req, res) {
       sendAdminAlert({
         subject: `Workstation Tour Request: ${cleanName}`,
         replyTo: cleanEmail,
-        fields: { Name: cleanName, Email: cleanEmail, Organization: organization || org_type, Suite: cleanSuite, Purpose: purpose },
+        fields: { Name: cleanName, Email: cleanEmail, Organization: organization || org_type, Suite: cleanSuite, Purpose: cleanPurpose },
       }),
       sendApplicantConfirmation({
         email: cleanEmail,
