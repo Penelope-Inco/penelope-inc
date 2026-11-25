@@ -119,3 +119,36 @@ export function getPresignedUrl(key, expiresIn = 3600) {
   const signature = crypto.createHmac('sha256', signingKey).update(stringToSign).digest('hex');
   return `${cfg.endpoint}${canonicalUri}?${canonicalQuery}&X-Amz-Signature=${signature}`;
 }
+
+export function getPresignedPutUrl(key, contentType = 'application/octet-stream', expiresIn = 1800) {
+  const cfg = getS3Config();
+  if (!key || !cfg.endpoint || !cfg.accessKeyId || !cfg.secretAccessKey) return '';
+  const host = new URL(cfg.endpoint).host;
+  const canonicalUri = `/${cfg.bucket}/${encodePathSegments(key)}`;
+  const { amzDate, dateStamp } = amzDates();
+  const scope = `${dateStamp}/${cfg.region}/s3/aws4_request`;
+  const qp = [
+    ['X-Amz-Algorithm', 'AWS4-HMAC-SHA256'],
+    ['X-Amz-Credential', `${cfg.accessKeyId}/${scope}`],
+    ['X-Amz-Date', amzDate],
+    ['X-Amz-Expires', String(expiresIn)],
+    ['X-Amz-SignedHeaders', 'content-type;host'],
+  ].sort((a, b) => (a[0] < b[0] ? -1 : 1));
+  const canonicalQuery = qp.map(([k, v]) => `${encodeRfc3986(k)}=${encodeRfc3986(v)}`).join('&');
+  const canonicalHeaders = `content-type:${contentType}\nhost:${host}\n`;
+  const canonicalRequest = `PUT\n${canonicalUri}\n${canonicalQuery}\n${canonicalHeaders}\ncontent-type;host\nUNSIGNED-PAYLOAD`;
+  const stringToSign = `AWS4-HMAC-SHA256\n${amzDate}\n${scope}\n${sha256Hex(canonicalRequest)}`;
+  const signingKey = getSigningKey(cfg.secretAccessKey, dateStamp, cfg.region, 's3');
+  const signature = crypto.createHmac('sha256', signingKey).update(stringToSign).digest('hex');
+  return `${cfg.endpoint}${canonicalUri}?${canonicalQuery}&X-Amz-Signature=${signature}`;
+}
+
+export function buildSafeObjectKey(prefix, fileName) {
+  const cleanPrefix = String(prefix || 'uploads').replace(/^\/+|\/+$/g, '').replace(/\.\./g, '');
+  return `${cleanPrefix}/${Date.now()}_${safeFileName(fileName)}`;
+}
+
+export function getPermanentAssetUrl(key, baseOrigin = 'https://penelope-inc.vercel.app') {
+  if (!key) return '';
+  return `${baseOrigin.replace(/\/+$/, '')}/api/relay?channel=asset&key=${encodeURIComponent(key)}`;
+}

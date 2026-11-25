@@ -15,14 +15,16 @@ export default async function handler(req, res) {
       const b = req.body || {};
       const userId = String(b.user_id || b.id || b.callsign || '').trim().toLowerCase();
       if (!userId) return res.status(400).json({ ok: false, error: 'user_id is required' });
+      const avatarUrl = String(b.avatar || b.avatar_url || '').trim();
       await query(
-        `INSERT INTO team_presence (user_id, name, callsign, suite, role, status, what_im_working_on, last_seen)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+        `INSERT INTO team_presence (user_id, name, callsign, suite, role, avatar_url, status, what_im_working_on, last_seen)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
          ON CONFLICT (user_id) DO UPDATE SET
            name = EXCLUDED.name,
            callsign = EXCLUDED.callsign,
            suite = EXCLUDED.suite,
            role = EXCLUDED.role,
+           avatar_url = COALESCE(NULLIF(EXCLUDED.avatar_url, ''), team_presence.avatar_url),
            status = EXCLUDED.status,
            what_im_working_on = EXCLUDED.what_im_working_on,
            last_seen = NOW()`,
@@ -32,6 +34,7 @@ export default async function handler(req, res) {
           b.callsign || userId,
           b.suite || 'phi-twin',
           b.role || 'member',
+          avatarUrl.startsWith('http') ? avatarUrl : '',
           b.status || 'online',
           b.what_im_working_on || '',
         ]
@@ -58,6 +61,7 @@ export default async function handler(req, res) {
             callsign: u.callsign || u.id,
             suite: u.suite || 'phi-twin',
             role: u.role || 'member',
+            avatar: u.avatar || '',
             online: true,
             transport: 'cloudflare-ws',
           });
@@ -65,22 +69,29 @@ export default async function handler(req, res) {
       }
     } catch {}
 
-    // 2. Recent Neon DB presence (active within last 5 minutes)
+    // 2. Recent Neon DB presence (active within last 5 minutes) + enrich missing avatars
     const { rows } = await query(
-      `SELECT user_id, name, callsign, suite, role, status, what_im_working_on, last_seen
+      `SELECT user_id, name, callsign, suite, role, avatar_url, status, what_im_working_on, last_seen
        FROM team_presence
        WHERE last_seen > NOW() - INTERVAL '5 minutes'
        ORDER BY last_seen DESC`
     );
     for (const r of rows) {
       const k = String(r.user_id || '').toLowerCase();
-      if (!k || peerMap.has(k)) continue;
+      if (!k) continue;
+      if (peerMap.has(k)) {
+        const existing = peerMap.get(k);
+        if (!existing.avatar && r.avatar_url) existing.avatar = r.avatar_url;
+        if (!existing.what_im_working_on && r.what_im_working_on) existing.what_im_working_on = r.what_im_working_on;
+        continue;
+      }
       peerMap.set(k, {
         id: r.user_id,
         name: r.name || r.user_id,
         callsign: r.callsign || r.user_id,
         suite: r.suite || 'phi-twin',
         role: r.role || 'member',
+        avatar: r.avatar_url || '',
         status: r.status || 'online',
         what_im_working_on: r.what_im_working_on || '',
         online: true,

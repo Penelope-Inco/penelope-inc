@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
 
 let sharedPool = null;
+let schemaEnsuredPromise = null;
 
 export function getPool() {
   if (!process.env.DATABASE_URL) {
@@ -11,7 +12,7 @@ export function getPool() {
       connectionString: process.env.DATABASE_URL,
       max: 5,
       idleTimeoutMillis: 20000,
-      connectionTimeoutMillis: 8000,
+      connectionTimeoutMillis: 15000,
     });
   }
   return sharedPool;
@@ -20,6 +21,52 @@ export function getPool() {
 export async function query(text, params = []) {
   const pool = getPool();
   return pool.query(text, params);
+}
+
+export function ensureExtendedSchema() {
+  if (!schemaEnsuredPromise) {
+    schemaEnsuredPromise = query(`
+      CREATE TABLE IF NOT EXISTS work_reports (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        author_id TEXT NOT NULL,
+        author_name TEXT NOT NULL DEFAULT 'Engineer',
+        author_email TEXT NOT NULL DEFAULT '',
+        author_avatar TEXT NOT NULL DEFAULT '',
+        suite TEXT NOT NULL DEFAULT 'phi-twin',
+        title TEXT NOT NULL,
+        summary TEXT NOT NULL DEFAULT '',
+        status TEXT NOT NULL DEFAULT 'submitted',
+        hours_logged NUMERIC(6,2) NOT NULL DEFAULT 0,
+        attachments JSONB NOT NULL DEFAULT '[]'::jsonb,
+        md_feedback TEXT NOT NULL DEFAULT '',
+        reviewed_by TEXT NOT NULL DEFAULT '',
+        reviewed_at TIMESTAMPTZ,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+      CREATE TABLE IF NOT EXISTS lab_directives (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        author_id TEXT NOT NULL DEFAULT 'cgu43cdnkhza7sd',
+        author_name TEXT NOT NULL DEFAULT 'Managing Director',
+        suite TEXT NOT NULL DEFAULT 'all',
+        title TEXT NOT NULL,
+        content TEXT NOT NULL DEFAULT '',
+        priority TEXT NOT NULL DEFAULT 'normal',
+        pinned BOOLEAN NOT NULL DEFAULT TRUE,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+      ALTER TABLE team_presence ADD COLUMN IF NOT EXISTS avatar_url TEXT NOT NULL DEFAULT '';
+      ALTER TABLE messages ADD COLUMN IF NOT EXISTS sender_avatar TEXT NOT NULL DEFAULT '';
+      ALTER TABLE messages ADD COLUMN IF NOT EXISTS reply_to TEXT NOT NULL DEFAULT '';
+      ALTER TABLE messages ADD COLUMN IF NOT EXISTS reply_preview TEXT NOT NULL DEFAULT '';
+      ALTER TABLE time_logs ADD COLUMN IF NOT EXISTS note TEXT NOT NULL DEFAULT '';
+      ALTER TABLE time_logs ADD COLUMN IF NOT EXISTS duration_minutes INTEGER NOT NULL DEFAULT 0;
+    `).catch((err) => {
+      schemaEnsuredPromise = null;
+      console.warn('[Neon/Schema] Warning:', err.message);
+    });
+  }
+  return schemaEnsuredPromise;
 }
 
 /**
