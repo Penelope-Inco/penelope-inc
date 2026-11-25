@@ -423,9 +423,13 @@ const newsIndexHtml = `<!DOCTYPE html>
     <meta property="og:type" content="website">
     <meta property="og:title" content="News &amp; Dispatches | PHI Lab">
     <meta property="og:description" content="Official announcements, aerospace research milestones, and institutional dispatches from PHI Lab.">
-    <meta property="og:image" content="/assets/phi-lab-social-1200x630.png">
+    <meta property="og:site_name" content="Penelope Inc. — PHI Lab">
+    <meta property="og:image" content="https://penelope-inc.vercel.app/assets/phi-lab-preview-2026.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://penelope-inc.vercel.app/news/index.html">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://penelope-inc.vercel.app/assets/phi-lab-preview-2026.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
