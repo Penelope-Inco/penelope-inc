@@ -20,7 +20,7 @@
     <meta property="og:locale" content="en_US">
     <meta property="og:url" content="https://penelope-inc.vercel.app/">
     <meta property="og:title" content="Penelope Inc. | PHI Lab — DIMASA Aerospace AI &amp; Workstation">
-    <meta property="og:description" content="Physics-informed edge digital twins, 9 avionics &amp; autonomy suites, zero-leakage federated telemetry, and the PHI-Lab Connected Workstation v0.3.1.">
+    <meta property="og:description" content="Physics-informed edge digital twins, 9 avionics &amp; autonomy suites, zero-leakage federated telemetry, and the PHI-Lab Connected Workstation v0.3.2.">
     <meta property="og:image" content="https://penelope-inc.vercel.app/assets/phi-lab-preview-2026.png">
     <meta property="og:image:secure_url" content="https://penelope-inc.vercel.app/assets/phi-lab-preview-2026.png">
     <meta property="og:image:type" content="image/png">
@@ -32,7 +32,7 @@
     <meta name="twitter:domain" content="penelope-inc.vercel.app">
     <meta name="twitter:url" content="https://penelope-inc.vercel.app/">
     <meta name="twitter:title" content="Penelope Inc. | PHI Lab — DIMASA Aerospace AI &amp; Workstation">
-    <meta name="twitter:description" content="Physics-informed edge digital twins, 9 avionics &amp; autonomy suites, zero-leakage federated telemetry, and the PHI-Lab Connected Workstation v0.3.1.">
+    <meta name="twitter:description" content="Physics-informed edge digital twins, 9 avionics &amp; autonomy suites, zero-leakage federated telemetry, and the PHI-Lab Connected Workstation v0.3.2.">
     <meta name="twitter:image" content="https://penelope-inc.vercel.app/assets/phi-lab-preview-2026.png">
     <meta name="twitter:image:alt" content="Penelope Inc. PHI Lab — DIMASA Aerospace AI &amp; Connected Workstation">
     <script type="application/ld+json">
@@ -80,20 +80,21 @@
 
         .hero-video-bg {
             position: absolute;
-            top: 50%; left: 50%;
-            min-width: 100%; min-height: 100%;
-            width: auto; height: auto;
+            inset: 0;
+            width: 100%;
+            height: 100%;
             z-index: 1;
-            transform: translate(-50%, -50%);
             object-fit: cover;
+            pointer-events: none;
         }
 
         .hero-overlay {
             position: absolute; inset: 0;
             background:
-                radial-gradient(820px 520px at 85% 25%, rgba(232, 163, 61, 0.16), transparent 62%),
-                linear-gradient(180deg, rgba(8,16,28,0.72) 0%, rgba(11,22,38,0.92) 100%);
+                radial-gradient(820px 520px at 85% 25%, rgba(232, 163, 61, 0.12), transparent 62%),
+                linear-gradient(180deg, rgba(8,16,28,0.24) 0%, rgba(11,22,38,0.52) 100%);
             z-index: 2;
+            pointer-events: none;
         }
 
         .hero-shell {
@@ -128,6 +129,7 @@
             font-size: clamp(2.25rem, 4.3vw, 3.7rem);
             font-weight: 800; line-height: 1.09; margin-bottom: 1.25rem;
             color: #FFFFFF;
+            text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
         }
         .hero-content h1 .accent { color: var(--amber); }
 
@@ -170,11 +172,11 @@
 
         /* ─── EXECUTIVE TEASER CONSOLE ─── */
         .teaser-console {
-            background: linear-gradient(165deg, rgba(15, 29, 46, 0.88) 0%, rgba(8, 16, 28, 0.94) 100%);
+            background: linear-gradient(165deg, rgba(15, 29, 46, 0.72) 0%, rgba(8, 16, 28, 0.80) 100%);
             border: 1px solid rgba(232, 163, 61, 0.34);
             border-radius: 16px; padding: 1.4rem;
-            backdrop-filter: blur(18px);
-            box-shadow: 0 30px 65px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 30px 65px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.09);
             text-align: left;
         }
         .tc-top {
@@ -592,8 +594,8 @@
     </div>
 
     <section class="hero">
-        <video class="hero-video-bg scroll-video" autoplay muted loop playsinline poster="assets/poster-hero.jpg">
-            <source src="assets/hero-video.mp4" type="video/mp4">
+        <video class="hero-video-bg" id="hero-bg-video" autoplay muted loop playsinline preload="auto">
+            <source src="/assets/hero-video.mp4" type="video/mp4">
             Your browser does not support HTML5 video.
         </video>
         <div class="hero-overlay"></div>
@@ -608,7 +610,7 @@
                 <div class="hero-cta-row">
                     <a href="/download.html" class="hero-btn-amber" id="hero-dl-btn">
                         <span>Download Workstation</span>
-                        <span class="hero-btn-ver" id="hero-dl-ver">v0.3.1</span>
+                        <span class="hero-btn-ver" id="hero-dl-ver">v0.3.2</span>
                     </a>
                     <a href="/join.html#panel-collaborator" class="hero-btn-glass">
                         <span>Join Lab &amp; Request CPDC</span>
@@ -623,7 +625,7 @@
                         <img src="/assets/phi-lab-mark-reverse.svg" alt="" style="width:18px;height:18px;">
                         <span>Penelope Inc. &bull; Executive Teaser</span>
                     </div>
-                    <span class="tc-status" id="tc-live-pill">WORKSTATION v0.3.1 LIVE</span>
+                    <span class="tc-status" id="tc-live-pill">WORKSTATION v0.3.2 LIVE</span>
                 </div>
 
                 <div class="tc-tabs" role="tablist">
@@ -661,7 +663,7 @@
                         <div class="tc-pillar"><strong>Report Center &amp; Work Vault</strong><span>Direct MD Review</span></div>
                         <div class="tc-pillar"><strong>CPDC Digital Clearance</strong><span>HMAC-SHA256 Verified</span></div>
                         <div class="tc-pillar"><strong>Colleague Rooms &amp; Audio</strong><span>LiveKit + Edge Relay</span></div>
-                        <div class="tc-pillar"><strong>Direct Release</strong><span id="tc-ws-tag">v0.3.1 (.exe / AppImage)</span></div>
+                        <div class="tc-pillar"><strong>Direct Release</strong><span id="tc-ws-tag">v0.3.2 (.exe / AppImage)</span></div>
                     </div>
                     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.85rem;">
                         <a href="/api/download?os=windows" class="hero-btn-amber" style="padding:0.55rem 0.9rem;font-size:0.8rem;">Windows (.exe)</a>
@@ -701,7 +703,7 @@
                     <p>At PHI Lab (Physics Hybrid Integrity Lab), we bridge high-fidelity aerospace structural modeling with deployment-ready AI frameworks. From landing gear prognostics to gas turbine fault injection, our platform empowers aerospace engineers and African fleet operators with trustworthy, certification-compliant digital twins under the DIMASA initiative.</p>
                 </div>
                 <div class="video-card-frame">
-                    <video class="scroll-video" muted loop playsinline poster="assets/poster-vision.jpg">
+                    <video class="scroll-video" muted loop playsinline preload="none">
                         <source src="assets/phi-intro.mp4" type="video/mp4">
                     </video>
                 </div>
@@ -737,7 +739,7 @@
 
         <div class="program-card" id="twin">
             <div class="video-card-frame">
-                <video class="scroll-video" muted loop playsinline poster="assets/poster-twin.jpg">
+                <video class="scroll-video" muted loop playsinline preload="none">
                     <source src="assets/phi-twin.mp4" type="video/mp4">
                 </video>
             </div>
@@ -751,7 +753,7 @@
 
         <div class="program-card reverse" id="chain">
             <div class="video-card-frame">
-                <video class="scroll-video" muted loop playsinline poster="assets/poster-chain.jpg">
+                <video class="scroll-video" muted loop playsinline preload="none">
                     <source src="assets/phi-chain.mp4" type="video/mp4">
                 </video>
             </div>
@@ -765,7 +767,7 @@
 
         <div class="program-card">
             <div class="video-card-frame">
-                <video class="scroll-video" muted loop playsinline poster="assets/poster-arc.jpg">
+                <video class="scroll-video" muted loop playsinline preload="none">
                     <source src="assets/phi-arc.mp4" type="video/mp4">
                 </video>
             </div>
@@ -779,7 +781,7 @@
 
         <div class="program-card reverse">
             <div class="video-card-frame">
-                <video class="scroll-video" muted loop playsinline poster="assets/poster-drone.jpg">
+                <video class="scroll-video" muted loop playsinline preload="none">
                     <source src="assets/phi-drone.mp4" type="video/mp4">
                 </video>
             </div>
@@ -957,8 +959,19 @@
     </footer>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            const heroVideo = document.getElementById('hero-bg-video');
+            if (heroVideo) {
+                heroVideo.muted = true;
+                const ensurePlay = () => {
+                    const p = heroVideo.play();
+                    if (p !== undefined) p.catch(() => {});
+                };
+                ensurePlay();
+                heroVideo.addEventListener('canplay', ensurePlay, { once: true });
+            }
+
             const scrollVideos = document.querySelectorAll('.scroll-video');
-            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.4 };
+            const observerOptions = { root: null, rootMargin: '80px', threshold: 0.15 };
             const videoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const video = entry.target;
