@@ -55,6 +55,18 @@ export function ensureExtendedSchema() {
         pinned BOOLEAN NOT NULL DEFAULT TRUE,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
+      CREATE TABLE IF NOT EXISTS room_calls (
+        room TEXT PRIMARY KEY,
+        call_id TEXT NOT NULL DEFAULT '',
+        initiator_id TEXT NOT NULL DEFAULT '',
+        initiator_name TEXT NOT NULL DEFAULT '',
+        call_type TEXT NOT NULL DEFAULT 'audio',
+        active_speaker_id TEXT NOT NULL DEFAULT '',
+        active_speaker_name TEXT NOT NULL DEFAULT '',
+        speaker_queue JSONB NOT NULL DEFAULT '[]'::jsonb,
+        participants JSONB NOT NULL DEFAULT '[]'::jsonb,
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
       ALTER TABLE team_presence ADD COLUMN IF NOT EXISTS avatar_url TEXT NOT NULL DEFAULT '';
       ALTER TABLE messages ADD COLUMN IF NOT EXISTS sender_avatar TEXT NOT NULL DEFAULT '';
       ALTER TABLE messages ADD COLUMN IF NOT EXISTS reply_to TEXT NOT NULL DEFAULT '';

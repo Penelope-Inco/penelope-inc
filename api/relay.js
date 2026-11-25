@@ -103,7 +103,7 @@ export default async function handler(req, res) {
       if (directKey && !directKey.includes('..')) {
         const signed = getPresignedUrl(directKey, 3600);
         if (signed) {
-          res.setHeader('Cache-Control', 'public, max-age=900');
+          res.setHeader('Cache-Control', 'private, max-age=300');
           return res.redirect(302, signed);
         }
       }
@@ -112,7 +112,7 @@ export default async function handler(req, res) {
         const { rows } = await query(
           `SELECT full_name, callsign, photo_s3_key, metadata
            FROM dossiers
-           WHERE LOWER(callsign) = $1 OR LOWER(email) = $1 OR id::text = $1
+           WHERE LOWER(callsign) = $1 OR LOWER(email) = $1 OR id::text = $1 OR LOWER(full_name) = $1
            ORDER BY updated_at DESC LIMIT 1`,
           [user]
         );
@@ -121,16 +121,35 @@ export default async function handler(req, res) {
         if (key && !key.includes('..')) {
           const signed = getPresignedUrl(key, 3600);
           if (signed) {
-            res.setHeader('Cache-Control', 'public, max-age=600');
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
             return res.redirect(302, signed);
           }
         }
-        const svg = renderFallbackAvatarSvg(d?.full_name || d?.callsign || user);
+        const metaUrl = d?.metadata?.avatar_url || '';
+        if (metaUrl && metaUrl.startsWith('http') && !metaUrl.includes('channel=avatar')) {
+          res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+          return res.redirect(302, metaUrl);
+        }
+        const pres = await query(
+          `SELECT name, avatar_url FROM team_presence WHERE LOWER(user_id) = $1 OR LOWER(callsign) = $1 ORDER BY last_seen DESC LIMIT 1`,
+          [user]
+        );
+        const presUrl = pres.rows[0]?.avatar_url || '';
+        if (presUrl && presUrl.startsWith('http') && !presUrl.includes('channel=avatar')) {
+          res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+          return res.redirect(302, presUrl);
+        }
+        const fallbackLabel =
+          d?.full_name ||
+          pres.rows[0]?.name ||
+          (user === 'cgu43cdnkhza7sd' ? 'Bello Sani' : d?.callsign || user);
+        const svg = renderFallbackAvatarSvg(fallbackLabel);
         res.setHeader('Content-Type', 'image/svg+xml; charset=utf-8');
-        res.setHeader('Cache-Control', 'public, max-age=300');
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         return res.status(200).send(svg);
       }
       res.setHeader('Content-Type', 'image/svg+xml; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       return res.status(200).send(renderFallbackAvatarSvg('P'));
     }
 
@@ -321,7 +340,7 @@ export default async function handler(req, res) {
 
       if (channel === 'telemetry') {
         const limit = Math.min(200, Math.max(10, Number(req.query?.limit || 60)));
-        const [telRes, presRes] = await Promise.all([
+        const [telRes, presRes, dosRes] = await Promise.all([
           query(`SELECT * FROM telemetry ORDER BY created_at DESC LIMIT $1`, [limit]),
           query(
             `SELECT user_id, name, suite, role, avatar_url, what_im_working_on, last_seen
@@ -329,15 +348,29 @@ export default async function handler(req, res) {
              WHERE last_seen > NOW() - INTERVAL '10 minutes'
              ORDER BY last_seen DESC`
           ),
+          query(`SELECT id, callsign, email, full_name, photo_s3_key, metadata FROM dossiers`),
         ]);
+        const dosAvatarMap = new Map();
+        for (const d of dosRes.rows) {
+          const av = resolveDossierAvatarUrl(d);
+          if (!av) continue;
+          if (d.callsign) dosAvatarMap.set(norm(d.callsign), av);
+          if (d.email) dosAvatarMap.set(norm(d.email), av);
+          if (d.full_name) dosAvatarMap.set(norm(d.full_name), av);
+        }
         const presence = {};
         for (const p of presRes.rows) {
+          const av =
+            (p.avatar_url && !p.avatar_url.includes('channel=avatar') ? p.avatar_url : '') ||
+            dosAvatarMap.get(norm(p.user_id)) ||
+            dosAvatarMap.get(norm(p.name)) ||
+            '';
           presence[p.user_id] = {
             operator_id: p.user_id,
             operator_name: p.name,
             suite: p.suite,
             role: p.role,
-            avatar: p.avatar_url || '',
+            avatar: av,
             what_im_working_on: p.what_im_working_on || '',
             updated_at: p.last_seen,
           };
@@ -352,12 +385,49 @@ export default async function handler(req, res) {
 
       if (channel === 'messages') {
         const room = String(req.query?.room || '').trim();
-        const { rows } = room
-          ? await query(`SELECT * FROM messages WHERE room = $1 ORDER BY created_at DESC LIMIT 120`, [room])
-          : await query(`SELECT * FROM messages ORDER BY created_at DESC LIMIT 120`);
+        const [msgRes, dosRes] = await Promise.all([
+          room
+            ? query(`SELECT * FROM messages WHERE room = $1 ORDER BY created_at DESC LIMIT 120`, [room])
+            : query(`SELECT * FROM messages ORDER BY created_at DESC LIMIT 120`),
+          query(`SELECT id, callsign, email, full_name, photo_s3_key, metadata FROM dossiers`),
+        ]);
+        const avatarIndex = new Map();
+        for (const d of dosRes.rows) {
+          const av = resolveDossierAvatarUrl(d);
+          if (!av) continue;
+          if (d.callsign) avatarIndex.set(norm(d.callsign), av);
+          if (d.email) avatarIndex.set(norm(d.email), av);
+          if (d.id) avatarIndex.set(norm(d.id), av);
+          if (d.full_name) avatarIndex.set(norm(d.full_name), av);
+        }
+        const enriched = msgRes.rows.reverse().map((m) => {
+          const currentAv = String(m.sender_avatar || '');
+          const cleanCurrent = currentAv && !currentAv.includes('channel=avatar') ? currentAv : '';
+          const liveAv =
+            avatarIndex.get(norm(m.sender)) ||
+            avatarIndex.get(norm(m.sender_name)) ||
+            cleanCurrent;
+          return { ...m, sender_avatar: liveAv || '' };
+        });
         return res.status(200).json({
           ok: true,
-          items: rows.reverse(),
+          items: enriched,
+          source: 'neon',
+        });
+      }
+
+      if (channel === 'call-state') {
+        const room = String(req.query?.room || '').trim();
+        // Expire stale calls untouched for over 3 hours
+        await query(`DELETE FROM room_calls WHERE updated_at < NOW() - INTERVAL '3 hours'`);
+        const { rows } = room
+          ? await query(`SELECT * FROM room_calls WHERE room = $1 LIMIT 1`, [room])
+          : await query(`SELECT * FROM room_calls ORDER BY updated_at DESC`);
+        return res.status(200).json({
+          ok: true,
+          room: room || 'all',
+          activeCall: room ? rows[0] || null : undefined,
+          calls: rows,
           source: 'neon',
         });
       }
@@ -378,7 +448,7 @@ export default async function handler(req, res) {
         const { rows } = await query(
           `SELECT id, target, sender, sender_name, room, signal_type, payload, ts
            FROM signal_events
-           WHERE ts > $1 AND ($2 = '' OR room = $2 OR room = 'global' OR signal_type IN ('incoming-call','call-response','call-end','leave-call','screen-invite'))
+           WHERE ts > $1 AND ($2 = '' OR room = $2 OR room = 'global' OR signal_type IN ('incoming-call','call-response','call-end','leave-call','screen-invite','call-floor','profile-updated'))
            ORDER BY ts ASC LIMIT 60`,
           [since, room]
         );
@@ -412,22 +482,26 @@ export default async function handler(req, res) {
         const callsign = norm(req.query?.callsign || b.callsign || id);
         const slug = safeSlug(callsign || email.split('@')[0], 'operator');
 
-        let newPhotoKey = '';
+        let newPhotoKey = String(b.photo_s3_key || '').trim();
         let clearPhoto = false;
-        let resolvedAvatarUrl = '';
+        let resolvedAvatarUrl = newPhotoKey ? getPermanentAssetUrl(newPhotoKey, PUBLIC_ORIGIN) : '';
 
         if (typeof b.avatar === 'string') {
           if (b.avatar === '') {
             clearPhoto = true;
+            newPhotoKey = '';
+            resolvedAvatarUrl = '';
           } else if (b.avatar.startsWith('data:image/') && isS3Configured()) {
-            const up = await uploadDataUrl(`avatars/${slug}`, `${slug}.png`, b.avatar);
+            const up = await uploadDataUrl(`avatars/${slug}`, `${slug}.jpg`, b.avatar);
             if (up?.key) {
               newPhotoKey = up.key;
               resolvedAvatarUrl = getPermanentAssetUrl(up.key, PUBLIC_ORIGIN);
             }
           } else if (b.avatar.startsWith('http://') || b.avatar.startsWith('https://')) {
-            resolvedAvatarUrl = b.avatar;
+            if (!resolvedAvatarUrl) resolvedAvatarUrl = b.avatar;
           }
+        } else if (typeof b.avatar_url === 'string' && b.avatar_url.startsWith('http')) {
+          resolvedAvatarUrl = b.avatar_url;
         }
 
         const metaPatch = {};
@@ -481,8 +555,8 @@ export default async function handler(req, res) {
         let savedRow = resUpd.rows[0] || null;
         if (!savedRow && (email || callsign)) {
           savedRow = await upsertDossierRecord({
-            full_name: b.name || b.full_name || callsign || 'PHI Engineer',
-            email: email || `${slug}@phi-lab.internal`,
+            full_name: b.name || b.full_name || (callsign === 'cgu43cdnkhza7sd' ? 'Bello Sani' : callsign) || 'PHI Engineer',
+            email: email || (callsign === 'cgu43cdnkhza7sd' ? 'penelopeincorporated1@gmail.com' : `${slug}@phi-lab.internal`),
             callsign: callsign || slug,
             role: b.role || (callsign === 'cgu43cdnkhza7sd' ? 'owner' : 'member'),
             suite: b.suite || 'phi-twin',
@@ -494,15 +568,27 @@ export default async function handler(req, res) {
         }
 
         const finalAvatar = savedRow ? resolveDossierAvatarUrl(savedRow) : resolvedAvatarUrl;
-        if (callsign) {
-          await query(
-            `UPDATE team_presence SET
-               name = COALESCE(NULLIF($2, ''), name),
-               avatar_url = CASE WHEN $3::boolean THEN '' WHEN $4 <> '' THEN $4 ELSE avatar_url END,
-               last_seen = NOW()
-             WHERE LOWER(user_id) = $1 OR LOWER(callsign) = $1`,
-            [callsign, b.name || b.full_name || '', clearPhoto, finalAvatar]
-          );
+        const matchKeys = [callsign, norm(savedRow?.callsign), email, norm(savedRow?.email)].filter(Boolean);
+        if (matchKeys.length > 0 && (finalAvatar || clearPhoto)) {
+          const avToStore = clearPhoto ? '' : finalAvatar;
+          await Promise.all([
+            query(
+              `UPDATE team_presence SET
+                 name = COALESCE(NULLIF($2, ''), name),
+                 avatar_url = CASE WHEN $3::boolean THEN '' WHEN $4 <> '' THEN $4 ELSE avatar_url END,
+                 last_seen = NOW()
+               WHERE LOWER(user_id) = ANY($1::text[]) OR LOWER(callsign) = ANY($1::text[])`,
+              [matchKeys, b.name || b.full_name || '', clearPhoto, avToStore]
+            ).catch(() => {}),
+            query(
+              `UPDATE work_reports SET author_avatar = $2 WHERE LOWER(author_id) = ANY($1::text[]) OR LOWER(author_email) = ANY($1::text[])`,
+              [matchKeys, avToStore]
+            ).catch(() => {}),
+            query(
+              `UPDATE messages SET sender_avatar = $2 WHERE LOWER(sender) = ANY($1::text[])`,
+              [matchKeys, avToStore]
+            ).catch(() => {}),
+          ]);
         }
 
         return res.status(200).json({
@@ -909,6 +995,44 @@ export default async function handler(req, res) {
           [uid, uName, action, suite, note, durationMin, b.timestamp || null]
         );
         return res.status(200).json({ ok: true, log: rows[0], source: 'neon' });
+      }
+
+      if (channel === 'call-state') {
+        const room = String(b.room || '').trim();
+        if (!room) return res.status(400).json({ ok: false, error: 'room is required' });
+        if (b.ended || b.active === false) {
+          await query(`DELETE FROM room_calls WHERE room = $1`, [room]);
+          return res.status(200).json({ ok: true, room, activeCall: null });
+        }
+        const { rows } = await query(
+          `INSERT INTO room_calls (
+             room, call_id, initiator_id, initiator_name, call_type,
+             active_speaker_id, active_speaker_name, speaker_queue, participants, updated_at
+           ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8::jsonb,$9::jsonb,NOW())
+           ON CONFLICT (room) DO UPDATE SET
+             call_id = COALESCE(NULLIF(EXCLUDED.call_id, ''), room_calls.call_id),
+             initiator_id = COALESCE(NULLIF(EXCLUDED.initiator_id, ''), room_calls.initiator_id),
+             initiator_name = COALESCE(NULLIF(EXCLUDED.initiator_name, ''), room_calls.initiator_name),
+             call_type = COALESCE(NULLIF(EXCLUDED.call_type, ''), room_calls.call_type),
+             active_speaker_id = EXCLUDED.active_speaker_id,
+             active_speaker_name = EXCLUDED.active_speaker_name,
+             speaker_queue = EXCLUDED.speaker_queue,
+             participants = EXCLUDED.participants,
+             updated_at = NOW()
+           RETURNING *`,
+          [
+            room,
+            String(b.call_id || `call_${Date.now()}`),
+            String(b.initiator_id || ''),
+            String(b.initiator_name || ''),
+            String(b.call_type || 'audio'),
+            String(b.active_speaker_id || ''),
+            String(b.active_speaker_name || ''),
+            JSON.stringify(Array.isArray(b.speaker_queue) ? b.speaker_queue : []),
+            JSON.stringify(Array.isArray(b.participants) ? b.participants : []),
+          ]
+        );
+        return res.status(200).json({ ok: true, room, activeCall: rows[0] || null });
       }
 
       if (channel === 'signals') {

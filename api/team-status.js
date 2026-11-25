@@ -69,19 +69,41 @@ export default async function handler(req, res) {
       }
     } catch {}
 
-    // 2. Recent Neon DB presence (active within last 5 minutes) + enrich missing avatars
-    const { rows } = await query(
-      `SELECT user_id, name, callsign, suite, role, avatar_url, status, what_im_working_on, last_seen
-       FROM team_presence
-       WHERE last_seen > NOW() - INTERVAL '5 minutes'
-       ORDER BY last_seen DESC`
-    );
-    for (const r of rows) {
+    // 2. Recent Neon DB presence (active within last 5 minutes) + enrich missing avatars from dossiers
+    const [presRes, dosRes] = await Promise.all([
+      query(
+        `SELECT user_id, name, callsign, suite, role, avatar_url, status, what_im_working_on, last_seen
+         FROM team_presence
+         WHERE last_seen > NOW() - INTERVAL '5 minutes'
+         ORDER BY last_seen DESC`
+      ),
+      query(`SELECT callsign, email, full_name, photo_s3_key, metadata FROM dossiers`),
+    ]);
+    const origin = (process.env.PUBLIC_SITE_URL || 'https://penelope-inc.vercel.app').replace(/\/+$/, '');
+    const dosAv = new Map();
+    for (const d of dosRes.rows) {
+      const k = d.photo_s3_key || d.metadata?.photo_s3_key || '';
+      const av = k
+        ? `${origin}/api/relay?channel=asset&key=${encodeURIComponent(k)}`
+        : (d.metadata?.avatar_url && !String(d.metadata.avatar_url).includes('channel=avatar') ? d.metadata.avatar_url : '');
+      if (!av) continue;
+      if (d.callsign) dosAv.set(String(d.callsign).toLowerCase(), av);
+      if (d.email) dosAv.set(String(d.email).toLowerCase(), av);
+      if (d.full_name) dosAv.set(String(d.full_name).toLowerCase(), av);
+    }
+    for (const [k, existing] of peerMap.entries()) {
+      if (!existing.avatar || String(existing.avatar).includes('channel=avatar')) {
+        existing.avatar = dosAv.get(k) || dosAv.get(String(existing.name || '').toLowerCase()) || existing.avatar || '';
+      }
+    }
+    for (const r of presRes.rows) {
       const k = String(r.user_id || '').toLowerCase();
       if (!k) continue;
+      const fallbackAv = dosAv.get(k) || dosAv.get(String(r.name || '').toLowerCase()) || '';
+      const resolvedAv = (r.avatar_url && !String(r.avatar_url).includes('channel=avatar') ? r.avatar_url : '') || fallbackAv;
       if (peerMap.has(k)) {
         const existing = peerMap.get(k);
-        if (!existing.avatar && r.avatar_url) existing.avatar = r.avatar_url;
+        if (!existing.avatar && resolvedAv) existing.avatar = resolvedAv;
         if (!existing.what_im_working_on && r.what_im_working_on) existing.what_im_working_on = r.what_im_working_on;
         continue;
       }
@@ -91,7 +113,7 @@ export default async function handler(req, res) {
         callsign: r.callsign || r.user_id,
         suite: r.suite || 'phi-twin',
         role: r.role || 'member',
-        avatar: r.avatar_url || '',
+        avatar: resolvedAv,
         status: r.status || 'online',
         what_im_working_on: r.what_im_working_on || '',
         online: true,
