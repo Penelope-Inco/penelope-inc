@@ -74,8 +74,11 @@
             justify-content: center;
             overflow: hidden;
             color: var(--text-light);
-            padding: 7.5rem 6% 4.5rem;
+            padding: 9.5rem 6% 5.5rem;
             background-color: #08101C;
+        }
+        body.has-announcement-bar .hero {
+            padding-top: 11.5rem;
         }
 
         .hero-video-bg {
@@ -91,28 +94,34 @@
         .hero-overlay {
             position: absolute; inset: 0;
             background:
-                radial-gradient(820px 520px at 85% 25%, rgba(232, 163, 61, 0.12), transparent 62%),
-                linear-gradient(180deg, rgba(8,16,28,0.24) 0%, rgba(11,22,38,0.52) 100%);
+                radial-gradient(ellipse 70% 62% at 50% 52%, rgba(8, 16, 28, 0.56) 0%, rgba(8, 16, 28, 0.26) 68%, rgba(8, 16, 28, 0.44) 100%),
+                linear-gradient(180deg, rgba(8, 16, 28, 0.36) 0%, rgba(8, 16, 28, 0.24) 50%, rgba(11, 22, 38, 0.58) 100%);
             z-index: 2;
             pointer-events: none;
         }
 
         .hero-shell {
             position: relative; z-index: 3;
-            max-width: 1280px; width: 100%;
-            display: grid; grid-template-columns: 1.15fr 0.85fr;
-            gap: 3rem; align-items: center;
+            max-width: 920px; width: 100%;
+            margin: 0 auto;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
         }
 
-        .hero-content { text-align: left; }
+        .hero-content {
+            text-align: center;
+            max-width: 860px;
+            margin: 0 auto;
+        }
 
         .hero-mission-pill {
             display: inline-flex; align-items: center; gap: 9px;
             font-family: var(--font-mono); font-size: 0.74rem; font-weight: 700;
             letter-spacing: 0.14em; text-transform: uppercase;
-            color: #F4B858; background: rgba(232,163,61,0.13);
-            border: 1px solid rgba(232,163,61,0.34);
-            padding: 6px 15px; border-radius: 999px; margin-bottom: 1.35rem;
+            color: #F4B858; background: rgba(8, 16, 28, 0.62);
+            border: 1px solid rgba(232, 163, 61, 0.42);
+            backdrop-filter: blur(8px);
+            padding: 6px 16px; border-radius: 999px; margin-bottom: 1.45rem;
         }
         .hero-live-dot {
             width: 8px; height: 8px; border-radius: 50%;
@@ -126,28 +135,29 @@
 
         .hero-content h1 {
             font-family: var(--font-heading);
-            font-size: clamp(2.25rem, 4.3vw, 3.7rem);
-            font-weight: 800; line-height: 1.09; margin-bottom: 1.25rem;
+            font-size: clamp(2.35rem, 4.6vw, 3.85rem);
+            font-weight: 800; line-height: 1.12; margin-bottom: 1.35rem;
+            letter-spacing: -0.02em;
             color: #FFFFFF;
-            text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.68);
         }
         .hero-content h1 .accent { color: var(--amber); }
 
         .hero-content p.hero-lead {
-            font-size: 1.1rem; font-weight: 400;
-            color: #E2E8F0; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
-            max-width: 600px; margin-bottom: 2rem; line-height: 1.68;
+            font-size: clamp(1.04rem, 1.35vw, 1.18rem); font-weight: 400;
+            color: #F1F5F9; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+            max-width: 720px; margin: 0 auto 2.25rem; line-height: 1.72;
         }
 
         .hero-cta-row {
-            display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center;
+            display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: center;
         }
         .hero-btn-amber {
             display: inline-flex; align-items: center; gap: 9px;
             background: var(--amber); color: #08101C;
-            padding: 0.92rem 1.45rem; border-radius: 8px;
+            padding: 0.92rem 1.5rem; border-radius: 8px;
             font-weight: 800; font-size: 0.94rem; transition: all 0.2s ease;
-            box-shadow: 0 12px 28px rgba(232, 163, 61, 0.32);
+            box-shadow: 0 12px 28px rgba(232, 163, 61, 0.34);
         }
         .hero-btn-amber:hover { background: #F4B44E; transform: translateY(-2px); box-shadow: 0 16px 34px rgba(232, 163, 61, 0.45); }
         .hero-btn-ver {
@@ -156,118 +166,28 @@
         }
         .hero-btn-glass {
             display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(255,255,255,0.08); color: #F8FAFC;
-            border: 1px solid rgba(255,255,255,0.22);
-            padding: 0.9rem 1.35rem; border-radius: 8px;
+            background: rgba(8, 16, 28, 0.55); color: #F8FAFC;
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            padding: 0.9rem 1.4rem; border-radius: 8px;
             font-weight: 700; font-size: 0.92rem; transition: all 0.2s ease;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
         }
-        .hero-btn-glass:hover { background: rgba(255,255,255,0.15); border-color: var(--amber); color: #fff; transform: translateY(-2px); }
+        .hero-btn-glass:hover { background: rgba(15, 29, 46, 0.75); border-color: var(--amber); color: #fff; transform: translateY(-2px); }
         .hero-btn-text {
-            font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600;
-            color: #CBD5E1; letter-spacing: 0.06em; padding: 0.5rem 0.4rem;
-            border-bottom: 1px solid transparent; transition: all 0.2s;
+            display: inline-flex; align-items: center;
+            font-family: var(--font-mono); font-size: 0.82rem; font-weight: 600;
+            color: #F8FAFC; letter-spacing: 0.05em; padding: 0.88rem 1.2rem;
+            background: rgba(8, 16, 28, 0.44);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px; backdrop-filter: blur(8px);
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+            transition: all 0.2s ease;
         }
-        .hero-btn-text:hover { color: var(--amber); border-bottom-color: var(--amber); }
+        .hero-btn-text:hover { color: var(--amber); border-color: var(--amber); background: rgba(8, 16, 28, 0.68); transform: translateY(-2px); }
 
-        /* ─── EXECUTIVE TEASER CONSOLE ─── */
-        .teaser-console {
-            background: linear-gradient(165deg, rgba(15, 29, 46, 0.72) 0%, rgba(8, 16, 28, 0.80) 100%);
-            border: 1px solid rgba(232, 163, 61, 0.34);
-            border-radius: 16px; padding: 1.4rem;
-            backdrop-filter: blur(14px);
-            box-shadow: 0 30px 65px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.09);
-            text-align: left;
-        }
-        .tc-top {
-            display: flex; align-items: center; justify-content: space-between;
-            padding-bottom: 0.85rem; margin-bottom: 0.9rem;
-            border-bottom: 1px solid rgba(255,255,255,0.09);
-        }
-        .tc-brand {
-            display: flex; align-items: center; gap: 8px;
-            font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase; color: #CBD5E1;
-        }
-        .tc-status {
-            font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700;
-            color: #4ADE80; background: rgba(34, 197, 94, 0.12);
-            border: 1px solid rgba(34, 197, 94, 0.3); padding: 3px 9px; border-radius: 999px;
-        }
-        .tc-tabs {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
-            padding: 4px; border-radius: 9px;
-            background: rgba(0,0,0,0.28); border: 1px solid rgba(255,255,255,0.07);
-            margin-bottom: 1rem;
-        }
-        .tc-tab {
-            border: 0; background: transparent; color: #94A3B8; cursor: pointer;
-            padding: 0.5rem 0.4rem; border-radius: 6px;
-            font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600;
-            letter-spacing: 0.04em; transition: all 0.18s ease; text-align: center;
-        }
-        .tc-tab:hover { color: #F8FAFC; }
-        .tc-tab.active {
-            background: rgba(232, 163, 61, 0.16); color: #FCD34D;
-            box-shadow: inset 0 0 0 1px rgba(232, 163, 61, 0.4);
-        }
-        .tc-pane { display: none; }
-        .tc-pane.active { display: block; }
-        .tc-summary {
-            font-size: 0.88rem; color: #CBD5E1; line-height: 1.58; margin-bottom: 0.95rem;
-        }
-        .tc-kpis {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 0.95rem;
-        }
-        .tc-kpi {
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 9px; padding: 0.7rem 0.65rem;
-        }
-        .tc-kpi-val { font-size: 1.25rem; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 3px; }
-        .tc-kpi-val.gold { color: var(--amber); }
-        .tc-kpi-val.cyan { color: #38BDF8; }
-        .tc-kpi-lbl { font-family: var(--font-mono); font-size: 0.6rem; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em; }
-
-        .tc-pillar-list { display: grid; gap: 7px; margin-bottom: 0.9rem; }
-        .tc-pillar {
-            display: flex; align-items: center; justify-content: space-between; gap: 8px;
-            padding: 0.55rem 0.75rem; border-radius: 8px;
-            background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.07);
-            font-size: 0.8rem; color: #E2E8F0;
-        }
-        .tc-pillar strong { color: #fff; }
-        .tc-pillar span { font-family: var(--font-mono); font-size: 0.66rem; color: var(--amber); white-space: nowrap; }
-
-        .tc-suite-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 0.95rem;
-        }
-        .tc-suite-chip {
-            display: flex; flex-direction: column; padding: 0.55rem 0.65rem; border-radius: 8px;
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.18s ease;
-        }
-        .tc-suite-chip:hover { border-color: var(--amber); background: rgba(232,163,61,0.1); transform: translateY(-1px); }
-        .tc-suite-chip small { font-family: var(--font-mono); font-size: 0.6rem; color: var(--amber); }
-        .tc-suite-chip strong { font-size: 0.8rem; color: #fff; }
-
-        .tc-foot {
-            display: flex; align-items: center; justify-content: space-between; gap: 8px;
-            padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.08);
-            font-family: var(--font-mono); font-size: 0.68rem; color: #94A3B8;
-        }
-        .tc-foot a { color: var(--amber); font-weight: 700; }
-        .tc-foot a:hover { text-decoration: underline; }
-
-        @media (max-width: 1024px) {
-            .hero { padding: 7rem 6% 4rem; }
-            .hero-shell { grid-template-columns: 1fr; gap: 2.2rem; }
-            .hero-content { text-align: center; }
-            .hero-content p.hero-lead { margin-left: auto; margin-right: auto; }
-            .hero-cta-row { justify-content: center; }
-        }
-        @media (max-width: 540px) {
-            .tc-tabs { grid-template-columns: 1fr; }
-            .tc-kpis, .tc-suite-grid { grid-template-columns: repeat(2, 1fr); }
+        @media (max-width: 768px) {
+            .hero { min-height: 86vh; padding: 8.5rem 5% 4.5rem; }
+            body.has-announcement-bar .hero { padding-top: 10.25rem; }
         }
 
         
@@ -618,80 +538,6 @@
                     <a href="#ecosystem" class="hero-btn-text">Explore 9 Suites &rarr;</a>
                 </div>
             </div>
-
-            <aside class="teaser-console" aria-label="Penelope Inc. and PHI Lab interactive preview">
-                <div class="tc-top">
-                    <div class="tc-brand">
-                        <img src="/assets/phi-lab-mark-reverse.svg" alt="" style="width:18px;height:18px;">
-                        <span>Penelope Inc. &bull; Executive Teaser</span>
-                    </div>
-                    <span class="tc-status" id="tc-live-pill">WORKSTATION v0.3.2 LIVE</span>
-                </div>
-
-                <div class="tc-tabs" role="tablist">
-                    <button type="button" class="tc-tab active" data-tc-tab="overview" role="tab" aria-selected="true">Company &amp; DIMASA</button>
-                    <button type="button" class="tc-tab" data-tc-tab="workstation" role="tab" aria-selected="false">Workstation</button>
-                    <button type="button" class="tc-tab" data-tc-tab="suites" role="tab" aria-selected="false">9 PHI Suites</button>
-                </div>
-
-                <div class="tc-pane active" data-tc-pane="overview">
-                    <p class="tc-summary">Strictly aerospace R&amp;D from Kaduna Facility: bridging first-principles flight mechanics, federated FleetTwin&trade; intelligence, and the sovereign Penelope AI engine.</p>
-                    <div class="tc-kpis">
-                        <div class="tc-kpi">
-                            <div class="tc-kpi-val gold">99.8%</div>
-                            <div class="tc-kpi-lbl">Fault Accuracy</div>
-                        </div>
-                        <div class="tc-kpi">
-                            <div class="tc-kpi-val cyan">&lt; 5ms</div>
-                            <div class="tc-kpi-lbl">Edge Latency</div>
-                        </div>
-                        <div class="tc-kpi">
-                            <div class="tc-kpi-val">100%</div>
-                            <div class="tc-kpi-lbl">Zero-Leakage</div>
-                        </div>
-                    </div>
-                    <div class="tc-pillar-list">
-                        <div class="tc-pillar"><strong>DIMASA Mission</strong><span>African MRO Digital Twins</span></div>
-                        <div class="tc-pillar"><strong>FleetTwin&trade; Federated</strong><span>Zero Raw Telemetry Cloud Sync</span></div>
-                        <div class="tc-pillar"><strong>Penelope Sovereign AI</strong><span>Hardware-Locked Diagnostics</span></div>
-                    </div>
-                </div>
-
-                <div class="tc-pane" data-tc-pane="workstation">
-                    <p class="tc-summary">The connected desktop command app for PHI Lab engineers &amp; collaborators — built for Windows and Linux with real-time rooms, deliverables, and CPDC security.</p>
-                    <div class="tc-pillar-list">
-                        <div class="tc-pillar"><strong>Report Center &amp; Work Vault</strong><span>Direct MD Review</span></div>
-                        <div class="tc-pillar"><strong>CPDC Digital Clearance</strong><span>HMAC-SHA256 Verified</span></div>
-                        <div class="tc-pillar"><strong>Colleague Rooms &amp; Audio</strong><span>LiveKit + Edge Relay</span></div>
-                        <div class="tc-pillar"><strong>Direct Release</strong><span id="tc-ws-tag">v0.3.2 (.exe / AppImage)</span></div>
-                    </div>
-                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.85rem;">
-                        <a href="/api/download?os=windows" class="hero-btn-amber" style="padding:0.55rem 0.9rem;font-size:0.8rem;">Windows (.exe)</a>
-                        <a href="/api/download?os=linux" class="hero-btn-glass" style="padding:0.55rem 0.9rem;font-size:0.8rem;">Linux (AppImage)</a>
-                        <a href="/download.html" class="hero-btn-glass" style="padding:0.55rem 0.9rem;font-size:0.8rem;">All Platforms &rarr;</a>
-                    </div>
-                </div>
-
-                <div class="tc-pane" data-tc-pane="suites">
-                    <p class="tc-summary">Nine specialized aerospace &amp; autonomy engineering suites inside the PHI Lab ecosystem:</p>
-                    <div class="tc-suite-grid">
-                        <a href="/suites/phi-twin.html" class="tc-suite-chip"><small>PHI-01</small><strong>PHI-Twin</strong></a>
-                        <a href="/suites/phi-chain.html" class="tc-suite-chip"><small>PHI-02</small><strong>PHI-Chain</strong></a>
-                        <a href="/suites/phi-arc.html" class="tc-suite-chip"><small>PHI-03</small><strong>PHI-Arc</strong></a>
-                        <a href="/suites/phi-sense.html" class="tc-suite-chip"><small>PHI-04</small><strong>PHI-Sense</strong></a>
-                        <a href="/suites/phi-engine.html" class="tc-suite-chip"><small>PHI-05</small><strong>PHI-Engine</strong></a>
-                        <a href="/suites/phi-drone.html" class="tc-suite-chip"><small>PHI-06</small><strong>PHI-Drone</strong></a>
-                        <a href="/suites/phi-swarm.html" class="tc-suite-chip"><small>PHI-07</small><strong>PHI-Swarm</strong></a>
-                        <a href="/suites/phi-ctrl.html" class="tc-suite-chip"><small>PHI-08</small><strong>PHI-Ctrl</strong></a>
-                        <a href="/suites/phi-spike.html" class="tc-suite-chip"><small>PHI-09</small><strong>PHI-Spike</strong></a>
-                    </div>
-                </div>
-
-                <div class="tc-foot">
-                    <span>Kaduna Aerospace Technologies Facility</span>
-                    <a href="/about.html">Tour &amp; Team &rarr;</a>
-                </div>
-            </aside>
         </div>
     </section>
 
@@ -987,35 +833,13 @@
             }, observerOptions);
             scrollVideos.forEach(video => videoObserver.observe(video));
 
-            // Executive Teaser Console tabs
-            const tabs = document.querySelectorAll('[data-tc-tab]');
-            const panes = document.querySelectorAll('[data-tc-pane]');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const target = tab.getAttribute('data-tc-tab');
-                    tabs.forEach(t => {
-                        const active = t === tab;
-                        t.classList.toggle('active', active);
-                        t.setAttribute('aria-selected', String(active));
-                    });
-                    panes.forEach(p => {
-                        p.classList.toggle('active', p.getAttribute('data-tc-pane') === target);
-                    });
-                });
-            });
-
             // Sync live workstation tag from /api/download?info=true
             fetch('/api/download?info=true')
                 .then(r => r.ok ? r.json() : null)
                 .then(data => {
                     if (!data || !data.ok || !data.tag) return;
-                    const tag = data.tag;
                     const verEl = document.getElementById('hero-dl-ver');
-                    const pillEl = document.getElementById('tc-live-pill');
-                    const wsEl = document.getElementById('tc-ws-tag');
-                    if (verEl) verEl.textContent = tag;
-                    if (pillEl) pillEl.textContent = 'WORKSTATION ' + tag.toUpperCase() + ' LIVE';
-                    if (wsEl) wsEl.textContent = tag + ' (.exe / AppImage)';
+                    if (verEl) verEl.textContent = data.tag;
                 })
                 .catch(() => {});
         });
